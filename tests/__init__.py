@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask_app.boot import load_env, set_root_dir
+from boot import load_env, set_root_dir
 
 if __package__:
     current_path = os.path.abspath(os.path.dirname(__file__)).replace('/' + str(__package__), '', 1)
@@ -23,6 +23,7 @@ def register_paths():
         sys.path.insert(0, ROOT_DIR)
         sys.path.insert(1, ROOT_DIR + 'chalicelib/')
         sys.path.insert(1, ROOT_DIR + 'flask_app/')
+        sys.path.insert(1, ROOT_DIR + 'flambda_app/')
         sys.path.insert(2, ROOT_DIR + 'vendor/')
         _REGISTERED_PATHS = True
     pass

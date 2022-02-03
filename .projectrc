@@ -1,2 +1,4 @@
-PROJECT_NAME=template-serverless-lambda-python
+PROJECT_NAME=template-serverless-service-python
 NETWORK_NAME=service-python
+APP_QUEUE=test-queue
+APP_PORT=5000

@@ -1,5 +1,5 @@
 {
-  "name": "template-serverless-lambda-python",
+  "name": "template-serverless-service-python",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

@@ -1,14 +1,23 @@
+#!/bin/bash
+if [ $RUNNING_IN_CONTAINER ]; then
+  HOST=localstack
+else
+  HOST=0.0.0.0
+fi
+
 QUEUE=$1
 if [ -z "$QUEUE" ]
 then
-  QUEUE='http://localhost:4566/000000000000/test'
+  QUEUE='http://$HOST:4566/000000000000/test-queue'
+else
+  QUEUE=$(basename -- $QUEUE)
+  QUEUE="http://$HOST:4566/000000000000/${QUEUE}"
 fi
-
-echo "aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url $QUEUE"
-aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url $QUEUE
+echo "aws --endpoint-url=http://$HOST:4566 sqs receive-message --queue-url $QUEUE"
+aws --endpoint-url=http://$HOST:4566 sqs receive-message --queue-url $QUEUE
 
 if [ ! $? -eq 0 ]; then
-    QUEUE="http://localhost:4566/000000000000/$QUEUE"
-    echo "aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url $QUEUE"
-    aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url $QUEUE
+    QUEUE="http://$HOST:4566/000000000000/$QUEUE"
+    echo "aws --endpoint-url=http://$HOST:4566 sqs receive-message --queue-url $QUEUE"
+    aws --endpoint-url=http://$HOST:4566 sqs receive-message --queue-url $QUEUE
 fi

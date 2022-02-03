@@ -1,13 +1,37 @@
 components:
   schemas:
-    Alive:
+    Entry:
       properties:
-        app:
-          example: I'm alive!
+        duration:
+          example: '0:00:00.013737'
+          type: string
+        status:
+          example: healthy
+          type: string
+        tags:
+          items:
+            example: db
+            type: string
+          type: array
+      type: object
+    EntryData:
+      properties:
+        name:
+          $ref: '#/components/schemas/Entry'
+      type: object
+    HealthCheck:
+      properties:
+        entries:
+          $ref: '#/components/schemas/EntryData'
+        status:
+          example: healthy
+          type: string
+        total_duration:
+          example: '0:00:00.013737'
           type: string
       type: object
 info:
-  title: template-serverless-lambda-python
+  title: app
   version: 1.0.0
 openapi: 3.0.2
 paths:
@@ -18,11 +42,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alive'
+                $ref: '#/components/schemas/HealthCheck'
           description: Success response
       summary: Service Health Method
 servers:
-- description: Staging server
-  url: https://localhost:5000
-- description: Development server
+- description: null
+  url: null
+- description: 'Development server '
   url: http://localhost:5000

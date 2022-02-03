@@ -1,11 +1,20 @@
 version: "3.2"
 services:
-  template-serverless-lambda-python:
-    container_name: template-serverless-lambda-python
+  template-serverless-service-python:
+#    container_name: template-serverless-service-python
     build:
       context: .
       dockerfile: ./docker/python/Dockerfile
     privileged: true
+    environment:
+      # Fake credentials for Localstack
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      TEST_ENV: ${TEST_ENV}
+    depends_on:
+      - "localstack"
+      - "redis"
+      - "mysql"
     ports:
       - 5000:5000
     networks:
@@ -19,38 +28,37 @@ services:
     expose:
       - 6379
     networks:
-      - default
+      - service-python
   mysql:
     image: mysql:5.7.22
     ports:
       - "3306:3306"
-#    volumes:
-#      - ./docker/mysql/data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: store
       MYSQL_ROOT_PASSWORD: store
     networks:
       - service-python
-#  localstack:
-#    image: localstack/localstack
-#    privileged: true
-#    ports:
-#      - "4566:4566"
-#      - "4567-4582:4567-4582"
-#      - "9070:9070"
-#      - "8080:8080"
-#    environment:
-#      SERVICES: sqs,lambda,cloudwatch
-#      DOCKER_HOST: unix:///var/run/docker.sock
-#      PORT_WEB_UI: 9070
-#      LAMBDA_EXECUTOR: docker
-#      DEBUG: 1
-#      HOSTNAME_EXTERNAL: localstack
-#    networks:
-#      - service-python
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
-#      - /tmp/localstack:/tmp/localstack
+  localstack:
+    image: localstack/localstack
+    privileged: true
+    ports:
+      - "4566:4566"
+      - "4567-4582:4567-4582"
+      - "9070:9070"
+      - "8080:8080"
+    environment:
+      SERVICES: sqs,lambda,cloudwatch,s3
+      DOCKER_HOST: unix:///var/run/docker.sock
+      PORT_WEB_UI: 9070
+      #LAMBDA_EXECUTOR: docker # está dando erro via docker
+      LAMBDA_EXECUTOR: local
+      DEBUG: 1
+      HOSTNAME_EXTERNAL: localstack
+    networks:
+      - service-python
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/localstack:/tmp/localstack
 networks:
   service-python:
     external: true

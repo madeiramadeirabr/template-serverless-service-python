@@ -3,8 +3,8 @@ import os
 import unittest
 import warnings
 
-from flask_app.boot import reset, load_dot_env, load_env
-from flask_app.config import reset as reset_config, get_config
+from boot import reset, load_dot_env, load_env
+from flambda_app.config import reset as reset_config, get_config
 
 
 class BaseComponentTestCase(unittest.TestCase):
