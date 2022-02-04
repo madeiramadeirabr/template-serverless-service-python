@@ -2,11 +2,11 @@ import unittest
 
 from unittest_data_provider import data_provider
 
-from lambda_app.database.mysql import get_connection
-from lambda_app.http_resources.request_control import Pagination, Order
-from lambda_app.logging import get_logger
-from lambda_app.repositories.v1.mysql.product_repository import ProductRepository
-from lambda_app.vos.product import ProductVO
+from flambda_app.database.mysql import get_connection
+from flambda_app.http_resources.request_control import Pagination, Order
+from flambda_app.logging import get_logger
+from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
+from flambda_app.vos.product import ProductVO
 from tests import ROOT_DIR
 from tests.component.componenttestutils import BaseComponentTestCase
 from tests.component.helpers.database.mysql_helper import MySQLHelper

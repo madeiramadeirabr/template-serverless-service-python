@@ -1,7 +1,7 @@
 import unittest
 
 from tests.component.componenttestutils import BaseComponentTestCase
-from lambda_app.config import get_config
+from flambda_app.config import get_config
 from tests.unit.mocks.database.redis_mock import get_connection, reset, server
 from tests.unit.testutils import get_function_name
 

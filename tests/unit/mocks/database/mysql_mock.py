@@ -47,8 +47,8 @@ def mock_raise_exception():
 def get_connection(config=None, connect=True, retry=False):
     global _CONNECTION, _RETRY_COUNT, _MAX_RETRY_ATTEMPTS, connection_mock
 
-    from lambda_app.logging import get_logger
-    from lambda_app.config import get_config
+    from flambda_app.logging import get_logger
+    from flambda_app.config import get_config
 
     logger = get_logger()
 

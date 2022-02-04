@@ -10,3 +10,4 @@ apispec
 marshmallow
 greenlet
 gevent
+serverless_wsgi

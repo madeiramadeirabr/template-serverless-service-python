@@ -1,8 +1,8 @@
 import unittest
 
-from lambda_app.config import get_config
-from lambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
-from lambda_app.services.v1.healthcheck.resources import SelfConnectionHealthCheck
+from flambda_app.config import get_config
+from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
+from flambda_app.services.v1.healthcheck.resources import SelfConnectionHealthCheck
 from tests.unit.mocks.http_mocks import http_client_mock
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
 

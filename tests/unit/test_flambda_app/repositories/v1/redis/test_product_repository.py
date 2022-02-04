@@ -2,10 +2,10 @@ import unittest
 
 from unittest_data_provider import data_provider
 
-from lambda_app.config import get_config
-from lambda_app.http_resources.request_control import Pagination
-from lambda_app.repositories.v1.redis.product_repository import ProductRepository
-from lambda_app.vos.product import ProductVO
+from flambda_app.config import get_config
+from flambda_app.http_resources.request_control import Pagination
+from flambda_app.repositories.v1.redis.product_repository import ProductRepository
+from flambda_app.vos.product import ProductVO
 from tests.unit.helpers.product_helper import get_product_sample
 from tests.unit.mocks.database.redis_mock import get_connection
 from tests.unit.testutils import get_function_name, BaseUnitTestCase

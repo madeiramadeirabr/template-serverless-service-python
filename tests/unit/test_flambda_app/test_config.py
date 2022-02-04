@@ -1,6 +1,6 @@
 import unittest
 
-from lambda_app.config import get_config
+from flambda_app.config import get_config
 from tests.unit.testutils import BaseUnitTestCase, get_function_name
 
 

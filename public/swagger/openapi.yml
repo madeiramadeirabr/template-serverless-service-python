@@ -31,7 +31,7 @@ components:
           type: string
       type: object
 info:
-  title: app
+  title: template-serverless-service-python
   version: 1.0.0
 openapi: 3.0.2
 paths:
@@ -48,5 +48,3 @@ paths:
 servers:
 - description: null
   url: null
-- description: 'Development server '
-  url: http://localhost:5000

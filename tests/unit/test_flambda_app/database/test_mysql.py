@@ -1,6 +1,6 @@
 import unittest
 
-from lambda_app.config import get_config
+from flambda_app.config import get_config
 from tests.unit.mocks.database.mysql_mock import get_connection, reset, connection_mock, mock_raise_exception
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
 
