@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-from flambda_app import APP_NAME
+
 
 if __package__:
     current_path = os.path.abspath(os.path.dirname(__file__)).replace('/' + str(__package__), '', 1)
@@ -53,6 +53,7 @@ def get_env_keys():
 
 
 def get_internal_logger():
+    from flambda_app import APP_NAME
     try:
         from flambda_app.logging import get_logger
         logger = get_logger()
@@ -110,6 +111,7 @@ def load_dot_env(env='development', force=False):
 def load_secrets(env='staging'):
     global _ENV_KEYS
     from flambda_app.aws.secrets import Secrets
+    from flambda_app import APP_NAME
     logger = get_internal_logger()
     result = False
 
