@@ -30,6 +30,7 @@ class ApiResponse:
         self.offset = api_request.offset if api_request is not None else Pagination.OFFSET
         self.total = 0
         self.count = 0
+        self.params = api_request.fields if api_request is not None else []
 
         self.api_request = api_request
 
@@ -122,7 +123,7 @@ class ApiResponse:
                 "label": label,
                 "code": code,
                 "message": message,
-                "params": [],
+                "params": self.params,
                 # data
                 "data": self.data,
                 # navigation
