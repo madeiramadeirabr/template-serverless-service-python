@@ -4,6 +4,7 @@ import os
 import sys
 from datetime import datetime
 from enum import Enum
+from boot import get_environment as get_env
 
 import pytz
 
@@ -173,11 +174,11 @@ def print_routes(app, logger=None):
 
 
 def get_environment():
-    environment = 'development'
-    if 'ENVIRONMENT' in os.environ:
-        environment = os.environ['ENVIRONMENT']
-    elif 'ENVIRONMENT_NAME' in os.environ:
-        environment = os.environ['ENVIRONMENT_NAME']
-    elif 'APP_ENV' in os.environ:
-        environment = os.environ['APP_ENV']
-    return environment
+    return get_env()
+
+
+def is_running_on_lambda(force=False):
+    if get_environment() == 'development':
+        return False if force is False else True
+    else:
+        return os.environ.get("AWS_EXECUTION_ENV") is not None

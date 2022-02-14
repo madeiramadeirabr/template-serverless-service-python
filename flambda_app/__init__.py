@@ -1,5 +1,10 @@
 import os
-from dotenv import dotenv_values
+
+
+def load_projectrc(projectrc_filepath):
+    from dotenv import dotenv_values
+    return dotenv_values(projectrc_filepath)
+
 
 if __package__:
     current_path = os.path.abspath(os.path.dirname(__file__)).replace('/' + str(__package__), '', 1)
@@ -7,15 +12,16 @@ else:
     current_path = os.path.abspath(os.path.dirname(__file__))
 
 env_vars = {}
-projectrc_file = current_path + '.projectrc'
+projectrc_file = os.path.join(current_path, '.projectrc')
 
+# inside of a docker the name of folder is app
 PROJECT_NAME = os.path.basename(current_path).replace('_', '-')
 
 if not current_path[-1] == '/':
     current_path += '/'
 
 if os.path.exists(projectrc_file):
-    env_vars = dotenv_values(projectrc_file)
+    env_vars = load_projectrc(projectrc_file)
 
 APP_NAME = env_vars['APP_NAME'] if 'APP_NAME' in env_vars else PROJECT_NAME
 APP_VERSION = env_vars['APP_VERSION'] if 'APP_VERSION' in env_vars else '1.0.0'

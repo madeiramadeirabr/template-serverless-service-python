@@ -1,5 +1,6 @@
 python-dotenv
 jsonformatter
+python-json-logger
 requests
 pytz
 redis
