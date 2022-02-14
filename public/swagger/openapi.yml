@@ -30,8 +30,90 @@ components:
           example: '0:00:00.013737'
           type: string
       type: object
+    Product:
+      properties:
+        active:
+          enum:
+          - 0
+          - 1
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        deleted_at:
+          format: date-time
+          type: string
+        description:
+          example: "Guarda Roupa com maior resist\xEAncia, durabilidade e acabamento,\
+            \ revestimento interno e externo. Pintura em estufas modernas com UV (ultra\
+            \ violeta). Modelo com corredi\xE7a met\xE1lica em a\xE7o, 4 gavetas espa\xE7\
+            osas, perfil em alum\xEDnio, roldanas de a\xE7o carbono com rolamento,\
+            \ divis\xE3o ele/ela"
+          type: string
+        id:
+          example: 1
+          type: integer
+        name:
+          example: "Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso\
+            \ M\xF3veis"
+          type: string
+        sku:
+          example: 657705
+          type: integer
+        supplier_id:
+          example: 1
+          type: integer
+        updated_at:
+          format: date-time
+          type: string
+        uuid:
+          example: 4bcad46b-6978-488f-8153-1c49f8a45244
+          format: uuid
+          type: string
+      type: object
+    ProductGetResponse:
+      properties:
+        data:
+          $ref: '#/components/schemas/Product'
+      type: object
+    ProductListResponse:
+      properties:
+        code:
+          type: integer
+        control:
+          $ref: '#/components/schemas/RequestControl'
+        data:
+          items:
+            $ref: '#/components/schemas/Product'
+          type: array
+        label:
+          type: string
+        message:
+          type: string
+        params:
+          items:
+            type: string
+          type: array
+        success:
+          type: boolean
+      required:
+      - code
+      type: object
+    RequestControl:
+      properties:
+        count:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+        total:
+          type: integer
+      required:
+      - limit
+      type: object
 info:
-  title: app
+  title: template-serverless-service-python
   version: 1.0.0
 openapi: 3.0.2
 paths:
@@ -45,8 +127,82 @@ paths:
                 $ref: '#/components/schemas/HealthCheck'
           description: Success response
       summary: Service Health Method
+  /v1/product:
+    get:
+      parameters:
+      - description: List limit
+        in: query
+        name: limit
+        required: false
+        schema:
+          example: 20
+          type: int
+      - description: List offset
+        in: query
+        name: offset
+        required: false
+        schema:
+          example: 0
+          type: int
+      - description: Filter fields with comma
+        in: query
+        name: fields
+        required: false
+        schema:
+          example: null
+          type: string
+      - description: Ordination of list
+        in: query
+        name: order_by
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+      - description: Sorting of the list
+        in: query
+        name: sort_by
+        required: false
+        schema:
+          example: id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+          description: Success response
+      summary: Product List
+  /v1/product/{uuid}:
+    get:
+      parameters:
+      - description: Product Id
+        in: path
+        name: uuid
+        required: true
+        schema:
+          example: 4bcad46b-6978-488f-8153-1c49f8a45244
+          format: uuid
+          type: string
+      - description: Filter fields with comma
+        in: query
+        name: fields
+        required: false
+        schema:
+          example: null
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGetResponse'
+          description: Success response
+      summary: Product get
 servers:
-- description: null
-  url: null
-- description: 'Development server '
+- description: Development server
+  url: http://localhost:5000
+- description: Development server
   url: http://localhost:5000

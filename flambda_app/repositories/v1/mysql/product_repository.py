@@ -1,11 +1,8 @@
 from datetime import datetime
 
-from flambda_app.database.mysql import get_connection
-from flambda_app.http_resources.request_control import Order
-from flambda_app.logging import get_logger
+from flambda_app.http_resources.request_control import Order, Pagination, PaginationType
 from flambda_app.repositories.v1.mysql import AbstractRepository
 from flambda_app.vos.product import ProductVO
-import pymysql
 
 
 class ProductRepository(AbstractRepository):
@@ -51,11 +48,27 @@ class ProductRepository(AbstractRepository):
 
         return created
 
-    def get(self, value, key=None):
+    def get(self, value, key=None, where=dict, fields: list = None):
         key_type = '%s'
         if key is None:
             key = self.PK
-        sql = "SELECT * FROM {} WHERE {} = {}".format(self.BASE_TABLE, key, key_type)
+
+        if fields is None or len(fields) == 0:
+            fields = '*'
+        else:
+            fields = [self.BASE_TABLE_ALIAS + '.' + v for v in fields]
+            fields = ",".join(fields)
+
+        sql = "SELECT {} FROM {} as {} WHERE {} = {}".format(fields, self.BASE_TABLE, self.BASE_TABLE_ALIAS, key,
+                                                             key_type)
+
+        if where != dict():
+            where_list = [
+                '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for
+                k, v in where.items()]
+            where_str = ",".join(where_list)
+
+            sql = sql + " AND {}".format(where_str)
 
         try:
             result = self._execute(sql, value)
@@ -93,12 +106,22 @@ class ProductRepository(AbstractRepository):
         sql = "SELECT {} FROM {} as {}".format(fields, self.BASE_TABLE, self.BASE_TABLE_ALIAS)
 
         if where != dict():
-            where_list = ['{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for k, v in where.items()]
+            where_list = [
+                '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for
+                k, v in where.items()]
             where_str = ",".join(where_list)
 
             sql = sql + " WHERE {}".format(where_str)
 
         sql = sql + " ORDER BY {} {}".format(sort_by, order_by)
+
+        if not offset:
+            offset = Pagination.validate(PaginationType.OFFSET, offset)
+
+        if not limit:
+            limit = Pagination.validate(PaginationType.LIMIT, limit)
+
+        sql = sql + " LIMIT {},{}".format(offset, limit)
 
         try:
             result = self._execute(sql)

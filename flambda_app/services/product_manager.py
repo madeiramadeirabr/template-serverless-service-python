@@ -5,7 +5,7 @@ from flambda_app.services.v1.product_service import ProductService as ProductSer
 
 
 class ProductManager:
-    def __init__(self, logger=None, product_service=None):
+    def __init__(self, logger=None, config=None, product_service=None):
         self.logger = logger if logger is not None else get_logger()
         # configurations
         self.config = config if config is not None else get_config()
@@ -33,8 +33,12 @@ class ProductManager:
             raise self.exception
         return total
 
-    def get(self):
-        pass
+    def get(self, request: ApiRequest, uuid):
+        data = self.product_service.get(request, uuid)
+        if (data is None or len(data) == 0) and self.product_service.exception:
+            self.exception = self.product_service.exception
+            raise self.exception
+        return data
 
     def create(self):
         pass

@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.http_resources.request_control import Pagination
@@ -17,16 +17,35 @@ class DefaultListResponseSchema(Schema):
 # Product
 # ***************************
 class ProductSchema(Schema):
+    id = fields.Int(example=1)
     sku = fields.Int(example=657705)
-    quantity = fields.Int(example=1)
-    uuid = fields.UUID(example="3d9f2fdb-f71a-4e6d-8fbf-72b12cc0c381")
+    name = fields.Str(example="Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso Móveis")
+    description = fields.Str(example="Guarda Roupa com maior resistência, durabilidade e acabamento, revestimento "
+                                     "interno e externo. Pintura em estufas modernas com UV (ultra violeta). "
+                                     "Modelo com corrediça metálica em aço, 4 gavetas espaçosas, perfil em alumínio, "
+                                     "roldanas de aço carbono com rolamento, divisão ele/ela")
+    supplier_id = fields.Int(example=1)
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+    deleted_at = fields.DateTime()
+    active = fields.Int(validate=validate.OneOf([0, 1]))
+    uuid = fields.UUID(example="4bcad46b-6978-488f-8153-1c49f8a45244")
+
+
+class HateosProductListResponseSchema(DefaultListResponseSchema):
+    data = fields.List(fields.Nested(ProductSchema))
+    control = fields.Nested(RequestControlSchema)
+    meta = fields.Nested(MetaSchema)
+    links = fields.List(fields.Nested(LinkSchema))
 
 
 class ProductListResponseSchema(DefaultListResponseSchema):
     data = fields.List(fields.Nested(ProductSchema))
     control = fields.Nested(RequestControlSchema)
-    meta = fields.Nested(MetaSchema)
-    links = fields.List(fields.Nested(LinkSchema))
+
+
+class ProductGetResponseSchema(Schema):
+    data = fields.Nested(ProductSchema)
 
 
 # ***************************
