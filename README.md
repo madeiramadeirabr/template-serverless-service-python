@@ -3,7 +3,7 @@ Template for build flexible API with AWS ECS services.
 
 ## Service Architecture
 Example of architecture with Kong API Gateway.
-![Service-Arch](docs/service-arch.png)
+![Service-Arch](docs/service-arch.drawio.png)
 
 ## General Service Routes Architecture
 Service routes.
@@ -42,7 +42,7 @@ POST /v1/event/<event_type> - Create event
 ### requirements.txt
 Collection of common application modules, light modules.
 
-### requirements.txt
+### requirements-vendor.txt
 Collection of specific application modules, heavy modules that can be converted to layers if necessary.
 
 ### requirements-tests.txt
