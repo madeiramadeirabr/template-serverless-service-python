@@ -6,6 +6,7 @@ from flambda_app.services.v1.product_service import ProductService as ProductSer
 
 class ProductManager:
     def __init__(self, logger=None, config=None, product_service=None):
+
         self.logger = logger if logger is not None else get_logger()
         # configurations
         self.config = config if config is not None else get_config()
@@ -14,6 +15,9 @@ class ProductManager:
 
         # exception
         self.exception = None
+
+        # debug
+        self.DEBUG = None
 
     def debug(self, flag: bool = False):
         self.DEBUG = flag
@@ -35,13 +39,17 @@ class ProductManager:
 
     def get(self, request: ApiRequest, uuid):
         data = self.product_service.get(request, uuid)
-        if (data is None or len(data) == 0) and self.product_service.exception:
+        if (data is None) and self.product_service.exception:
             self.exception = self.product_service.exception
             raise self.exception
         return data
 
-    def create(self):
-        pass
+    def create(self, request: ApiRequest):
+        data = self.product_service.create(request)
+        if (data is None) and self.product_service.exception:
+            self.exception = self.product_service.exception
+            raise self.exception
+        return data
 
     def soft_update(self):
         pass

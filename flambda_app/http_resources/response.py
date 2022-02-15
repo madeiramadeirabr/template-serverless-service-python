@@ -40,7 +40,19 @@ class ApiResponse:
     def set_data(self, data):
         # data
         self.data = data
-        if isinstance(data, list):
+
+        # has method dict to convert
+        if helper.has_method(self.data, 'to_dict'):
+            self.data = data.to_dict()
+
+        if isinstance(self.data, list):
+            # has method dict to convert
+            if helper.has_method(self.data[0], 'to_dict'):
+                dict_data = []
+                for item in self.data:
+                    dict_data.append(item.to_dict())
+                self.data = dict_data
+
             self.count = len(self.data)
         else:
             self.count = 1
@@ -143,7 +155,7 @@ class ApiResponse:
                 del body["meta"]
                 del body["links"]
 
-           # todo deletar o control na leitura de um item unico
+        # todo deletar o control na leitura de um item unico
 
         if 'Content-Type' in headers and headers['Content-Type'] == 'application/json':
             body = helper.to_json(body)

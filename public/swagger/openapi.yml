@@ -71,6 +71,37 @@ components:
           format: uuid
           type: string
       type: object
+    ProductCreateErrorResponse:
+      properties: {}
+      type: object
+    ProductCreateRequest:
+      properties:
+        active:
+          enum:
+          - 0
+          - 1
+          type: integer
+        description:
+          example: "Guarda Roupa com maior resist\xEAncia, durabilidade e acabamento,\
+            \ revestimento interno e externo. Pintura em estufas modernas com UV (ultra\
+            \ violeta). Modelo com corredi\xE7a met\xE1lica em a\xE7o, 4 gavetas espa\xE7\
+            osas, perfil em alum\xEDnio, roldanas de a\xE7o carbono com rolamento,\
+            \ divis\xE3o ele/ela"
+          type: string
+        name:
+          example: "Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso\
+            \ M\xF3veis"
+          type: string
+        sku:
+          example: 657705
+          type: integer
+        supplier_id:
+          example: 1
+          type: integer
+      type: object
+    ProductCreateResponse:
+      properties: {}
+      type: object
     ProductGetResponse:
       properties:
         data:
@@ -175,6 +206,26 @@ paths:
                 $ref: '#/components/schemas/ProductListResponse'
           description: Success response
       summary: Product List
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreateRequest'
+        description: Product to be created
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCreateResponse'
+        4xx:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCreateErrorResponse'
+      summary: Create product
   /v1/product/{uuid}:
     get:
       parameters:

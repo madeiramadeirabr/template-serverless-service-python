@@ -3,6 +3,7 @@ import json
 import os
 import sys
 from datetime import datetime
+from datetime import date
 from enum import Enum
 from boot import get_environment as get_env
 
@@ -132,6 +133,23 @@ def datetime_format_for_lifecycle(datetime_object):
     return datetime_object.isoformat()
 
 
+def datetime_add_timezone(datetime_object: datetime, timezone_name='America/Sao_Paulo'):
+    return datetime.fromtimestamp(datetime_object.timestamp(), tz=pytz.timezone(timezone_name))
+
+
+def datetime_convert_utc_to_local_timezone(datetime_object: datetime, timezone_name='America/Sao_Paulo'):
+    local_tz = pytz.timezone(timezone_name)
+    datetime_with_timezone = datetime_object.replace(tzinfo=pytz.utc).astimezone(local_tz)
+    return local_tz.normalize(datetime_with_timezone)
+    # return datetime_with_timezone
+
+def datetime_convert_local_timezone_to_utc(datetime_object: datetime, timezone_name='America/Sao_Paulo'):
+    local_tz = pytz.timezone(timezone_name)
+    utc_tz = pytz.utc
+    datetime_with_timezone = datetime_object.replace(tzinfo=local_tz).astimezone(utc_tz)
+    return utc_tz.normalize(datetime_with_timezone)
+    # return datetime_with_timezone
+
 def get_protocol():
     protocol = 'http://'
     if is_https():
@@ -182,3 +200,39 @@ def is_running_on_lambda(force=False):
         return False if force is False else True
     else:
         return os.environ.get("AWS_EXECUTION_ENV") is not None
+
+
+def has_method(obj, method_name):
+    if has_attr(obj, method_name):
+        method = getattr(obj, method_name, None)
+        if callable(method):
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
+def convert_object_dates_to_iso_with_timezone(target_object, timezone_name=None):
+    attrs = [att for att in dir(target_object) if not att.startswith('__')]
+    for att in attrs:
+        try:
+            val = getattr(target_object, att, None)
+            if isinstance(val, datetime) or isinstance(val, date):
+                if timezone_name:
+                    val = datetime_add_timezone(val, TZ_AMERICA_SAO_PAULO)
+                setattr(target_object, att, val.isoformat())
+        except Exception as err:
+            get_logger().error(err)
+
+def convert_object_dates_to_iso_utc(target_object):
+    attrs = [att for att in dir(target_object) if not att.startswith('__')]
+    for att in attrs:
+        try:
+            val = getattr(target_object, att, None)
+            if isinstance(val, datetime):
+                # val = datetime_add_timezone(val)
+                val = datetime_convert_local_timezone_to_utc(val)
+                setattr(target_object, att, val.isoformat())
+        except Exception as err:
+            get_logger().error(err)

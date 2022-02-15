@@ -228,8 +228,11 @@ def product_list():
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
     try:
-        response.set_data(manager.list(request))
+        data = manager.list(request)
+        response.set_data(data)
         response.set_total(manager.count(request))
+        # LOGGER.info(data)
+        # LOGGER.info(response.data)
     except Exception as err:
         LOGGER.error(err)
         error = ApiException(MessagesEnum.LIST_ERROR)
@@ -285,7 +288,7 @@ def product_get(uuid):
         # response.set_total(manager.count(request))
     except Exception as err:
         LOGGER.error(err)
-        error = ApiException(MessagesEnum.LIST_ERROR)
+        error = ApiException(MessagesEnum.FIND_ERROR)
         status_code = 400
         if manager.exception:
             error = manager.exception
@@ -294,9 +297,50 @@ def product_get(uuid):
     return response.get_response(status_code)
 
 
-@APP.route(API_ROOT + '/v1/product/<uuid>', methods=['POST'])
+@APP.route(API_ROOT + '/v1/product', methods=['POST'])
 def product_create():
-    pass
+    """
+        :return:
+        ---
+        post:
+            summary: Create product
+            requestBody:
+                description: 'Product to be created'
+                required: true
+                content:
+                    application/json:
+                        schema: ProductCreateRequest
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema: ProductCreateResponseSchema
+                4xx:
+                    content:
+                        application/json:
+                            schema: ProductCreateErrorResponseSchema
+            """
+    request = ApiRequest().parse_request(APP)
+    LOGGER.info('request: {}'.format(request))
+
+    status_code = 200
+    response = ApiResponse(request)
+    response.set_hateos(False)
+
+    manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
+    manager.debug(DEBUG)
+    try:
+        response.set_data(manager.create(request))
+        # response.set_total(manager.count(request))
+    except Exception as err:
+        LOGGER.error(err)
+        error = ApiException(MessagesEnum.CREATE_ERROR)
+        status_code = 400
+        if manager.exception:
+            error = manager.exception
+        response.set_exception(error)
+
+    return response.get_response(status_code)
 
 
 @APP.route('/v1/product/<uuid>', methods=['PUT'])
@@ -321,7 +365,7 @@ spec.path(view=product_list,
 spec.path(view=product_get,
           path="/v1/product/{uuid}", operations=get_doc(product_get))
 spec.path(view=product_create,
-          path="/v1/product/{uuid}", operations=get_doc(product_create))
+          path="/v1/product", operations=get_doc(product_create))
 spec.path(view=product_update,
           path="/v1/product/{uuid}", operations=get_doc(product_update))
 spec.path(view=product_delete,

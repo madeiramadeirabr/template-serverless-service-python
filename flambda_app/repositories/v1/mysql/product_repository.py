@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from flambda_app import helper
 from flambda_app.http_resources.request_control import Order, Pagination, PaginationType
 from flambda_app.repositories.v1.mysql import AbstractRepository
 from flambda_app.vos.product import ProductVO
@@ -26,6 +27,9 @@ class ProductRepository(AbstractRepository):
         # query
         sql = "INSERT INTO {} ({}) VALUES ({})".format(self.BASE_TABLE, keys_str, values_str)
 
+        # convert to database date format
+
+        # last treatments
         product_dict = product.to_dict()
         del product_dict["id"]
         values = tuple(product_dict.values())
@@ -65,7 +69,8 @@ class ProductRepository(AbstractRepository):
         if where != dict():
             where_list = [
                 '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for
-                k, v in where.items()]
+                k, v in where.items()
+            ]
             where_str = ",".join(where_list)
 
             sql = sql + " AND {}".format(where_str)

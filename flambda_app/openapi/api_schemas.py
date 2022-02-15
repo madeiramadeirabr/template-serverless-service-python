@@ -48,6 +48,21 @@ class ProductGetResponseSchema(Schema):
     data = fields.Nested(ProductSchema)
 
 
+class ProductCreateRequest(Schema):
+    sku = fields.Int(example=657705)
+    name = fields.Str(example="Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso Móveis")
+    description = fields.Str(example="Guarda Roupa com maior resistência, durabilidade e acabamento, revestimento "
+                                     "interno e externo. Pintura em estufas modernas com UV (ultra violeta). "
+                                     "Modelo com corrediça metálica em aço, 4 gavetas espaçosas, perfil em alumínio, "
+                                     "roldanas de aço carbono com rolamento, divisão ele/ela")
+    supplier_id = fields.Int(example=1)
+    active = fields.Int(validate=validate.OneOf([0, 1]))
+
+class ProductCreateResponseSchema(Schema):
+    pass
+
+class ProductCreateErrorResponseSchema(Schema):
+    pass
 # ***************************
 # Event
 # ***************************

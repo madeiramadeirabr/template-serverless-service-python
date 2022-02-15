@@ -1,15 +1,17 @@
+import datetime
 import json
 
 from flambda_app import helper
 from flambda_app.enums import messages
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.exceptions import DatabaseException
+from flambda_app.exceptions import DatabaseException, ValidationException
 from flambda_app.http_resources.request import ApiRequest
 from flambda_app.logging import get_logger
 from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
 from flambda_app.repositories.v1.redis.product_repository import ProductRepository as RedisProductRepository
 from flambda_app.database.mysql import get_connection as mysql_get_connection
 from flambda_app.database.redis import get_connection as redis_get_connection
+from flambda_app.vos.product import ProductVO
 
 
 class ProductService:
@@ -48,8 +50,6 @@ class ProductService:
         self.logger.info('method: {} - request: {}'
                          .format('list', request.to_json()))
 
-
-
         data = []
         where = request.where
         if where == dict():
@@ -61,6 +61,13 @@ class ProductService:
             data = self.product_repository.list(
                 where=where, offset=request.offset, limit=request.limit, order_by=request.order_by,
                 sort_by=request.sort_by, fields=request.fields)
+
+            # convert to vo and prepare for api response
+            if data:
+                vo_data = []
+                for item in data:
+                    vo_data.append(ProductVO(item).to_api_response())
+                data = vo_data
 
             # set exception if it happens
             if self.product_repository.get_exception():
@@ -109,11 +116,45 @@ class ProductService:
             )
 
             if self.DEBUG:
-                self.logger.debug('data: {}'.format(data))
+                self.logger.info('data: {}'.format(data))
+
+            # convert to vo and prepare for api response
+            if data:
+                data = ProductVO(data).to_api_response()
 
             # set exception if it happens
             if self.product_repository.get_exception():
-                raise DatabaseException(MessagesEnum.LIST_ERROR)
+                raise DatabaseException(MessagesEnum.FIND_ERROR)
+
+        except Exception as err:
+            self.logger.error(err)
+            self.exception = err
+
+        return data
+
+    def create(self, request: ApiRequest):
+        self.logger.info('method: {} - request: {}'.format('create', request.to_json()))
+
+        data = request.where
+        if self.DEBUG:
+            self.logger.info('method: {} - data: {}'.format('create', data))
+
+        try:
+
+            if data == dict():
+                raise ValidationException(MessagesEnum.REQUEST_ERROR)
+
+            now = helper.datetime_now_with_timezone()
+            product_vo = ProductVO(data)
+            created = self.product_repository.create(product_vo)
+
+            if created:
+                # convert to vo and prepare for api response
+                data = product_vo.to_api_response()
+            else:
+                data = None
+                # set exception if it happens
+                raise DatabaseException(MessagesEnum.CREATE_ERROR)
 
         except Exception as err:
             self.logger.error(err)
