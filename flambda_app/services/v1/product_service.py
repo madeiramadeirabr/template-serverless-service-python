@@ -112,7 +112,7 @@ class ProductService:
         try:
             value = uuid
             data = self.product_repository.get(
-                value, key='uuid', where=where, fields=request.fields
+                value, key=self.product_repository.UUID_KEY, where=where, fields=request.fields
             )
 
             if self.DEBUG:
@@ -161,3 +161,48 @@ class ProductService:
             self.exception = err
 
         return data
+
+    def update(self, request: ApiRequest, uuid):
+
+        self.logger.info('method: {} - request: {}'.format('update', request.to_json()))
+
+        original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)
+        if original_product is None:
+            raise DatabaseException(MessagesEnum.FIND_ERROR)
+
+        data = request.where
+        if self.DEBUG:
+            self.logger.info('method: {} - data: {}'.format('update', data))
+        
+        # update original product with update data
+        original_product.update(data)
+        data = original_product
+        
+        try:
+
+            if data == dict():
+                raise ValidationException(MessagesEnum.REQUEST_ERROR)
+
+            updated_at = helper.datetime_now_with_timezone()
+            data['updated_at'] = updated_at
+            product_vo = ProductVO(data)
+
+            updated = self.product_repository.update(product_vo, uuid, key=self.product_repository.UUID_KEY)
+
+            if updated:
+                # convert to vo and prepare for api response
+                data = product_vo.to_api_response()
+            else:
+                data = None
+                # set exception if it happens
+                raise DatabaseException(MessagesEnum.CREATE_ERROR)
+
+        except Exception as err:
+            self.logger.error(err)
+            self.exception = err
+
+        return data
+
+
+
+

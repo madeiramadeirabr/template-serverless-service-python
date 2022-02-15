@@ -48,7 +48,7 @@ class ProductGetResponseSchema(Schema):
     data = fields.Nested(ProductSchema)
 
 
-class ProductCreateRequest(Schema):
+class ProductCreateRequestSchema(Schema):
     sku = fields.Int(example=657705)
     name = fields.Str(example="Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso Móveis")
     description = fields.Str(example="Guarda Roupa com maior resistência, durabilidade e acabamento, revestimento "
@@ -63,6 +63,16 @@ class ProductCreateResponseSchema(Schema):
 
 class ProductCreateErrorResponseSchema(Schema):
     pass
+
+class ProductCompleteUpdateRequestSchema(ProductCreateRequestSchema):
+    pass
+
+class ProductUpdateResponseSchema(Schema):
+    pass
+
+class ProductUpdateErrorResponseSchema(Schema):
+    pass
+
 # ***************************
 # Event
 # ***************************
@@ -81,11 +91,11 @@ class OcorenSchema(Schema):
     pedido = fields.Str(example="Z1223321")
 
 
-class EventCreateRequest(OcorenSchema):
+class EventCreateRequestSchema(OcorenSchema):
     pass
 
 
-class EventUpdateRequest(EventCreateRequest):
+class EventUpdateRequestSchema(EventCreateRequestSchema):
     pass
 
 

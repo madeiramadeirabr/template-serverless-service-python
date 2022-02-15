@@ -309,7 +309,7 @@ def product_create():
                 required: true
                 content:
                     application/json:
-                        schema: ProductCreateRequest
+                        schema: ProductCreateRequestSchema
             responses:
                 200:
                     content:
@@ -344,12 +344,68 @@ def product_create():
 
 
 @APP.route('/v1/product/<uuid>', methods=['PUT'])
-def product_update():
-    pass
+def product_update(uuid):
+    """
+        :return:
+        ---
+        put:
+            summary: Complete product update
+            parameters:
+            - in: path
+              name: uuid
+              description: "Product Id"
+              required: true
+              schema:
+                type: string
+                format: uuid
+                example: 4bcad46b-6978-488f-8153-1c49f8a45244
+            requestBody:
+                description: 'Product to be updated'
+                required: true
+                content:
+                    application/json:
+                        schema: ProductCompleteUpdateRequestSchema
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema: ProductUpdateResponseSchema
+                4xx:
+                    content:
+                        application/json:
+                            schema: ProductUpdateErrorResponseSchema
+            """
+    request = ApiRequest().parse_request(APP)
+    LOGGER.info('request: {}'.format(request))
+
+    status_code = 200
+    response = ApiResponse(request)
+    response.set_hateos(False)
+
+    manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
+    manager.debug(DEBUG)
+    try:
+
+        response.set_data(manager.update(request, uuid))
+        # response.set_total(manager.count(request))
+    except Exception as err:
+        LOGGER.error(err)
+        error = ApiException(MessagesEnum.FIND_ERROR)
+        status_code = 400
+        if manager.exception:
+            error = manager.exception
+        response.set_exception(error)
+
+    return response.get_response(status_code)
 
 
 @APP.route('/v1/product/<uuid>', methods=['DELETE'])
 def product_delete():
+    pass
+
+
+@APP.route('/v1/product/<uuid>', methods=['PATCH'])
+def product_soft_update():
     pass
 
 

@@ -71,6 +71,31 @@ components:
           format: uuid
           type: string
       type: object
+    ProductCompleteUpdateRequest:
+      properties:
+        active:
+          enum:
+          - 0
+          - 1
+          type: integer
+        description:
+          example: "Guarda Roupa com maior resist\xEAncia, durabilidade e acabamento,\
+            \ revestimento interno e externo. Pintura em estufas modernas com UV (ultra\
+            \ violeta). Modelo com corredi\xE7a met\xE1lica em a\xE7o, 4 gavetas espa\xE7\
+            osas, perfil em alum\xEDnio, roldanas de a\xE7o carbono com rolamento,\
+            \ divis\xE3o ele/ela"
+          type: string
+        name:
+          example: "Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso\
+            \ M\xF3veis"
+          type: string
+        sku:
+          example: 657705
+          type: integer
+        supplier_id:
+          example: 1
+          type: integer
+      type: object
     ProductCreateErrorResponse:
       properties: {}
       type: object
@@ -129,6 +154,12 @@ components:
           type: boolean
       required:
       - code
+      type: object
+    ProductUpdateErrorResponse:
+      properties: {}
+      type: object
+    ProductUpdateResponse:
+      properties: {}
       type: object
     RequestControl:
       properties:
@@ -252,6 +283,35 @@ paths:
                 $ref: '#/components/schemas/ProductGetResponse'
           description: Success response
       summary: Product get
+    put:
+      parameters:
+      - description: Product Id
+        in: path
+        name: uuid
+        required: true
+        schema:
+          example: 4bcad46b-6978-488f-8153-1c49f8a45244
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCompleteUpdateRequest'
+        description: Product to be updated
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductUpdateResponse'
+        4xx:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductUpdateErrorResponse'
+      summary: Complete product update
 servers:
 - description: Development server
   url: http://localhost:5000

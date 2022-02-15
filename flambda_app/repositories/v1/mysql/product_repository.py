@@ -11,6 +11,7 @@ class ProductRepository(AbstractRepository):
     BASE_SCHEMA = 'store'
     BASE_TABLE_ALIAS = 'p'
     PK = 'id'
+    UUID_KEY = 'uuid'
 
     def __init__(self, logger=None, mysql_connection=None):
         super().__init__(logger, mysql_connection)
@@ -27,11 +28,9 @@ class ProductRepository(AbstractRepository):
         # query
         sql = "INSERT INTO {} ({}) VALUES ({})".format(self.BASE_TABLE, keys_str, values_str)
 
-        # convert to database date format
-
         # last treatments
         product_dict = product.to_dict()
-        del product_dict["id"]
+        del product_dict[self.PK]
         values = tuple(product_dict.values())
 
         # try to create
@@ -52,10 +51,57 @@ class ProductRepository(AbstractRepository):
 
         return created
 
-    def get(self, value, key=None, where=dict, fields: list = None):
+    def update(self, product: ProductVO, value, key=None):
         key_type = '%s'
         if key is None:
             key = self.PK
+
+        keys = list(product.keys())
+        # remove the PK
+        keys.remove(self.PK)
+        # remove the uuid
+        keys.remove(self.UUID_KEY)
+        # values
+        values = []
+        update_data = []
+        for k, v in product.to_dict().items():
+            if k in keys:
+                update_data.append('{}.{}=%s '.format(self.BASE_TABLE_ALIAS, k))
+                values.append(v)
+        update_str = ",".join(update_data)
+        # query
+        sql = "UPDATE {} as {} SET {} WHERE {}.{} = {}".format(self.BASE_TABLE, self.BASE_TABLE_ALIAS, update_str, self.BASE_TABLE_ALIAS, key,
+                                                            key_type)
+
+        # last treatments
+        product_dict = product.to_dict()
+        del product_dict[self.PK]
+        del product_dict[self.UUID_KEY]
+        # the uuid key
+        values.append(value)
+
+        try:
+            updated = self._execute(sql, values)
+            # commit
+            self.connection.commit()
+
+        except Exception as err:
+            self.logger.error(err)
+            self.connection.rollback()
+            self._exception = err
+            updated = False
+        finally:
+            self._close()
+
+        return updated
+
+    def get(self, value, key=None, where: dict = None, fields: list = None):
+        key_type = '%s'
+        if key is None:
+            key = self.PK
+
+        if where is None:
+            where = dict()
 
         if fields is None or len(fields) == 0:
             fields = '*'
@@ -140,7 +186,7 @@ class ProductRepository(AbstractRepository):
 
         return result
 
-    def count(self, where, sort_by=None, order_by=None):
+    def count(self, where: dict, sort_by=None, order_by=None):
         if order_by is None:
             order_by = Order.ASC
 

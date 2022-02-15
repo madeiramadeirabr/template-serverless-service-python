@@ -22,21 +22,3 @@ class ProductVO(AbstractVO):
         self.created_at = data.get('created_at') if data and 'created_at' in data else datetime_now_with_timezone()
         self.updated_at = data.get('updated_at') if data and 'updated_at' in data else None
         self.deleted_at = data.get('deleted_at') if data and 'deleted_at' in data else None
-
-    def to_json(self):
-        """
-        Transform before convert
-        """
-        # iso date format
-        if isinstance(self.created_at, datetime.datetime):
-            self.created_at = self.created_at.isoformat()
-
-        # iso date format
-        if isinstance(self.updated_at, datetime.datetime):
-            self.updated_at = self.updated_at.isoformat()
-
-        # iso date format
-        if isinstance(self.deleted_at, datetime.datetime):
-            self.deleted_at = self.deleted_at.isoformat()
-
-        return super(ProductVO, self).to_json()

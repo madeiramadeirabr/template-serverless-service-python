@@ -54,8 +54,12 @@ class ProductManager:
     def soft_update(self):
         pass
 
-    def update(self):
-        pass
+    def update(self, request: ApiRequest, uuid):
+        data = self.product_service.update(request, uuid)
+        if (data is None) and self.product_service.exception:
+            self.exception = self.product_service.exception
+            raise self.exception
+        return data
 
     def delete(self):
         pass
