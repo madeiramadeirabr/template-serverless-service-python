@@ -1,35 +1,50 @@
 version: 0.2
-
+env:
+  secrets-manager:
+    GITHUB_TOKEN: devops:GITHUB_TOKEN
+    DOCKERHUB_USERNAME: devops:DOCKERHUB_USERNAME
+    DOCKERHUB_PASSWORD: devops:DOCKERHUB_PASSWORD
 phases:
   pre_build:
-    run-as: root
     commands:
-      # Install Serverless Framework CLI and plugins
-      - curl -L -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.9.6/yq_linux_amd64 && chmod +x /usr/local/bin/yq
-      - npm install -g serverless@2.72.2 $(yq eval '.plugins | join(" ")' serverless.yaml)
-      - export IAC_VERSION="serverless-$(serverless --version | grep -i framework | cut -d ' ' -f 3)"
-      - yq eval '.provider.stackTags.Iac = strenv(IAC_VERSION) | .custom.cloudWatchLogsTags.Iac = strenv(IAC_VERSION)' --inplace serverless.yaml
+      # AWS ECR Login
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      # Docker Hub Login
+      - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
   build:
     commands:
       # Install project dependencies locally
       - pip install -r ./requirements.txt -t .
-      - pip install -r ./requirements-vendor.txt -t ./vendor
-      # generate openapi.yaml for the current env
-      - ./scripts/openapi.sh
+      - pip install -r ./requirements-vendor.txt
+      # Build Docker image
+      - |
+        docker build \
+          --build-arg PROJECT_NAME=$APP_NAME \
+          --build-arg FLASK_PORT=$CONTAINER_PORT_0 \
+          --build-arg ENVIRONMENT_NAME=$ENVIRONMENT_NAME \
+          -t $CONTAINER_NAME_0 \
+          -f docker/python/Dockerfile .
   post_build:
     commands:
-      # Install test requirements
-      #      - pip install -r ./requirements-tests.txt
-      #      # Run unit tests
-      #      - ./bin/tests/unit-coverage-no-report-html.sh
-      #      # Clean vendor folder (let the zip light because the layers)
-      #      # - rm -Rf ./vendor/*
-      #      # Uninstall test dependencies
-      #      - pip uninstall -r requirements-tests.txt -y
-      # Deploy application
-      - serverless deploy --verbose --stage $ENVIRONMENT_NAME
-#reports:
-#  UnitTestsReports:
-#    files:
-#      - 'target/unit/clover.xml'
-#    file-format: 'CLOVERXML'
+      - echo Installing test requirements
+      - pip install -r ./requirements-tests.txt
+      - echo Running unit testes
+      - ./bin/tests/unit-coverage-no-report-html.sh
+      # Uninstall test dependencies
+      - pip uninstall -r requirements-tests.txt -y
+    finally:
+      # Tag Docker images
+      - docker tag $CONTAINER_NAME_0:latest $REPOSITORY_URI_0:latest
+      # Push Docker images
+      - docker push $REPOSITORY_URI_0:latest
+      # Write imagedefinitions.json
+      - printf '[' > imagedefinitions.json
+      - printf '{"name":"%s","imageUri":"%s"}' $CONTAINER_NAME_0 $REPOSITORY_URI_0:latest >> imagedefinitions.json
+      - printf ']' >> imagedefinitions.json
+reports:
+  UnitTestsReports:
+    files:
+      - 'target/unit/clover.xml'
+    file-format: 'CLOVERXML'
+artifacts:
+  files: imagedefinitions.json
