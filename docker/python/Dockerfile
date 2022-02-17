@@ -1,5 +1,5 @@
 FROM python:3.8.11-alpine3.13
-MAINTAINER Anderson Contreira <anderson.contreira@gmail.com>
+MAINTAINER Anderson Contreira <anderson.contreira@madeiramadeira.com.br>
 
 ARG FLASK_PORT=5000
 ARG ENVIRONMENT_NAME=development
@@ -53,8 +53,6 @@ COPY . .
 
 # entrypoint permission
 RUN ["chmod", "+x", "./docker/python/entrypoint.sh"]
-# entrypoint
-ENTRYPOINT ["sh", "./docker/python/entrypoint.sh"]
 
 # CMD [ "flask", "run", "--host", "0.0.0.0" ]
 CMD [ "python3", "server.py" ]

@@ -4,7 +4,7 @@ from unittest_data_provider import data_provider
 
 from flambda_app.config import get_config
 from flambda_app.database.redis import get_connection
-from flambda_app.http_resources.request_control import Pagination
+from flambda_app.request_control import Pagination
 from flambda_app.logging import get_logger
 from flambda_app.repositories.v1.redis.product_repository import ProductRepository
 from flambda_app.vos.product import ProductVO

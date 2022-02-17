@@ -8,7 +8,7 @@ from flambda_app.exceptions import DatabaseException
 from flambda_app.logging import get_logger
 
 # iterate a list in batches of size n
-from flambda_app.http_resources.request_control import Pagination
+from flambda_app.request_control import Pagination
 
 
 def batcher(iterable, n):

@@ -1,0 +1,50 @@
+version: 0.2
+env:
+  secrets-manager:
+    GITHUB_TOKEN: devops:GITHUB_TOKEN
+    DOCKERHUB_USERNAME: devops:DOCKERHUB_USERNAME
+    DOCKERHUB_PASSWORD: devops:DOCKERHUB_PASSWORD
+phases:
+  pre_build:
+    commands:
+      # AWS ECR Login
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      # Docker Hub Login
+      - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+  build:
+    commands:
+      # Install project dependencies locally
+      - pip install -r ./requirements.txt -t .
+      - pip install -r ./requirements-vendor.txt
+      # Build Docker image
+      - |
+        docker build \
+          --build-arg PROJECT_NAME=$APP_NAME \
+          --build-arg FLASK_PORT=$CONTAINER_PORT_0 \
+          --build-arg ENVIRONMENT_NAME=$ENVIRONMENT_NAME \
+          -t $CONTAINER_NAME_0 \
+          -f docker/python/Dockerfile .
+  post_build:
+    commands:
+      - echo Installing test requirements
+      - pip install -r ./requirements-tests.txt
+      - echo Running unit testes
+      - ./bin/tests/unit-coverage-no-report-html.sh
+      # Uninstall test dependencies
+      - pip uninstall -r requirements-tests.txt -y
+    finally:
+      # Tag Docker images
+      - docker tag $CONTAINER_NAME_0:latest $REPOSITORY_URI_0:latest
+      # Push Docker images
+      - docker push $REPOSITORY_URI_0:latest
+      # Write imagedefinitions.json
+      - printf '[' > imagedefinitions.json
+      - printf '{"name":"%s","imageUri":"%s"}' $CONTAINER_NAME_0 $REPOSITORY_URI_0:latest >> imagedefinitions.json
+      - printf ']' >> imagedefinitions.json
+reports:
+  UnitTestsReports:
+    files:
+      - 'target/unit/clover.xml'
+    file-format: 'CLOVERXML'
+artifacts:
+  files: imagedefinitions.json

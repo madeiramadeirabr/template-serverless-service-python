@@ -24,8 +24,9 @@ if env == "development":
         "url": os.environ["LOCAL_API_SERVER"] if "LOCAL_API_SERVER" in os.environ else "http://localhost:5000",
         "description": os.environ["LOCAL_API_SERVER_DESCRIPTION"] \
             if "LOCAL_API_SERVER_DESCRIPTION" in os.environ \
-            else "Development server "
+            else "Development server"
     })
+
 
 spec = APISpec(
     title=APP_NAME,
@@ -35,19 +36,21 @@ spec = APISpec(
         MarshmallowPlugin()
     ],
     servers=servers
-
 )
 
 
 def generate_openapi_yml(spec_object, logger, force=False):
-    openapi_data = spec_object.to_yaml()
+    try:
+        openapi_data = spec_object.to_yaml()
 
-    if os.environ['APP_ENV'] == 'development' or force:
-        stream = open_vendor_file("./public/swagger/openapi.yml", "w")
+        if os.environ['APP_ENV'] == 'development' or force:
+            stream = open_vendor_file("./public/swagger/openapi.yml", "w")
 
-        if stream:
-            stream.write(openapi_data)
-            stream.close()
+            if stream:
+                stream.write(openapi_data)
+                stream.close()
+    except Exception as err:
+        logger.error(err)
 
 
 # doc
@@ -57,8 +60,9 @@ def get_doc(fn):
     try:
 
         fn_doc = fn.__doc__
-        fn_doc = fn_doc.split('---')[-1]
-        doc_yml = yaml.safe_load(fn_doc)
+        if fn_doc:
+            fn_doc = fn_doc.split('---')[-1]
+            doc_yml = yaml.safe_load(fn_doc)
     except Exception as err:
         logger.error(err)
     return doc_yml

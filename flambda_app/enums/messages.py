@@ -35,6 +35,7 @@ class MessagesEnum(IntEnum):
     CREATE_ERROR = 17, 'common.error.create_error', 'Unable to create the record'
     UPDATE_ERROR = 18, 'common.error.update_error', 'Unable to update the record'
     DELETE_ERROR = 18, 'common.error.delete_error', 'Unable to delete the record'
+    SOFT_DELETE_ERROR = 18, 'common.error.soft_delete_error', 'Unable to disable the record'
 
     # validation 31 - 50
     VALIDATION_ERROR = 31, 'common.error.validation_error', 'Validation error, please review your params: value (%s) for param (%s)'

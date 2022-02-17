@@ -2,8 +2,6 @@ import json
 import os
 import sys
 
-
-
 if __package__:
     current_path = os.path.abspath(os.path.dirname(__file__)).replace('/' + str(__package__), '', 1)
 else:
@@ -55,17 +53,20 @@ def get_env_keys():
 def get_internal_logger():
     from flambda_app import APP_NAME
     try:
-        from flambda_app.logging import get_logger
+        from flambda_app.logging import get_logger, reset as reset_logger
         logger = get_logger()
+        reset_logger()
+
     except Exception as err:
-        print('load_env: Unable to load logger: {}'.format(err))
         import logging
         log_name = APP_NAME
         logger = logging.getLogger(log_name)
+        logger.error('load_env: Unable to load logger: {}'.format(err))
     return logger
 
 
 def load_dot_env(env='development', force=False):
+    result = False
     from dotenv import dotenv_values
     # env default value
     if env is None:
@@ -73,7 +74,7 @@ def load_dot_env(env='development', force=False):
 
     logger = get_internal_logger()
 
-    global _LOADED, _ENV_KEYS
+    global _LOADED, _ENV_KEYS, _DEFAULT_ENV_CONFIGS
     if not _LOADED or force:
         logger.info('Boot - Loading env: {}'.format(env))
 
@@ -92,10 +93,11 @@ def load_dot_env(env='development', force=False):
                 _ENV_KEYS.append(k)
                 os.environ[k] = v
             _LOADED = True
+            result = True
         else:
             # try with development
             if env == 'dev':
-                load_dot_env('development')
+                result = load_dot_env('development')
             else:
                 # Try to load via secrets manager
                 result = load_secrets(env=env)
@@ -105,7 +107,8 @@ def load_dot_env(env='development', force=False):
                     logger.error('Unable to load config')
 
     else:
-        pass
+        result = True
+    return result
 
 
 def load_secrets(env='staging'):
@@ -134,6 +137,7 @@ def load_secrets(env='staging'):
 
 
 def load_env(env='dev', force=False):
+    result = False
     # env default value
     if env is None:
         env = 'dev'
@@ -174,22 +178,25 @@ def load_env(env='dev', force=False):
                         if k not in os.environ:
                             os.environ[k] = v
                     _LOADED = True
+                    result = True
                 else:
                     logger.error("Unable to load env_vars from chalice: {}".format(env_vars))
             else:
                 # solution for projects with development flag instead of dev
                 if env == 'dev':
-                    load_env('development')
+                    result = load_env('development')
                 else:
                     logger.error('Unable to load config')
                     _LOADED = False
             # close the file
             file.close()
+
         else:
             logger.error('Unable to load config')
             _LOADED = False
     else:
-        pass
+        result = True
+    return result
 
 
 def register_vendor():
@@ -208,7 +215,7 @@ def register_path(path):
 
 
 def print_env(app, logger):
-    logger.info('Environment: %s' % os.getenv('APP_ENV'))
+    logger.info('Environment: %s' % get_environment())
     # logger.info('Host: %s' % os.getenv('APP_HOST'))
     # logger.info('Port: %s' % os.getenv('APP_PORT'))
     # logger.info('Database: %s' % os.getenv('DB_HOST'))
@@ -216,4 +223,21 @@ def print_env(app, logger):
     logger.info('Debug: %s' % os.getenv('DEBUG'))
 
 
+def get_environment():
+    environment = 'development'
+    if 'ENVIRONMENT' in os.environ:
+        environment = os.environ['ENVIRONMENT']
+    elif 'ENVIRONMENT_NAME' in os.environ:
+        environment = os.environ['ENVIRONMENT_NAME']
+    elif 'APP_ENV' in os.environ:
+        environment = os.environ['APP_ENV']
+    return environment
+
+
+# register the vendor folder
 register_vendor()
+
+# load env
+loaded = load_env(get_environment())
+if not loaded:
+    loaded = load_dot_env(get_environment())

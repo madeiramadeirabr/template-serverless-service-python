@@ -1,38 +1,11 @@
-# fix request.data
 import json
-import re
-from urllib.parse import parse_qs
 
-
-from flambda_app.http_resources import _REQUEST_IGNORED_KEYS
-from flambda_app import helper
-from flambda_app.http_resources.request_control import Pagination, Order, PaginationType
 from werkzeug.datastructures import ImmutableMultiDict
 
-
-def filter_sql_injection(value):
-    check_value = str(value).replace('-', '')
-    pattern = '(select|from|where)'
-    if re.search(pattern, check_value, re.I):
-        value = None
-    return value
-
-
-def filter_fields(fields):
-    filtered = None
-    if isinstance(fields, list):
-        filtered = []
-        for v in fields:
-            if v == '*':
-                pass
-            else:
-                filtered_value = filter_sql_injection(v)
-                if not helper.empty(filtered_value):
-                    filtered_value = filtered_value.strip()
-                    filtered.append(filtered_value)
-        if len(filtered) == 0:
-            filtered = None
-    return filtered
+from flambda_app import helper
+from flambda_app.filter_helper import filter_fields, filter_sql_injection
+from flambda_app.http_resources import _REQUEST_IGNORED_KEYS
+from flambda_app.request_control import Pagination, Order, PaginationType
 
 
 class FlaskRequestParser:
@@ -51,6 +24,8 @@ class FlaskRequestParser:
         self._request = None
         self._logger = logger
         self.json = None
+        self.query_string = None
+        self.query_string_args = None
 
     def set_request(self, request):
         self._request = request
@@ -61,8 +36,11 @@ class FlaskRequestParser:
             self._request = request
 
         request = self._request
+        # Query string
+        self.query_string = str(request.query_string.decode('ascii'))
+        self.query_string_args = {k: v for k, v in request.args.items()}
 
-        # headers
+        # Headers
         if not helper.empty(request.headers):
             if 'host' in request.headers:
                 self.host = request.headers['host']
@@ -127,9 +105,7 @@ class FlaskRequestParser:
                             wlist.append(value)
                         self.where[key] = wlist
 
-        # print('where', self.where)
-
-        if request.method in ['POST', 'PUT']:
+        if request.method in ['POST', 'PUT', 'PATCH']:
             # json
             if request.json is not None:
                 self.where = request.json

@@ -76,6 +76,12 @@ class CustomIntEnum(IntEnum):
 
 
 class CustomStringEnum(CustomEnum):
+    # não usar propriedades default value, name etc
+    # def __new__(cls, value):
+    #     obj = object.__new__(cls)
+    #     obj.value = value
+    #     return obj
+
     @classmethod
     def from_description(cls, description):
         for e in cls:

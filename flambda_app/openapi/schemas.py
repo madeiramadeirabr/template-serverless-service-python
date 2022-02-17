@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields
 
-from flambda_app.http_resources.request_control import Pagination
+from flambda_app.enums.messages import MessagesEnum
+from flambda_app.request_control import Pagination
 
 
 class DeletionSchema(Schema):
@@ -12,11 +13,13 @@ class DeletionSchema(Schema):
 
 
 class ErrorSchema(Schema):
-    success = fields.Bool(default=False)
-    code = fields.Int(required=True)
-    label = fields.Str()
-    message = fields.Str()
+    success = fields.Bool(example=False, default=False)
+    code = fields.Int(example=MessagesEnum.INTERNAL_SERVER_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.INTERNAL_SERVER_ERROR.label)
+    message = fields.Str(example=MessagesEnum.INTERNAL_SERVER_ERROR.message)
     params = fields.List(fields.Str())
+    details = fields.Str()
+    trace = fields.Str()
 
 
 class RequestControlSchema(Schema):

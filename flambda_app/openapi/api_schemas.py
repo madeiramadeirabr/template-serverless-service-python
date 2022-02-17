@@ -1,33 +1,121 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.http_resources.request_control import Pagination
 from flambda_app.openapi.schemas import DeletionSchema, RequestControlSchema, MetaSchema, LinkSchema, ErrorSchema
 
 
-class DefaultListResponseSchema(Schema):
-    success = fields.Bool(default=True)
-    code = fields.Int(required=True)
-    label = fields.Str()
-    message = fields.Str()
+class DefaultResponseSchema(Schema):
+    success = fields.Bool(example=True, default=True)
+    code = fields.Int(example=MessagesEnum.OK.code, required=True)
+    label = fields.Str(example=MessagesEnum.OK.label)
+    message = fields.Str(example=MessagesEnum.OK.message)
     params = fields.List(fields.Str())
 
+class HateosDefaultResponseSchema(DefaultResponseSchema):
+    meta = fields.Nested(MetaSchema)
+    links = fields.List(fields.Nested(LinkSchema))
+
+class HateosDefaultListResponseSchema(DefaultResponseSchema):
+    meta = fields.Nested(MetaSchema)
 
 # ***************************
 # Product
 # ***************************
 class ProductSchema(Schema):
+    id = fields.Int(example=1)
     sku = fields.Int(example=657705)
-    quantity = fields.Int(example=1)
-    uuid = fields.UUID(example="3d9f2fdb-f71a-4e6d-8fbf-72b12cc0c381")
+    name = fields.Str(example="Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso Móveis")
+    description = fields.Str(example="Guarda Roupa com maior resistência, durabilidade e acabamento, revestimento "
+                                     "interno e externo. Pintura em estufas modernas com UV (ultra violeta). "
+                                     "Modelo com corrediça metálica em aço, 4 gavetas espaçosas, perfil em alumínio, "
+                                     "roldanas de aço carbono com rolamento, divisão ele/ela")
+    supplier_id = fields.Int(example=1)
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+    deleted_at = fields.DateTime()
+    active = fields.Int(validate=validate.OneOf([0, 1]))
+    uuid = fields.UUID(example="4bcad46b-6978-488f-8153-1c49f8a45244")
 
 
-class ProductListResponseSchema(DefaultListResponseSchema):
+class HateosProductListResponseSchema(HateosDefaultListResponseSchema):
     data = fields.List(fields.Nested(ProductSchema))
     control = fields.Nested(RequestControlSchema)
-    meta = fields.Nested(MetaSchema)
-    links = fields.List(fields.Nested(LinkSchema))
 
+
+class ProductListResponseSchema(DefaultResponseSchema):
+    data = fields.List(fields.Nested(ProductSchema))
+    control = fields.Nested(RequestControlSchema)
+
+class ProductListErrorResponseSchema(ErrorSchema):
+    code = fields.Int(example=MessagesEnum.LIST_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.LIST_ERROR.label)
+    message = fields.Str(example=MessagesEnum.LIST_ERROR.message)
+
+class ProductGetResponseSchema(DefaultResponseSchema):
+    data = fields.Nested(ProductSchema)
+
+class HateosProductGetResponseSchema(HateosDefaultResponseSchema):
+    data = fields.Nested(ProductSchema)
+
+class ProductGetErrorResponseSchema(ErrorSchema):
+    code = fields.Int(example=MessagesEnum.FIND_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.FIND_ERROR.label)
+    message = fields.Str(example=MessagesEnum.FIND_ERROR.message)
+
+class ProductCreateRequestSchema(Schema):
+    sku = fields.Int(example=657705)
+    name = fields.Str(example="Guarda Roupa Casal com Espelho 3 Portas de Correr Lara Espresso Móveis")
+    description = fields.Str(example="Guarda Roupa com maior resistência, durabilidade e acabamento, revestimento "
+                                     "interno e externo. Pintura em estufas modernas com UV (ultra violeta). "
+                                     "Modelo com corrediça metálica em aço, 4 gavetas espaçosas, perfil em alumínio, "
+                                     "roldanas de aço carbono com rolamento, divisão ele/ela")
+    supplier_id = fields.Int(example=1)
+    active = fields.Int(validate=validate.OneOf([0, 1]))
+
+
+class ProductCreateResponseSchema(DefaultResponseSchema):
+    data = fields.Nested(ProductSchema)
+
+
+class ProductCreateErrorResponseSchema(ErrorSchema):
+    code = fields.Int(example=MessagesEnum.CREATE_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.CREATE_ERROR.label)
+    message = fields.Str(example=MessagesEnum.CREATE_ERROR.message)
+
+
+class ProductCompleteUpdateRequestSchema(ProductCreateRequestSchema):
+    pass
+
+
+class ProductUpdateResponseSchema(ProductCreateResponseSchema):
+    pass
+
+
+class ProductUpdateErrorResponseSchema(ErrorSchema):
+    code = fields.Int(example=MessagesEnum.UPDATE_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.UPDATE_ERROR.label)
+    message = fields.Str(example=MessagesEnum.UPDATE_ERROR.message)
+
+
+class ProductSoftUpdateRequestSchema(Schema):
+    field = fields.Str(example="value")
+
+
+class ProductSoftDeleteResponseSchema(DefaultResponseSchema):
+    data = fields.Dict(example={"deleted": True})
+
+class ProductDeleteResponseSchema(Schema):
+    data = fields.Dict(example={"deleted": True})
+
+class ProductSoftDeleteErrorResponseSchema(ErrorSchema):
+    code = fields.Int(example=MessagesEnum.SOFT_DELETE_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.SOFT_DELETE_ERROR.label)
+    message = fields.Str(example=MessagesEnum.SOFT_DELETE_ERROR.message)
+
+class ProductDeleteErrorResponseSchema(ErrorSchema):
+    code = fields.Int(example=MessagesEnum.DELETE_ERROR.code, required=True)
+    label = fields.Str(example=MessagesEnum.DELETE_ERROR.label)
+    message = fields.Str(example=MessagesEnum.DELETE_ERROR.message)
 
 # ***************************
 # Event
@@ -47,15 +135,15 @@ class OcorenSchema(Schema):
     pedido = fields.Str(example="Z1223321")
 
 
-class EventCreateRequest(OcorenSchema):
+class EventCreateRequestSchema(OcorenSchema):
     pass
 
 
-class EventUpdateRequest(EventCreateRequest):
+class EventUpdateRequestSchema(EventCreateRequestSchema):
     pass
 
 
-class EventListResponseSchema(DefaultListResponseSchema):
+class EventListResponseSchema(DefaultResponseSchema):
     data = fields.List(fields.Nested(EventSchema))
     control = fields.Nested(RequestControlSchema)
     meta = fields.Nested(MetaSchema)
@@ -97,3 +185,7 @@ class EventUpdateResponseSchema(EventGetResponseSchema):
 
 class EventDeleteResponseSchema(EventGetResponseSchema):
     data = fields.Nested(DeletionSchema)
+
+def register():
+    # simple function only to force the import of the script on app.py
+    pass

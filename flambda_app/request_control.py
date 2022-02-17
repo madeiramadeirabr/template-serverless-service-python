@@ -1,16 +1,14 @@
+from flambda_app import constants
 class PaginationType:
     LIMIT = 'limit'
     OFFSET = 'offset'
 
 
-PAGINATION_LIMIT = 100
-
-
 class Pagination:
     """
     """
-    LIMIT = 20
-    OFFSET = 0
+    LIMIT = constants.LIMIT
+    OFFSET = constants.OFFSET
 
     @staticmethod
     def validate(pagination_type, value):
@@ -21,8 +19,8 @@ class Pagination:
         """
         try:
             if str(pagination_type).lower() == PaginationType.LIMIT:
-                if int(value) > PAGINATION_LIMIT:
-                    value = PAGINATION_LIMIT
+                if int(value) > constants.PAGINATION_LIMIT:
+                    value = constants.PAGINATION_LIMIT
                 elif int(value) < 0:
                     value = Pagination.OFFSET
             else:

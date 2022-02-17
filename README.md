@@ -3,16 +3,23 @@ Template for build flexible API with AWS ECS services.
 
 ## Service Architecture
 Example of architecture with Kong API Gateway.
-![Service-Arch](docs/service-arch.png)
+![Service-Arch](docs/service-arch.drawio.png)
 
 ## General Service Routes Architecture
-Service routes.
+Example of OpenApi documentation.
+![Service-Arch](docs/swagger.png)
+
+Route list:
 ```
 GET / - Root
 GET /docs - Swagger docs
 GET /alive - Health Check
-GET /v1/event/<event_type> - Event List
-POST /v1/event/<event_type> - Create event
+GET /v1/product - Product List
+POST /v1/product - Product Create 
+DELETE /v1/product/<uuid> - Soft Product Delete
+GET /v1/product/<uuid> - Product Get
+PATCH /v1/product/<uuid> - Soft Product Update
+PUT /v1/product/<uuid> - Complete Product Update
 ```
 
 # Prerequisites
@@ -37,12 +44,14 @@ POST /v1/event/<event_type> - Create event
 * MySQL
 * Redis
 * Swagger
+* Restful
+* HATEOS
 
 ## Details about requirements files
 ### requirements.txt
 Collection of common application modules, light modules.
 
-### requirements.txt
+### requirements-vendor.txt
 Collection of specific application modules, heavy modules that can be converted to layers if necessary.
 
 ### requirements-tests.txt
@@ -96,6 +105,11 @@ Execute the follow command:
 ./scripts/runenv.sh
 ```
 
+### Recovering the environment in error cases
+Execute the follow command:
+```
+./scripts/fixenv.sh
+```
 
 ## Samples
 See the project samples in this folder [here](samples).

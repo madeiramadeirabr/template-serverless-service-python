@@ -8,6 +8,9 @@ from flambda_app.logging import get_logger
 
 
 def read_event(record, logger=None):
+    """
+
+    """
     if logger is None:
         logger = get_logger()
     logger.info('try to reading event form record: {}'.format(record))
@@ -39,6 +42,9 @@ def read_event(record, logger=None):
 
 
 def get_records_from_sqs_event(sqs_event, logger=None):
+    """
+
+    """
     if logger is None:
         logger = get_logger()
     records = []

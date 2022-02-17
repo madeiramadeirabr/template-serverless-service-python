@@ -2,12 +2,11 @@ import logging
 import os
 import random
 import string
-import traceback
 import unittest
 
 from boot import reset, load_dot_env, load_env
 from flambda_app.config import reset as reset_config, get_config
-
+from flambda_app.helper import get_function_name as get_fn
 
 def random_string(string_length=10):
     """Generate a random string of fixed length """
@@ -16,10 +15,7 @@ def random_string(string_length=10):
 
 
 def get_function_name(class_name=""):
-    fn_name = class_name + "::" + traceback.extract_stack(None, 2)[0][2]
-    if not class_name:
-        fn_name = traceback.extract_stack(None, 2)[0][2]
-    return fn_name
+    return get_fn(class_name)
 
 
 class BaseUnitTestCase(unittest.TestCase):

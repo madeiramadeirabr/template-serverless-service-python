@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from flambda_app import helper
@@ -15,6 +16,13 @@ class AbstractVO:
 
     def to_json(self):
         return json.dumps(self.to_dict(force_str=False))
+
+    def to_api_response(self, convert_to_utc=True):
+        """
+        Apply iso format to result
+        """
+        helper.convert_object_dates_to_iso_utc(self)
+        return helper.to_dict(self, force_str=False)
 
     def __getitem__(self, n):
         """

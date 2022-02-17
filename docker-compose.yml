@@ -2,9 +2,11 @@ version: "3.2"
 services:
   template-serverless-service-python:
 #    container_name: template-serverless-service-python
+
     build:
       context: .
       dockerfile: ./docker/python/Dockerfile
+    entrypoint: ["sh", "./docker/python/entrypoint.sh"]
     privileged: true
     environment:
       # Fake credentials for Localstack
