@@ -33,6 +33,6 @@ class HealthCheckManager:
             self.logger, self.config), ["redis"])
         self.healthcheck_service.add_check("internal", lambda: HealthCheckResult.healthy("connect"), ["example"])
         # example with a lambda check
-        # self.service.add_check("internal", lambda: HealthCheckResult.unhealthy("connect"), ["example"])
+        # self.healthcheck_service.add_check("internal", lambda: HealthCheckResult.unhealthy("connect"), ["example"])
 
         return self.healthcheck_service.get_response()
