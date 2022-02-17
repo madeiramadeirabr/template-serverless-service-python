@@ -1,3 +1,4 @@
+#!/bin/bash
 #echo 'Booting database...'
 ## TODO futuramente usar o Flask migrate ou outra alternativa
 #
