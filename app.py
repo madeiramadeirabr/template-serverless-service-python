@@ -16,24 +16,33 @@ from flambda_app.helper import open_vendor_file, print_routes
 from flambda_app.http_helper import CUSTOM_DEFAULT_HEADERS, set_hateos_links, set_hateos_meta
 from flambda_app.http_resources.request import ApiRequest
 from flambda_app.http_resources.response import ApiResponse
-from flambda_app.logging import get_logger
+from flambda_app.logging import get_logger, set_debug_mode
 from flambda_app.openapi import spec, get_doc, generate_openapi_yml
 from flambda_app.services.healthcheck_manager import HealthCheckManager
 from flambda_app.services.product_manager import ProductManager
 from flambda_app.services.v1.product_service import ProductService as ProductServiceV1
 from flambda_app.openapi import api_schemas
+
 # load directly by boot
 ENV = boot.get_environment()
 # boot.load_dot_env(ENV)
+
 
 # config
 CONFIG = get_config()
 # debug
 DEBUG = helper.debug_mode()
-# logger
-LOGGER = get_logger()
 
-APP = Flambda(__name__)
+# keep in this order, the app generic stream handler will be removed
+APP = Flambda(APP_NAME)
+# Logger
+LOGGER = get_logger()
+# override the APP logger
+APP.logger = LOGGER
+# override the log configs
+if DEBUG:
+    # override to the level desired
+    set_debug_mode(LOGGER)
 
 API_ROOT = os.environ['API_ROOT'] if 'API_ROOT' in os.environ else None
 API_ROOT_ENDPOINT = API_ROOT if API_ROOT != "" else '/'
@@ -236,6 +245,7 @@ def product_list():
         response.set_total(manager.count(request))
 
         # hateos
+        response.links = None
         set_hateos_meta(request, response)
         # LOGGER.info(data)
         # LOGGER.info(response.data)

@@ -5,7 +5,7 @@ from flambda_app import helper
 
 def filter_sql_injection(value):
     check_value = str(value).replace('-', '')
-    pattern = '(select|from|where)'
+    pattern = '(select|insert|drop|update|replace|create|delete|from|where)'
     if re.search(pattern, check_value, re.I):
         value = None
     if str(value).find('--') > -1:

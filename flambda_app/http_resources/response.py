@@ -181,6 +181,15 @@ class ApiResponse:
                 del body["meta"]
                 del body["links"]
 
+            # remove empty links (main used for list pages)
+            # response.links = None
+            # set_hateos_meta(request, response)
+            if self.links is None:
+                del body["links"]
+
+            if self.meta is None:
+                del body["meta"]
+
         # todo deletar o control na leitura de um item unico
 
         if 'Content-Type' in headers and headers['Content-Type'] == 'application/json':
