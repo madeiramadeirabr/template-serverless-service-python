@@ -11,8 +11,12 @@ Service routes.
 GET / - Root
 GET /docs - Swagger docs
 GET /alive - Health Check
-GET /v1/event/<event_type> - Event List
-POST /v1/event/<event_type> - Create event
+GET /v1/product - Product List
+POST /v1/product - Product Create 
+DELETE /v1/product/<uuid> - Soft Product Delete
+GET /v1/product/<uuid> - Product Get
+PATCH /v1/product/<uuid> - Soft Product Update
+PUT /v1/product/<uuid> - Complete Product Update
 ```
 
 # Prerequisites
@@ -37,6 +41,8 @@ POST /v1/event/<event_type> - Create event
 * MySQL
 * Redis
 * Swagger
+* Restful
+* HATEOS (Future versions)
 
 ## Details about requirements files
 ### requirements.txt

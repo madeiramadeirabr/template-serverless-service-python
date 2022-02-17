@@ -1,7 +1,6 @@
 from marshmallow import Schema, fields, validate
 
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.http_resources.request_control import Pagination
 from flambda_app.openapi.schemas import DeletionSchema, RequestControlSchema, MetaSchema, LinkSchema, ErrorSchema
 
 
@@ -12,6 +11,12 @@ class DefaultResponseSchema(Schema):
     message = fields.Str(example=MessagesEnum.OK.message)
     params = fields.List(fields.Str())
 
+class HateosDefaultResponseSchema(DefaultResponseSchema):
+    meta = fields.Nested(MetaSchema)
+    links = fields.List(fields.Nested(LinkSchema))
+
+class HateosDefaultListResponseSchema(DefaultResponseSchema):
+    meta = fields.Nested(MetaSchema)
 
 # ***************************
 # Product
@@ -32,11 +37,9 @@ class ProductSchema(Schema):
     uuid = fields.UUID(example="4bcad46b-6978-488f-8153-1c49f8a45244")
 
 
-class HateosProductListResponseSchema(DefaultResponseSchema):
+class HateosProductListResponseSchema(HateosDefaultListResponseSchema):
     data = fields.List(fields.Nested(ProductSchema))
     control = fields.Nested(RequestControlSchema)
-    meta = fields.Nested(MetaSchema)
-    links = fields.List(fields.Nested(LinkSchema))
 
 
 class ProductListResponseSchema(DefaultResponseSchema):
@@ -48,7 +51,10 @@ class ProductListErrorResponseSchema(ErrorSchema):
     label = fields.Str(example=MessagesEnum.LIST_ERROR.label)
     message = fields.Str(example=MessagesEnum.LIST_ERROR.message)
 
-class ProductGetResponseSchema(Schema):
+class ProductGetResponseSchema(DefaultResponseSchema):
+    data = fields.Nested(ProductSchema)
+
+class HateosProductGetResponseSchema(HateosDefaultResponseSchema):
     data = fields.Nested(ProductSchema)
 
 class ProductGetErrorResponseSchema(ErrorSchema):
@@ -179,3 +185,7 @@ class EventUpdateResponseSchema(EventGetResponseSchema):
 
 class EventDeleteResponseSchema(EventGetResponseSchema):
     data = fields.Nested(DeletionSchema)
+
+def register():
+    # simple function only to force the import of the script on app.py
+    pass

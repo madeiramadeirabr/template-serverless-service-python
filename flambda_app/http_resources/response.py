@@ -5,10 +5,12 @@ from flask import Response
 
 from boot import get_environment
 from flambda_app import helper
+from flambda_app.enums import CustomStringEnum
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import ApiException
-from flambda_app.http_resources.request_control import Pagination
 from flambda_app.http_helper import CUSTOM_DEFAULT_HEADERS
+from flambda_app.http_resources.hateos import HateosLink, HateosMeta
+from flambda_app.http_resources.request_control import Pagination
 from flambda_app.logging import get_logger
 
 
@@ -119,31 +121,39 @@ class ApiResponse:
             if self.total > 1:
                 self.links = []
             else:
-                self.links = [
-                    {
-                        "href": "",
-                        "rel": "update",
-                        "method": "POST",
-                    },
-                    {
-                        "href": "",
-                        "rel": "delete",
-                        "method": "DELETE",
-                    },
-                    {
-                        "href": "",
-                        "rel": "patch",
-                        "method": "PATCH",
-                    }
-                ]
+                self.logger.info('links: {}'.format(self.links))
+                if self.links == list():
+                    self.links = [
+                        {
+                            "href": "",
+                            "rel": HateosLink.UPDATE.rel,
+                            "method": HateosLink.UPDATE.method,
+                        },
+                        {
+                            "href": "",
+                            "rel": HateosLink.DELETE.rel,
+                            "method": HateosLink.DELETE.method,
+                        },
+                        {
+                            "href": "",
+                            "rel": HateosLink.PATCH.rel,
+                            "method": HateosLink.PATCH.method,
+                        },
+                        {
+                            "href": "",
+                            "rel": HateosLink.GET.rel,
+                            "method": HateosLink.GET.method,
+                        }
+                    ]
 
-            self.meta = {
-                "href": "",
-                "next": "",
-                "previous": "",
-                "first": "",
-                "last": ""
-            }
+            if self.meta == dict():
+                self.meta = {
+                    "href": HateosMeta.HREF,
+                    "next": HateosMeta.NEXT,
+                    "previous": HateosMeta.PREVIOUS,
+                    "first": HateosMeta.FIRST,
+                    "last": HateosMeta.LAST
+                }
 
             body = {
                 # success
@@ -191,3 +201,13 @@ class ApiResponse:
 
     def to_json(self):
         return json.dumps(self.to_dict(force_str=False))
+
+    def set_hateos_link(self, link: HateosLink, href):
+        self.links.append({
+            "href": href,
+            "rel": link.rel,
+            "method": link.method,
+        })
+
+    def set_meta(self, meta: HateosMeta, value):
+        self.meta[meta.meta_name] = value

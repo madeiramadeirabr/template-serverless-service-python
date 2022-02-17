@@ -2,35 +2,26 @@
 
 This module contains the handler method
 """
-import boot
-import os
 import base64
+import os
 
-from flambda_app.services.healthcheck_manager import HealthCheckManager
-from flambda_app.services.product_manager import ProductManager
-from flambda_app.services.v1.healthcheck import HealthCheckSchema, HealthCheckResult
-from flambda_app.services.v1.healthcheck.resources import \
-    MysqlConnectionHealthCheck, RedisConnectionHealthCheck, \
-    SQSConnectionHealthCheck, SelfConnectionHealthCheck
-from flambda_app.services.v1.healthcheck_service import HealthCheckService
+import boot
+from flambda_app import APP_NAME, APP_VERSION, http_helper
+from flambda_app import helper
 from flambda_app.config import get_config
-from flambda_app.enums.events import EventType
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.events.tracker import EventTracker
 from flambda_app.exceptions import ApiException, ValidationException
+from flambda_app.flambda import Flambda
+from flambda_app.helper import open_vendor_file, print_routes
+from flambda_app.http_helper import CUSTOM_DEFAULT_HEADERS, set_hateos_links, set_hateos_meta
 from flambda_app.http_resources.request import ApiRequest
 from flambda_app.http_resources.response import ApiResponse
-from flambda_app.vos.events import EventVO
 from flambda_app.logging import get_logger
-from flambda_app import APP_NAME, APP_VERSION, http_helper
-from flambda_app.helper import open_vendor_file, print_routes
-from flambda_app.http_helper import CUSTOM_DEFAULT_HEADERS
-from flambda_app.flambda import Flambda
 from flambda_app.openapi import spec, get_doc, generate_openapi_yml
-from flambda_app import helper
-from flambda_app.openapi import api_schemas
+from flambda_app.services.healthcheck_manager import HealthCheckManager
+from flambda_app.services.product_manager import ProductManager
 from flambda_app.services.v1.product_service import ProductService as ProductServiceV1
-
+from flambda_app.openapi import api_schemas
 # load directly by boot
 ENV = boot.get_environment()
 # boot.load_dot_env(ENV)
@@ -218,7 +209,7 @@ def product_list():
                     description: Success response
                     content:
                         application/json:
-                            schema: ProductListResponseSchema
+                            schema: HateosProductListResponseSchema
                 4xx:
                     description: Error response
                     content:
@@ -235,7 +226,7 @@ def product_list():
 
     status_code = 200
     response = ApiResponse(request)
-    response.set_hateos(False)
+    response.set_hateos(True)
 
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
@@ -243,6 +234,9 @@ def product_list():
         data = manager.list(request)
         response.set_data(data)
         response.set_total(manager.count(request))
+
+        # hateos
+        set_hateos_meta(request, response)
         # LOGGER.info(data)
         # LOGGER.info(response.data)
     except Exception as err:
@@ -261,7 +255,7 @@ def product_get(uuid):
     """
         ---
         get:
-            summary: Product get
+            summary: Product Get
             parameters:
             - in: path
               name: uuid
@@ -283,7 +277,7 @@ def product_get(uuid):
                     description: Success response
                     content:
                         application/json:
-                            schema: ProductGetResponseSchema
+                            schema: HateosProductGetResponseSchema
                 4xx:
                     description: Error response
                     content:
@@ -300,14 +294,17 @@ def product_get(uuid):
 
     status_code = 200
     response = ApiResponse(request)
-    response.set_hateos(False)
+    response.set_hateos(True)
 
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
     try:
-
         response.set_data(manager.get(request, uuid))
-        # response.set_total(manager.count(request))
+
+        # hateos
+        set_hateos_links(request, response, uuid)
+        set_hateos_meta(request, response, uuid)
+
     except Exception as error:
         LOGGER.error(error)
         if not isinstance(error, ValidationException):
@@ -326,7 +323,7 @@ def product_create():
         :return:
         ---
         post:
-            summary: Create product
+            summary: Product Create
             requestBody:
                 description: 'Product to be created'
                 required: true
@@ -362,6 +359,10 @@ def product_create():
     try:
         response.set_data(manager.create(request))
         # response.set_total(manager.count(request))
+
+        # hateos
+        # set_hateos_links(request, response, uuid)
+        # set_hateos_meta(request, response, uuid)
     except Exception as error:
         LOGGER.error(error)
         if not isinstance(error, ValidationException):
@@ -380,7 +381,7 @@ def product_update(uuid):
         :return:
         ---
         put:
-            summary: Complete product update
+            summary: Complete Product Update
             parameters:
             - in: path
               name: uuid
@@ -443,7 +444,7 @@ def product_delete(uuid):
             :return:
             ---
             delete:
-                summary: Soft Product delete
+                summary: Soft Product Delete
                 parameters:
                 - in: path
                   name: uuid
@@ -494,13 +495,14 @@ def product_delete(uuid):
 
     return response.get_response(status_code)
 
+
 @APP.route('/v1/product/<uuid>', methods=['PATCH'])
 def product_soft_update(uuid):
     """
         :return:
         ---
         patch:
-            summary: Soft product update
+            summary: Soft Product Update
             parameters:
             - in: path
               name: uuid
@@ -583,3 +585,5 @@ LOGGER.info('Running at {}'.format(ENV))
 
 # generate de openapi.yml
 generate_openapi_yml(spec, LOGGER, force=True)
+
+api_schemas.register()

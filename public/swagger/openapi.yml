@@ -19,6 +19,64 @@ components:
         name:
           $ref: '#/components/schemas/Entry'
       type: object
+    HateosProductGetResponse:
+      properties:
+        code:
+          example: 1
+          type: integer
+        data:
+          $ref: '#/components/schemas/Product'
+        label:
+          example: common.success
+          type: string
+        links:
+          items:
+            $ref: '#/components/schemas/Link'
+          type: array
+        message:
+          example: Success
+          type: string
+        meta:
+          $ref: '#/components/schemas/Meta'
+        params:
+          items:
+            type: string
+          type: array
+        success:
+          example: true
+          type: boolean
+      required:
+      - code
+      type: object
+    HateosProductListResponse:
+      properties:
+        code:
+          example: 1
+          type: integer
+        control:
+          $ref: '#/components/schemas/RequestControl'
+        data:
+          items:
+            $ref: '#/components/schemas/Product'
+          type: array
+        label:
+          example: common.success
+          type: string
+        message:
+          example: Success
+          type: string
+        meta:
+          $ref: '#/components/schemas/Meta'
+        params:
+          items:
+            type: string
+          type: array
+        success:
+          example: true
+          type: boolean
+      required:
+      - code
+      type: object
     HealthCheck:
       properties:
         entries:
@@ -28,6 +86,33 @@ components:
           type: string
         total_duration:
           example: '0:00:00.013737'
+          type: string
+      type: object
+    Link:
+      properties:
+        href:
+          type: string
+        method:
+          type: string
+        rel:
+          type: string
+      type: object
+    Meta:
+      properties:
+        first:
+          format: url
+          type: string
+        href:
+          format: url
+          type: string
+        last:
+          format: url
+          type: string
+        next:
+          format: url
+          type: string
+        previous:
+          format: url
           type: string
       type: object
     Product:
@@ -194,11 +279,6 @@ components:
       required:
       - code
       type: object
-    ProductGetResponse:
-      properties:
-        data:
-          $ref: '#/components/schemas/Product'
-      type: object
     ProductListErrorResponse:
       properties:
         code:
@@ -221,33 +301,6 @@ components:
           type: boolean
         trace:
           type: string
-      required:
-      - code
-      type: object
-    ProductListResponse:
-      properties:
-        code:
-          example: 1
-          type: integer
-        control:
-          $ref: '#/components/schemas/RequestControl'
-        data:
-          items:
-            $ref: '#/components/schemas/Product'
-          type: array
-        label:
-          example: common.success
-          type: string
-        message:
-          example: Success
-          type: string
-        params:
-          items:
-            type: string
-          type: array
-        success:
-          example: true
-          type: boolean
       required:
       - code
       type: object
@@ -440,7 +493,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductListResponse'
+                $ref: '#/components/schemas/HateosProductListResponse'
           description: Success response
         4xx:
           content:
@@ -482,7 +535,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductCreateErrorResponse'
           description: Service fail response
-      summary: Create product
+      summary: Product Create
   /v1/product/{uuid}:
     delete:
       parameters:
@@ -513,7 +566,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductSoftDeleteErrorResponse'
           description: Service fail response
-      summary: Soft Product delete
+      summary: Soft Product Delete
     get:
       parameters:
       - description: Product Id
@@ -536,7 +589,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductGetResponse'
+                $ref: '#/components/schemas/HateosProductGetResponse'
           description: Success response
         4xx:
           content:
@@ -550,7 +603,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductGetErrorResponse'
           description: Service fail response
-      summary: Product get
+      summary: Product Get
     patch:
       parameters:
       - description: Product Id
@@ -587,7 +640,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductUpdateErrorResponse'
           description: Service fail response
-      summary: Soft product update
+      summary: Soft Product Update
     put:
       parameters:
       - description: Product Id
@@ -623,7 +676,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductUpdateErrorResponse'
           description: Service fail response
-      summary: Complete product update
+      summary: Complete Product Update
 servers:
 - description: Development server
   url: http://localhost:5000
