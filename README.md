@@ -6,7 +6,10 @@ Example of architecture with Kong API Gateway.
 ![Service-Arch](docs/service-arch.drawio.png)
 
 ## General Service Routes Architecture
-Service routes.
+Example of OpenApi documentation.
+![Service-Arch](docs/swagger.png)
+
+Route list:
 ```
 GET / - Root
 GET /docs - Swagger docs
@@ -42,7 +45,7 @@ PUT /v1/product/<uuid> - Complete Product Update
 * Redis
 * Swagger
 * Restful
-* HATEOS (Future versions)
+* HATEOS
 
 ## Details about requirements files
 ### requirements.txt
