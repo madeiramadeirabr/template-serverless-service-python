@@ -2,6 +2,7 @@ import os
 
 import requests
 
+from boot import get_environment
 from flambda_app.services.v1.healthcheck import AbstractHealthCheck, HealthCheckResult
 from flambda_app.database.mysql import get_connection
 from flambda_app.database.redis import get_connection as redis_get_connection
@@ -17,28 +18,51 @@ class SelfConnectionHealthCheck(AbstractHealthCheck):
         result = False
         description = "Unable to connect"
         check_result = HealthCheckResult.unhealthy(description)
-        try:
+        # para o ambiente docker implementar uma verificação compativel
+        if get_environment() == "development":
             result = True
-            url = os.environ["API_SERVER"] if "API_SERVER" in os.environ else None
-            url = url + "/docs"
-            self.logger.info("requesting url: {}".format(url))
-            response = self.http_client.get(url)
-            if response:
-                if response.status_code == 200:
-                    result = True
-                    description = "Connection successful"
-                else:
+            #     # retry for docker
+            #     url = "http://0.0.0.0:5000"
+            #     url = url + "/docs"
+            #     check_result, description, result = self.do_request(check_result, description, result, url)
+            # else:
+            #     description = "internal error"
+            #     check_result = HealthCheckResult.degraded(description)
+        else:
+            try:
+                result = True
+                # todo migrar para usar self.config e adicionar API_PORT
+                url = os.environ["API_SERVER"] if "API_SERVER" in os.environ else "http://0.0.0.0:5000"
+                url = url + "/docs"
+                try:
+                    check_result, description, result = self.do_request(check_result, description, result, url)
+                except Exception as err:
+                    self.logger.error(err)
                     result = False
-                    description = "Something wrong"
-                    check_result = HealthCheckResult.degraded(description)
-            else:
-                raise Exception("Unable to connect")
-        except Exception as err:
-            self.logger.error(err)
+
+            except Exception as err:
+                self.logger.error(err)
+                description = "internal error"
+                check_result = HealthCheckResult.degraded(description)
 
         if result:
             check_result = HealthCheckResult.healthy(description)
         return check_result
+
+    def do_request(self, check_result, description, result, url):
+        self.logger.info("requesting url: {}".format(url))
+        response = self.http_client.get(url, timeout=2)
+        if response:
+            if response.status_code == 200:
+                result = True
+                description = "Connection successful"
+            else:
+                result = False
+                description = "Something wrong"
+                check_result = HealthCheckResult.degraded(description)
+        else:
+            raise Exception("Unable to connect")
+        return check_result, description, result
 
 
 class MysqlConnectionHealthCheck(AbstractHealthCheck):

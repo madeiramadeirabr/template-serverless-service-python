@@ -53,8 +53,6 @@ COPY . .
 
 # entrypoint permission
 RUN ["chmod", "+x", "./docker/python/entrypoint.sh"]
-# entrypoint
-ENTRYPOINT ["sh", "./docker/python/entrypoint.sh"]
 
 # CMD [ "flask", "run", "--host", "0.0.0.0" ]
 CMD [ "python3", "server.py" ]

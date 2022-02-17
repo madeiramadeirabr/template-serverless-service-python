@@ -105,6 +105,11 @@ Execute the follow command:
 ./scripts/runenv.sh
 ```
 
+### Recovering the environment in error cases
+Execute the follow command:
+```
+./scripts/fixenv.sh
+```
 
 ## Samples
 See the project samples in this folder [here](samples).
