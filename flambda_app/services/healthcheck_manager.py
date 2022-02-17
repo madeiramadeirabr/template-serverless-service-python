@@ -1,5 +1,4 @@
 from flambda_app.config import get_config
-from flambda_app.http_resources.request import ApiRequest
 from flambda_app.logging import get_logger
 from flambda_app.services.v1.healthcheck import HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import SelfConnectionHealthCheck, MysqlConnectionHealthCheck, \

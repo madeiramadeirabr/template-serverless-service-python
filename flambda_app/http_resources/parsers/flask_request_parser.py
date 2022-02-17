@@ -1,13 +1,11 @@
-# fix request.data
 import json
-import re
-from urllib.parse import parse_qs
 
+from werkzeug.datastructures import ImmutableMultiDict
+
+from flambda_app import helper
 from flambda_app.filter_helper import filter_fields, filter_sql_injection
 from flambda_app.http_resources import _REQUEST_IGNORED_KEYS
-from flambda_app import helper
 from flambda_app.http_resources.request_control import Pagination, Order, PaginationType
-from werkzeug.datastructures import ImmutableMultiDict
 
 
 class FlaskRequestParser:
@@ -26,6 +24,8 @@ class FlaskRequestParser:
         self._request = None
         self._logger = logger
         self.json = None
+        self.query_string = None
+        self.query_string_args = None
 
     def set_request(self, request):
         self._request = request
@@ -36,8 +36,11 @@ class FlaskRequestParser:
             self._request = request
 
         request = self._request
+        # Query string
+        self.query_string = str(request.query_string.decode('ascii'))
+        self.query_string_args = {k: v for k, v in request.args.items()}
 
-        # headers
+        # Headers
         if not helper.empty(request.headers):
             if 'host' in request.headers:
                 self.host = request.headers['host']

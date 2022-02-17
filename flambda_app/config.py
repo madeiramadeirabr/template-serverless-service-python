@@ -1,4 +1,3 @@
-# fix config loaded
 import inspect
 import logging
 import os
@@ -9,6 +8,9 @@ _CONFIG = None
 
 
 class Configuration:
+    """
+    Configuration class of the project, load the env vars dynamically
+    """
     # APP
     APP_NAME = ''
     APP_VERSION = ''
@@ -18,7 +20,7 @@ class Configuration:
         self.APP_NAME = APP_NAME
         self.APP_VERSION = APP_VERSION
 
-        # montagem dinamica de atributos
+        # get the env vars built dynamically on load
         env_keys = Configuration.get_env_keys()
         for k in env_keys:
             value = os.getenv(k) if k in os.environ else None

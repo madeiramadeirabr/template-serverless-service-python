@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from flambda_app import helper
 from flambda_app.http_resources.request_control import Order, Pagination, PaginationType
 from flambda_app.repositories.v1.mysql import AbstractRepository
 from flambda_app.vos.product import ProductVO

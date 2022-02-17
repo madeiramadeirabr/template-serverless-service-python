@@ -1,7 +1,13 @@
+"""
+Main module of th app
+"""
 import os
 
 
 def load_projectrc(projectrc_filepath):
+    """
+    Load the values of .projectrc file
+    """
     from dotenv import dotenv_values
     return dotenv_values(projectrc_filepath)
 

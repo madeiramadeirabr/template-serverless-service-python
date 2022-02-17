@@ -28,6 +28,8 @@ class ApiRequest:
         self.host = None
         self.path = None
         self.method = None
+        self.query_string = None
+        self.query_string_args = None
 
         # Original chalice/flask request
         self._request = None
@@ -96,6 +98,8 @@ class ApiRequest:
         self.path = parsed_request.path
         self.method = parsed_request.method
         self.server_type = parsed_request.server_type
+        self.query_string = parsed_request.query_string
+        self.query_string_args = parsed_request.query_string_args
         self._request = request
 
         return self
