@@ -1,19 +1,15 @@
 import copy
-import datetime
-import json
 
 from flambda_app import helper
-from flambda_app.enums import messages
+from flambda_app.database.mysql import get_connection as mysql_get_connection
+from flambda_app.database.redis import get_connection as redis_get_connection
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import DatabaseException, ValidationException, ServiceException
 from flambda_app.filter_helper import filter_xss_injection
 from flambda_app.helper import get_function_name
-from flambda_app.http_resources.request import ApiRequest
 from flambda_app.logging import get_logger
 from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
 from flambda_app.repositories.v1.redis.product_repository import ProductRepository as RedisProductRepository
-from flambda_app.database.mysql import get_connection as mysql_get_connection
-from flambda_app.database.redis import get_connection as redis_get_connection
 from flambda_app.vos.product import ProductVO
 
 
@@ -49,12 +45,12 @@ class ProductService:
         if self.REDIS_ENABLED:
             self.redis_product_repository.debug = self.DEBUG
 
-    def list(self, request: ApiRequest):
+    def list(self, request: dict):
         self.logger.info('method: {} - request: {}'
-                         .format(get_function_name(), request.to_json()))
+                         .format(get_function_name(), request))
 
         data = []
-        where = request.where
+        where = request['where']
         if where == dict():
             where = {
                 'active': 1
@@ -64,9 +60,14 @@ class ProductService:
         where['deleted_at'] = None
 
         try:
+            offset = request['offset']
+            limit = request['limit']
+            order_by = request['order_by']
+            sort_by = request['sort_by']
+            fields = request['fields']
             data = self.product_repository.list(
-                where=where, offset=request.offset, limit=request.limit, order_by=request.order_by,
-                sort_by=request.sort_by, fields=request.fields)
+                where=where, offset=offset, limit=limit, order_by=order_by,
+                sort_by=sort_by, fields=fields)
 
             # convert to vo and prepare for api response
             if data:
@@ -85,12 +86,12 @@ class ProductService:
 
         return data
 
-    def count(self, request: ApiRequest):
+    def count(self, request: dict):
         self.logger.info('method: {} - request: {}'
-                         .format(get_function_name(), request.to_json()))
+                         .format(get_function_name(), request))
 
         total = 0
-        where = request.where
+        where = request['where']
         if where == dict():
             where = {
                 'active': 1
@@ -100,33 +101,36 @@ class ProductService:
         where['deleted_at'] = None
 
         try:
+            order_by = request['order_by']
+            sort_by = request['sort_by']
             total = self.product_repository.count(
-                where=where, order_by=request.order_by, sort_by=request.sort_by)
+                where=where, order_by=order_by, sort_by=sort_by)
         except Exception as err:
             self.logger.error(err)
             self.exception = DatabaseException(MessagesEnum.LIST_ERROR)
 
         return total
 
-    def find(self, request: ApiRequest):
+    def find(self, request: dict):
         self.logger.info('method: {} - request: {}'
-                         .format(get_function_name(), request.to_json()))
+                         .format(get_function_name(), request))
         raise ServiceException(MessagesEnum.METHOD_NOT_IMPLEMENTED_ERROR)
 
-    def get(self, request: ApiRequest, uuid):
+    def get(self, request: dict, uuid):
         self.logger.info('method: {} - request: {}'
-                         .format(get_function_name(), request.to_json()))
+                         .format(get_function_name(), request))
 
         self.logger.info('method: {} - uuid: {}'
                          .format(get_function_name(), uuid))
 
         data = []
-        where = request.where
+        where = request['where']
 
         try:
+            fields = request['fields']
             value = uuid
             data = self.product_repository.get(
-                value, key=self.product_repository.UUID_KEY, where=where, fields=request.fields
+                value, key=self.product_repository.UUID_KEY, where=where, fields=fields
             )
 
             if self.DEBUG:
@@ -146,10 +150,10 @@ class ProductService:
 
         return data
 
-    def create(self, request: ApiRequest):
-        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
+    def create(self, request: dict):
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request))
 
-        data = request.where
+        data = request['where']
         if self.DEBUG:
             self.logger.info('method: {} - data: {}'.format(get_function_name(), data))
 
@@ -158,7 +162,6 @@ class ProductService:
             if data == dict():
                 raise ValidationException(MessagesEnum.REQUEST_ERROR)
 
-            now = helper.datetime_now_with_timezone()
             product_vo = ProductVO(data)
             created = self.product_repository.create(product_vo)
 
@@ -176,15 +179,15 @@ class ProductService:
 
         return data
 
-    def update(self, request: ApiRequest, uuid):
+    def update(self, request: dict, uuid):
 
-        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request))
 
         original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)
         if original_product is None:
             raise DatabaseException(MessagesEnum.FIND_ERROR)
 
-        data = request.where
+        data = request['where']
         if self.DEBUG:
             self.logger.info('method: {} - data: {}'.format(get_function_name(), data))
 
@@ -220,15 +223,15 @@ class ProductService:
 
         return data
 
-    def soft_update(self, request: ApiRequest, uuid):
+    def soft_update(self, request: dict, uuid):
 
-        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request))
 
         original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)
         if original_product is None:
             raise DatabaseException(MessagesEnum.FIND_ERROR)
 
-        data = request.where
+        data = request['where']
         if self.DEBUG:
             self.logger.info('method: {} - data: {}'.format(get_function_name(), data))
 
@@ -268,9 +271,9 @@ class ProductService:
 
         return data
 
-    def delete(self, request: ApiRequest, uuid):
+    def delete(self, request: dict, uuid):
 
-        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request))
         result = False
 
         original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)

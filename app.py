@@ -240,9 +240,9 @@ def product_list():
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
     try:
-        data = manager.list(request)
+        data = manager.list(request.to_dict())
         response.set_data(data)
-        response.set_total(manager.count(request))
+        response.set_total(manager.count(request.to_dict()))
 
         # hateos
         response.links = None
@@ -309,7 +309,7 @@ def product_get(uuid):
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
     try:
-        response.set_data(manager.get(request, uuid))
+        response.set_data(manager.get(request.to_dict(), uuid))
 
         # hateos
         set_hateos_links(request, response, uuid)
@@ -367,7 +367,7 @@ def product_create():
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
     try:
-        response.set_data(manager.create(request))
+        response.set_data(manager.create(request.to_dict()))
         # response.set_total(manager.count(request))
 
         # hateos
@@ -434,7 +434,7 @@ def product_update(uuid):
     manager.debug(DEBUG)
     try:
 
-        response.set_data(manager.update(request, uuid))
+        response.set_data(manager.update(request.to_dict(), uuid))
         # response.set_total(manager.count(request))
     except Exception as error:
         LOGGER.error(error)
@@ -491,7 +491,7 @@ def product_delete(uuid):
     manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
     manager.debug(DEBUG)
     try:
-        data = {"deleted": manager.delete(request, uuid)}
+        data = {"deleted": manager.delete(request.to_dict(), uuid)}
         response.set_data(data)
         # response.set_total(manager.count(request))
     except Exception as error:
@@ -557,7 +557,7 @@ def product_soft_update(uuid):
     manager.debug(DEBUG)
     try:
 
-        response.set_data(manager.soft_update(request, uuid))
+        response.set_data(manager.soft_update(request.to_dict(), uuid))
         # response.set_total(manager.count(request))
     except Exception as error:
         LOGGER.error(error)
