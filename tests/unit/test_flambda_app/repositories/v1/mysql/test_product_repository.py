@@ -4,7 +4,7 @@ from unittest_data_provider import data_provider
 
 from flambda_app.config import get_config
 from tests.unit.mocks.database.mysql_mock import get_connection, cursor_mock
-from flambda_app.http_resources.request_control import Pagination, Order
+from flambda_app.request_control import Pagination, Order
 from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
 from flambda_app.vos.product import ProductVO
 from tests.unit.helpers.product_helper import get_product_sample

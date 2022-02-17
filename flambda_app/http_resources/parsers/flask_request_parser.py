@@ -5,7 +5,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 from flambda_app import helper
 from flambda_app.filter_helper import filter_fields, filter_sql_injection
 from flambda_app.http_resources import _REQUEST_IGNORED_KEYS
-from flambda_app.http_resources.request_control import Pagination, Order, PaginationType
+from flambda_app.request_control import Pagination, Order, PaginationType
 
 
 class FlaskRequestParser:

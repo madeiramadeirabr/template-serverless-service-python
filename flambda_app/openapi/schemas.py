@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.http_resources.request_control import Pagination
+from flambda_app.request_control import Pagination
 
 
 class DeletionSchema(Schema):

@@ -3,7 +3,7 @@ import unittest
 from unittest_data_provider import data_provider
 
 from flambda_app.database.mysql import get_connection
-from flambda_app.http_resources.request_control import Pagination, Order
+from flambda_app.request_control import Pagination, Order
 from flambda_app.logging import get_logger
 from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
 from flambda_app.vos.product import ProductVO

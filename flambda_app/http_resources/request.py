@@ -3,7 +3,7 @@ import json
 import uuid
 
 from flambda_app import helper
-from flambda_app.http_resources.request_control import Pagination, Order
+from flambda_app.request_control import Pagination, Order
 from flambda_app.http_resources.parsers.flask_request_parser import FlaskRequestParser
 from flask import request
 

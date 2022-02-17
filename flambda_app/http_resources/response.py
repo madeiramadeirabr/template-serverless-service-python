@@ -10,7 +10,7 @@ from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import ApiException
 from flambda_app.http_helper import CUSTOM_DEFAULT_HEADERS
 from flambda_app.http_resources.hateos import HateosLink, HateosMeta
-from flambda_app.http_resources.request_control import Pagination
+from flambda_app.request_control import Pagination
 from flambda_app.logging import get_logger
 
 
