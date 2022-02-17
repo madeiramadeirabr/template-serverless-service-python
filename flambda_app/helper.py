@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import sys
+import traceback
 from datetime import datetime
 from datetime import date
 from enum import Enum
@@ -143,12 +144,14 @@ def datetime_convert_utc_to_local_timezone(datetime_object: datetime, timezone_n
     return local_tz.normalize(datetime_with_timezone)
     # return datetime_with_timezone
 
+
 def datetime_convert_local_timezone_to_utc(datetime_object: datetime, timezone_name='America/Sao_Paulo'):
     local_tz = pytz.timezone(timezone_name)
     utc_tz = pytz.utc
     datetime_with_timezone = datetime_object.replace(tzinfo=local_tz).astimezone(utc_tz)
     return utc_tz.normalize(datetime_with_timezone)
     # return datetime_with_timezone
+
 
 def get_protocol():
     protocol = 'http://'
@@ -225,6 +228,7 @@ def convert_object_dates_to_iso_with_timezone(target_object, timezone_name=None)
         except Exception as err:
             get_logger().error(err)
 
+
 def convert_object_dates_to_iso_utc(target_object):
     attrs = [att for att in dir(target_object) if not att.startswith('__')]
     for att in attrs:
@@ -236,3 +240,10 @@ def convert_object_dates_to_iso_utc(target_object):
                 setattr(target_object, att, val.isoformat())
         except Exception as err:
             get_logger().error(err)
+
+
+def get_function_name(class_name=""):
+    fn_name = class_name + "::" + traceback.extract_stack(None, 2)[0][2]
+    if not class_name:
+        fn_name = traceback.extract_stack(None, 2)[0][2]
+    return fn_name

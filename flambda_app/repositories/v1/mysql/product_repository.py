@@ -70,8 +70,9 @@ class ProductRepository(AbstractRepository):
                 values.append(v)
         update_str = ",".join(update_data)
         # query
-        sql = "UPDATE {} as {} SET {} WHERE {}.{} = {}".format(self.BASE_TABLE, self.BASE_TABLE_ALIAS, update_str, self.BASE_TABLE_ALIAS, key,
-                                                            key_type)
+        sql = "UPDATE {} as {} SET {} WHERE {}.{} = {}".format(self.BASE_TABLE, self.BASE_TABLE_ALIAS, update_str,
+                                                               self.BASE_TABLE_ALIAS, key,
+                                                               key_type)
 
         # last treatments
         product_dict = product.to_dict()
@@ -113,13 +114,8 @@ class ProductRepository(AbstractRepository):
                                                              key_type)
 
         if where != dict():
-            where_list = [
-                '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for
-                k, v in where.items()
-            ]
-            where_str = ",".join(where_list)
-
-            sql = sql + " AND {}".format(where_str)
+            where_str = self.build_where(where)
+            sql = sql + " WHERE {}".format(where_str)
 
         try:
             result = self._execute(sql, value)
@@ -157,11 +153,7 @@ class ProductRepository(AbstractRepository):
         sql = "SELECT {} FROM {} as {}".format(fields, self.BASE_TABLE, self.BASE_TABLE_ALIAS)
 
         if where != dict():
-            where_list = [
-                '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for
-                k, v in where.items()]
-            where_str = ",".join(where_list)
-
+            where_str = self.build_where(where)
             sql = sql + " WHERE {}".format(where_str)
 
         sql = sql + " ORDER BY {} {}".format(sort_by, order_by)
@@ -186,6 +178,18 @@ class ProductRepository(AbstractRepository):
 
         return result
 
+    def build_where(self, where):
+        where_list = []
+        for k, v in where.items():
+            if v is None:
+                where_value = '{} IS NULL'.format(self.BASE_TABLE_ALIAS + "." + k)
+            else:
+                where_value = '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k,
+                                               '"{}"'.format(v) if isinstance(v, str) else v)
+            where_list.append(where_value)
+        where_str = " AND ".join(where_list)
+        return where_str
+
     def count(self, where: dict, sort_by=None, order_by=None):
         if order_by is None:
             order_by = Order.ASC
@@ -203,11 +207,7 @@ class ProductRepository(AbstractRepository):
         sql = "SELECT COUNT(1) as total FROM {} as {}".format(self.BASE_TABLE, self.BASE_TABLE_ALIAS)
 
         if where != dict():
-            where_list = [
-                '{} = {}'.format(self.BASE_TABLE_ALIAS + "." + k, '"{}"'.format(v) if isinstance(v, str) else v) for
-                k, v in where.items()]
-            where_str = ",".join(where_list)
-
+            where_str = self.build_where(where)
             sql = sql + " WHERE {}".format(where_str)
 
         sql = sql + " ORDER BY {} {}".format(sort_by, order_by)
@@ -225,11 +225,15 @@ class ProductRepository(AbstractRepository):
 
         return result
 
-    def soft_delete(self, sku_parent):
-        sql = "UPDATE {}.{} SET deleted_at = %s WHERE sku_parent = %s" \
-            .format(self.BASE_SCHEMA, self.BASE_TABLE)
+    def soft_delete(self, value, key=None):
+        key_type = '%s'
+        if key is None:
+            key = self.PK
 
-        data = (datetime.today(), sku_parent,)
+        sql = "UPDATE {}.{} SET deleted_at = %s WHERE {} = {}" \
+            .format(self.BASE_SCHEMA, self.BASE_TABLE, key, key_type)
+
+        data = (datetime.today(), value,)
         try:
             result = self._execute(sql, data)
             self.connection.commit()

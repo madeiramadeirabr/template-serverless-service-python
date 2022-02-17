@@ -26,8 +26,12 @@ class CustomException(Exception):
         else:
             self.message = message
 
-    def set_message_params(self, params):
-        self.params = params
+    def set_message_params(self, params=None):
+        if params is not None:
+            self.params = params
+        else:
+            params = self.params
+
         if isinstance(params, Exception):
             self.message = self.message % str(params)
         else:
@@ -111,6 +115,18 @@ class ValidationException(ApiException):
         :param errors:
         """
         super(ApiException, self).__init__(message_enum, errors)
+        self.code = message_enum.code
+        self.label = message_enum.label
+        self.message = message_enum.message
+        self.params = None
+
+class ServiceException(CustomException):
+    def __init__(self, message_enum, errors=None):
+        """
+        :param (MessagesEnum) message_enum:
+        :param errors:
+        """
+        super(CustomException, self).__init__(message_enum.message, errors)
         self.code = message_enum.code
         self.label = message_enum.label
         self.message = message_enum.message

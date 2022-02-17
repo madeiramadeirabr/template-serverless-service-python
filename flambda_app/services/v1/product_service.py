@@ -1,10 +1,13 @@
+import copy
 import datetime
 import json
 
 from flambda_app import helper
 from flambda_app.enums import messages
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.exceptions import DatabaseException, ValidationException
+from flambda_app.exceptions import DatabaseException, ValidationException, ServiceException
+from flambda_app.filter_helper import filter_xss_injection
+from flambda_app.helper import get_function_name
 from flambda_app.http_resources.request import ApiRequest
 from flambda_app.logging import get_logger
 from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
@@ -48,7 +51,7 @@ class ProductService:
 
     def list(self, request: ApiRequest):
         self.logger.info('method: {} - request: {}'
-                         .format('list', request.to_json()))
+                         .format(get_function_name(), request.to_json()))
 
         data = []
         where = request.where
@@ -56,6 +59,9 @@ class ProductService:
             where = {
                 'active': 1
             }
+
+        # exclude deleted
+        where['deleted_at'] = None
 
         try:
             data = self.product_repository.list(
@@ -81,7 +87,7 @@ class ProductService:
 
     def count(self, request: ApiRequest):
         self.logger.info('method: {} - request: {}'
-                         .format('count', request.to_json()))
+                         .format(get_function_name(), request.to_json()))
 
         total = 0
         where = request.where
@@ -89,6 +95,9 @@ class ProductService:
             where = {
                 'active': 1
             }
+
+        # exclude deleted
+        where['deleted_at'] = None
 
         try:
             total = self.product_repository.count(
@@ -99,12 +108,17 @@ class ProductService:
 
         return total
 
+    def find(self, request: ApiRequest):
+        self.logger.info('method: {} - request: {}'
+                         .format(get_function_name(), request.to_json()))
+        raise ServiceException(MessagesEnum.METHOD_NOT_IMPLEMENTED_ERROR)
+
     def get(self, request: ApiRequest, uuid):
         self.logger.info('method: {} - request: {}'
-                         .format('get', request.to_json()))
+                         .format(get_function_name(), request.to_json()))
 
         self.logger.info('method: {} - uuid: {}'
-                         .format('get', uuid))
+                         .format(get_function_name(), uuid))
 
         data = []
         where = request.where
@@ -133,11 +147,11 @@ class ProductService:
         return data
 
     def create(self, request: ApiRequest):
-        self.logger.info('method: {} - request: {}'.format('create', request.to_json()))
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
 
         data = request.where
         if self.DEBUG:
-            self.logger.info('method: {} - data: {}'.format('create', data))
+            self.logger.info('method: {} - data: {}'.format(get_function_name(), data))
 
         try:
 
@@ -164,7 +178,7 @@ class ProductService:
 
     def update(self, request: ApiRequest, uuid):
 
-        self.logger.info('method: {} - request: {}'.format('update', request.to_json()))
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
 
         original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)
         if original_product is None:
@@ -172,12 +186,15 @@ class ProductService:
 
         data = request.where
         if self.DEBUG:
-            self.logger.info('method: {} - data: {}'.format('update', data))
-        
+            self.logger.info('method: {} - data: {}'.format(get_function_name(), data))
+
+        # validate the request payload
+        self.validate_data(data, original_product)
+
         # update original product with update data
         original_product.update(data)
         data = original_product
-        
+
         try:
 
             if data == dict():
@@ -203,6 +220,93 @@ class ProductService:
 
         return data
 
+    def soft_update(self, request: ApiRequest, uuid):
 
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
 
+        original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)
+        if original_product is None:
+            raise DatabaseException(MessagesEnum.FIND_ERROR)
 
+        data = request.where
+        if self.DEBUG:
+            self.logger.info('method: {} - data: {}'.format(get_function_name(), data))
+
+        # validate the request payload
+        self.validate_data(data, original_product)
+
+        # create a copy the original product
+        product_copy = copy.deepcopy(original_product)
+        product_copy.update(data)
+        data = product_copy
+
+        # self.logger.info(product_copy)
+        # self.logger.info(data)
+
+        try:
+
+            if data == dict():
+                raise ValidationException(MessagesEnum.REQUEST_ERROR)
+
+            updated_at = helper.datetime_now_with_timezone()
+            data['updated_at'] = updated_at
+
+            product_vo = ProductVO(data)
+            updated = self.product_repository.update(product_vo, uuid, key=self.product_repository.UUID_KEY)
+
+            if updated:
+                # convert to vo and prepare for api response
+                data = product_vo.to_api_response()
+            else:
+                data = None
+                # set exception if it happens
+                raise DatabaseException(MessagesEnum.CREATE_ERROR)
+
+        except Exception as err:
+            self.logger.error(err)
+            self.exception = err
+
+        return data
+
+    def delete(self, request: ApiRequest, uuid):
+
+        self.logger.info('method: {} - request: {}'.format(get_function_name(), request.to_json()))
+        result = False
+
+        original_product = self.product_repository.get(uuid, key=self.product_repository.UUID_KEY)
+        if original_product is None:
+            raise DatabaseException(MessagesEnum.FIND_ERROR)
+
+        try:
+
+            updated = self.product_repository.soft_delete(value=uuid, key=self.product_repository.UUID_KEY)
+
+            if updated:
+                result = True
+            else:
+                # set exception if it happens
+                raise DatabaseException(MessagesEnum.SOFT_DELETE_ERROR)
+
+        except Exception as err:
+            self.logger.error(err)
+            self.exception = err
+
+        return result
+
+    def validate_data(self, data, original_product):
+        allowed_fields = list(original_product.keys())
+        try:
+            allowed_fields.remove(self.product_repository.UUID_KEY)
+            allowed_fields.remove(self.product_repository.PK)
+            allowed_fields.remove('updated_at')
+            allowed_fields.remove('created_at')
+            allowed_fields.remove('deleted_at')
+        except Exception as err:
+            self.logger.error(err)
+        fields = list(data.keys())
+        for field in fields:
+            if not field in allowed_fields:
+                exception = ValidationException(MessagesEnum.VALIDATION_ERROR)
+                exception.params = [filter_xss_injection(data[field]), filter_xss_injection(field)]
+                exception.set_message_params()
+                raise exception

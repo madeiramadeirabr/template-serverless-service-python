@@ -51,8 +51,12 @@ class ProductManager:
             raise self.exception
         return data
 
-    def soft_update(self):
-        pass
+    def soft_update(self, request: ApiRequest, uuid):
+        data = self.product_service.soft_update(request, uuid)
+        if (data is None) and self.product_service.exception:
+            self.exception = self.product_service.exception
+            raise self.exception
+        return data
 
     def update(self, request: ApiRequest, uuid):
         data = self.product_service.update(request, uuid)
@@ -61,5 +65,9 @@ class ProductManager:
             raise self.exception
         return data
 
-    def delete(self):
-        pass
+    def delete(self, request: ApiRequest, uuid):
+        result = self.product_service.delete(request, uuid)
+        if (result is None) and self.product_service.exception:
+            self.exception = self.product_service.exception
+            raise self.exception
+        return result

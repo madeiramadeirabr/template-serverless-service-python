@@ -3,45 +3,11 @@ import json
 import re
 from urllib.parse import parse_qs
 
-
+from flambda_app.filter_helper import filter_fields, filter_sql_injection
 from flambda_app.http_resources import _REQUEST_IGNORED_KEYS
 from flambda_app import helper
 from flambda_app.http_resources.request_control import Pagination, Order, PaginationType
 from werkzeug.datastructures import ImmutableMultiDict
-
-
-def filter_sql_injection(value):
-    check_value = str(value).replace('-', '')
-    pattern = '(select|from|where)'
-    if re.search(pattern, check_value, re.I):
-        value = None
-    if str(value).find('--') > -1:
-        value = None
-    return value
-
-def filter_xss_injection(value):
-    check_value = str(value).replace('-', '')
-    pattern = '<(\w+)(/)?>'
-    if re.search(pattern, check_value, re.I):
-        value = None
-    return value
-
-def filter_fields(fields):
-    filtered = None
-    if isinstance(fields, list):
-        filtered = []
-        for v in fields:
-            if v == '*':
-                pass
-            else:
-                filtered_value = filter_sql_injection(v)
-                filtered_value = filter_xss_injection(filtered_value)
-                if not helper.empty(filtered_value):
-                    filtered_value = filtered_value.strip()
-                    filtered.append(filtered_value)
-        if len(filtered) == 0:
-            filtered = None
-    return filtered
 
 
 class FlaskRequestParser:
@@ -136,9 +102,7 @@ class FlaskRequestParser:
                             wlist.append(value)
                         self.where[key] = wlist
 
-        # print('where', self.where)
-
-        if request.method in ['POST', 'PUT']:
+        if request.method in ['POST', 'PUT', 'PATCH']:
             # json
             if request.json is not None:
                 self.where = request.json

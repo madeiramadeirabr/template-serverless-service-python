@@ -1,22 +1,30 @@
 import json
+import traceback
 
 from flask import Response
+
+from boot import get_environment
 from flambda_app import helper
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import ApiException
 from flambda_app.http_resources.request_control import Pagination
 from flambda_app.http_helper import CUSTOM_DEFAULT_HEADERS
+from flambda_app.logging import get_logger
 
 
 class ApiResponse:
-    def __init__(self, api_request=None):
+    def __init__(self, api_request=None, logger=None):
         """
         :param (ApiRequest) api_request:
         """
+        self.logger = logger if logger is not None else get_logger()
         self.hateos = True
         self.status_code = 200
         self.headers = CUSTOM_DEFAULT_HEADERS
         self.exception = None
+        # used when you decide to describe the origin of the exception
+        # example: unable to insert the product because another product with the same data already was found
+        self.exception_details = None
 
         self.links = []
         self.meta = {}
@@ -89,15 +97,23 @@ class ApiResponse:
                 label = MessagesEnum.NOK.label
                 message = MessagesEnum.NOK.message % message
 
-            # TODO rever
             body = {
-                "error": {
-                    "code": code,
-                    "label": label,
-                    "message": message,
-                    "params": params
-                }
+                "success": success,
+                "code": code,
+                "label": label,
+                "message": message,
+                "params": params,
+                "details": self.exception_details
             }
+
+            # only for development
+            if get_environment() == "development":
+                try:
+                    # raise exception to get the trace
+                    raise self.exception
+                except Exception as err:
+                    self.logger.debug('getting trace for debug of the exception {}'.format(err))
+                    body["trace"] = traceback.format_exc()
 
         else:
             if self.total > 1:

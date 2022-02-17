@@ -6,6 +6,7 @@ import boot
 import os
 import base64
 
+from flambda_app.services.healthcheck_manager import HealthCheckManager
 from flambda_app.services.product_manager import ProductManager
 from flambda_app.services.v1.healthcheck import HealthCheckSchema, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import \
@@ -16,7 +17,7 @@ from flambda_app.config import get_config
 from flambda_app.enums.events import EventType
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.events.tracker import EventTracker
-from flambda_app.exceptions import ApiException
+from flambda_app.exceptions import ApiException, ValidationException
 from flambda_app.http_resources.request import ApiRequest
 from flambda_app.http_resources.response import ApiResponse
 from flambda_app.vos.events import EventVO
@@ -75,18 +76,19 @@ def alive():
                     content:
                         application/json:
                             schema: HealthCheckSchema
+                424:
+                    description: Failed dependency response
+                    content:
+                        application/json:
+                            schema: HealthCheckSchema
+                503:
+                    description: Service unavailable response
+                    content:
+                        application/json:
+                            schema: HealthCheckSchema
         """
-    service = HealthCheckService()
-    service.add_check("self", SelfConnectionHealthCheck(LOGGER, CONFIG), [])
-    service.add_check(
-        "mysql", MysqlConnectionHealthCheck(LOGGER, CONFIG), ["db"])
-    service.add_check("redis", RedisConnectionHealthCheck(
-        LOGGER, CONFIG), ["redis"])
-    service.add_check("queue", SQSConnectionHealthCheck(
-        LOGGER, CONFIG), ["queue"])
-    service.add_check("internal", lambda: HealthCheckResult.healthy("connect"), ["example"])
-
-    return service.get_response()
+    service = HealthCheckManager()
+    return service.check()
 
 
 @APP.route(API_ROOT + '/favicon-32x32.png')
@@ -217,6 +219,16 @@ def product_list():
                     content:
                         application/json:
                             schema: ProductListResponseSchema
+                4xx:
+                    description: Error response
+                    content:
+                        application/json:
+                            schema: ProductListErrorResponseSchema
+                5xx:
+                    description: Service fail response
+                    content:
+                        application/json:
+                            schema: ProductListErrorResponseSchema
         """
     request = ApiRequest().parse_request(APP)
     LOGGER.info('request: {}'.format(request))
@@ -272,6 +284,16 @@ def product_get(uuid):
                     content:
                         application/json:
                             schema: ProductGetResponseSchema
+                4xx:
+                    description: Error response
+                    content:
+                        application/json:
+                            schema: ProductGetErrorResponseSchema
+                5xx:
+                    description: Service fail response
+                    content:
+                        application/json:
+                            schema: ProductGetErrorResponseSchema
     """
     request = ApiRequest().parse_request(APP)
     LOGGER.info('request: {}'.format(request))
@@ -286,9 +308,10 @@ def product_get(uuid):
 
         response.set_data(manager.get(request, uuid))
         # response.set_total(manager.count(request))
-    except Exception as err:
-        LOGGER.error(err)
-        error = ApiException(MessagesEnum.FIND_ERROR)
+    except Exception as error:
+        LOGGER.error(error)
+        if not isinstance(error, ValidationException):
+            error = ApiException(MessagesEnum.FIND_ERROR)
         status_code = 400
         if manager.exception:
             error = manager.exception
@@ -312,10 +335,17 @@ def product_create():
                         schema: ProductCreateRequestSchema
             responses:
                 200:
+                    description: Success response
                     content:
                         application/json:
                             schema: ProductCreateResponseSchema
                 4xx:
+                    description: Error response
+                    content:
+                        application/json:
+                            schema: ProductCreateErrorResponseSchema
+                5xx:
+                    description: Service fail response
                     content:
                         application/json:
                             schema: ProductCreateErrorResponseSchema
@@ -332,9 +362,10 @@ def product_create():
     try:
         response.set_data(manager.create(request))
         # response.set_total(manager.count(request))
-    except Exception as err:
-        LOGGER.error(err)
-        error = ApiException(MessagesEnum.CREATE_ERROR)
+    except Exception as error:
+        LOGGER.error(error)
+        if not isinstance(error, ValidationException):
+            error = ApiException(MessagesEnum.CREATE_ERROR)
         status_code = 400
         if manager.exception:
             error = manager.exception
@@ -371,6 +402,12 @@ def product_update(uuid):
                         application/json:
                             schema: ProductUpdateResponseSchema
                 4xx:
+                    description: Error response
+                    content:
+                        application/json:
+                            schema: ProductUpdateErrorResponseSchema
+                5xx:
+                    description: Service fail response
                     content:
                         application/json:
                             schema: ProductUpdateErrorResponseSchema
@@ -388,9 +425,10 @@ def product_update(uuid):
 
         response.set_data(manager.update(request, uuid))
         # response.set_total(manager.count(request))
-    except Exception as err:
-        LOGGER.error(err)
-        error = ApiException(MessagesEnum.FIND_ERROR)
+    except Exception as error:
+        LOGGER.error(error)
+        if not isinstance(error, ValidationException):
+            error = ApiException(MessagesEnum.UPDATE_ERROR)
         status_code = 400
         if manager.exception:
             error = manager.exception
@@ -400,13 +438,125 @@ def product_update(uuid):
 
 
 @APP.route('/v1/product/<uuid>', methods=['DELETE'])
-def product_delete():
-    pass
+def product_delete(uuid):
+    """
+            :return:
+            ---
+            delete:
+                summary: Soft Product delete
+                parameters:
+                - in: path
+                  name: uuid
+                  description: "Product Id"
+                  required: true
+                  schema:
+                    type: string
+                    format: uuid
+                    example: 4bcad46b-6978-488f-8153-1c49f8a45244
+                responses:
+                    200:
+                        description: Success response
+                        content:
+                            application/json:
+                                schema: ProductSoftDeleteResponseSchema
+                    4xx:
+                        description: Error response
+                        content:
+                            application/json:
+                                schema: ProductSoftDeleteErrorResponseSchema
+                    5xx:
+                        description: Service fail response
+                        content:
+                            application/json:
+                                schema: ProductSoftDeleteErrorResponseSchema
+                    """
+    request = ApiRequest().parse_request(APP)
+    LOGGER.info('request: {}'.format(request))
 
+    status_code = 200
+    response = ApiResponse(request)
+    response.set_hateos(False)
+
+    manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
+    manager.debug(DEBUG)
+    try:
+        data = {"deleted": manager.delete(request, uuid)}
+        response.set_data(data)
+        # response.set_total(manager.count(request))
+    except Exception as error:
+        LOGGER.error(error)
+        if not isinstance(error, ValidationException):
+            error = ApiException(MessagesEnum.DELETE_ERROR)
+        status_code = 400
+        if manager.exception:
+            error = manager.exception
+        response.set_exception(error)
+
+    return response.get_response(status_code)
 
 @APP.route('/v1/product/<uuid>', methods=['PATCH'])
-def product_soft_update():
-    pass
+def product_soft_update(uuid):
+    """
+        :return:
+        ---
+        patch:
+            summary: Soft product update
+            parameters:
+            - in: path
+              name: uuid
+              description: "Product Id"
+              required: true
+              schema:
+                type: string
+                format: uuid
+                example: 4bcad46b-6978-488f-8153-1c49f8a45244
+            requestBody:
+                description: 'Product field to be updated'
+                required: true
+                content:
+                    application/json:
+                        schema: ProductSoftUpdateRequestSchema
+
+            responses:
+                200:
+                    description: Success response
+                    content:
+                        application/json:
+                            schema: ProductUpdateResponseSchema
+                4xx:
+                    description: Error response
+                    content:
+                        application/json:
+                            schema: ProductUpdateErrorResponseSchema
+                5xx:
+                    description: Service fail response
+                    content:
+                        application/json:
+                            schema: ProductUpdateErrorResponseSchema
+                """
+    request = ApiRequest().parse_request(APP)
+    LOGGER.info('request: {}'.format(request))
+
+    status_code = 200
+    response = ApiResponse(request)
+    response.set_hateos(False)
+
+    manager = ProductManager(logger=LOGGER, product_service=ProductServiceV1(logger=LOGGER))
+    manager.debug(DEBUG)
+    try:
+
+        response.set_data(manager.soft_update(request, uuid))
+        # response.set_total(manager.count(request))
+    except Exception as error:
+        LOGGER.error(error)
+        if not isinstance(error, ValidationException):
+            error = ApiException(MessagesEnum.UPDATE_ERROR)
+        status_code = 400
+        if manager.exception:
+            error = manager.exception
+        response.set_exception(error)
+
+    return response.get_response(status_code)
 
 
 # *************
@@ -424,6 +574,8 @@ spec.path(view=product_create,
           path="/v1/product", operations=get_doc(product_create))
 spec.path(view=product_update,
           path="/v1/product/{uuid}", operations=get_doc(product_update))
+spec.path(view=product_soft_update,
+          path="/v1/product/{uuid}", operations=get_doc(product_soft_update))
 spec.path(view=product_delete,
           path="/v1/product/{uuid}", operations=get_doc(product_delete))
 print_routes(APP, LOGGER)
