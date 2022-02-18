@@ -1,7 +1,7 @@
 import unittest
 
 from flambda_app.config import get_config
-from flambda_app.database.mysql import get_connection
+from flambda_app.database.mysql import MySQLConnector
 from flambda_app.logging import get_logger
 from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import MysqlConnectionHealthCheck
@@ -27,7 +27,7 @@ class MysqlConnectionHealthCheckTestCase(BaseComponentTestCase):
 
     def setUp(self):
         super().setUp()
-        self.connection = get_connection()
+        self.connection = MySQLConnector().get_connection()
         self.config = get_config()
         self.service = MysqlConnectionHealthCheck(self.logger, self.config, self.connection)
 

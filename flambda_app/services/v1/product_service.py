@@ -1,8 +1,8 @@
 import copy
 
 from flambda_app import helper
-from flambda_app.database.mysql import get_connection as mysql_get_connection
-from flambda_app.database.redis import get_connection as redis_get_connection
+from flambda_app.database.mysql import MySQLConnector
+from flambda_app.database.redis import RedisConnector
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import DatabaseException, ValidationException, ServiceException
 from flambda_app.filter_helper import filter_xss_injection
@@ -22,7 +22,7 @@ class ProductService:
         # logger
         self.logger = logger if logger is None else get_logger()
         # database connection
-        self.mysql_connection = mysql_connection if mysql_connection is not None else mysql_get_connection()
+        self.mysql_connection = mysql_connection if mysql_connection is not None else MySQLConnector.get_connection()
         # mysql repository
         self.product_repository = product_repository if product_repository is not None \
             else ProductRepository(mysql_connection=mysql_connection)
@@ -32,7 +32,7 @@ class ProductService:
 
         if self.REDIS_ENABLED:
             # redis connection
-            self.redis_connection = redis_connection if redis_connection is not None else redis_get_connection()
+            self.redis_connection = redis_connection if redis_connection is not None else RedisConnector.get_connection()
             # redis repository
             self.redis_product_repository = redis_product_repository if redis_product_repository is not None \
                 else RedisProductRepository(redis_connection=redis_connection)

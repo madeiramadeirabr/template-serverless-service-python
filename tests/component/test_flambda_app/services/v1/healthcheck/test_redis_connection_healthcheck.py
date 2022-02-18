@@ -1,7 +1,7 @@
 import unittest
 
 from flambda_app.config import get_config
-from flambda_app.database.redis import get_connection
+from flambda_app.database.redis import RedisConnector
 from flambda_app.logging import get_logger
 from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import RedisConnectionHealthCheck
@@ -27,7 +27,7 @@ class RedisConnectionHealthCheckTestCase(BaseComponentTestCase):
 
     def setUp(self):
         super().setUp()
-        self.connection = get_connection()
+        self.connection = RedisConnector().get_connection()
         self.config = get_config()
         self.service = RedisConnectionHealthCheck(self.logger, self.config, self.connection)
 
