@@ -1,7 +1,6 @@
 import unittest
 
 from flambda_app.config import get_config
-from flambda_app.database.mysql import get_connection
 from flambda_app.logging import get_logger
 from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import SelfConnectionHealthCheck

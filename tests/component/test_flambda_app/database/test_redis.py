@@ -2,7 +2,7 @@ import unittest
 
 from tests.component.componenttestutils import BaseComponentTestCase
 from flambda_app.config import get_config
-from flambda_app.database.redis import get_connection, reset
+from flambda_app.database.redis import RedisConnector, reset
 from tests.unit.testutils import get_function_name
 
 
@@ -20,7 +20,7 @@ class RedisTestCase(BaseComponentTestCase):
         self.logger.info('REDIS_HOST: {}'.format(config.REDIS_HOST))
         self.logger.info('REDIS_PORT: {}'.format(config.REDIS_PORT))
 
-        connection = get_connection()
+        connection = RedisConnector().get_connection()
 
         self.assertIsNotNone(connection)
 
@@ -34,7 +34,7 @@ class RedisTestCase(BaseComponentTestCase):
 
         self.logger.info('REDIS_HOST: {}'.format(config.REDIS_HOST))
         self.logger.info('REDIS_PORT: {}'.format(config.REDIS_PORT))
-        connection = get_connection(config)
+        connection = RedisConnector(config=config).get_connection()
 
         self.assertIsNone(connection)
 

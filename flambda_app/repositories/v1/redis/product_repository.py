@@ -2,7 +2,7 @@ import json
 import math
 from itertools import zip_longest
 
-from flambda_app.database.redis import get_connection
+from flambda_app.database.redis import RedisConnector
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import DatabaseException
 from flambda_app.logging import get_logger
@@ -21,7 +21,7 @@ class ProductRepository:
         # logger
         self.logger = logger if logger is not None else get_logger()
         # database connection
-        self.redis_connection = redis_connection if redis_connection is not None else get_connection()
+        self.redis_connection = redis_connection if redis_connection is not None else RedisConnector().get_connection()
         self.total = 0
         self.where = None
 

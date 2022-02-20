@@ -4,8 +4,8 @@ import requests
 
 from boot import get_environment
 from flambda_app.services.v1.healthcheck import AbstractHealthCheck, HealthCheckResult
-from flambda_app.database.mysql import get_connection
-from flambda_app.database.redis import get_connection as redis_get_connection
+from flambda_app.database.mysql import MySQLConnector
+from flambda_app.database.redis import RedisConnector
 from flambda_app.aws.sqs import SQSEvents
 
 
@@ -69,7 +69,7 @@ class MysqlConnectionHealthCheck(AbstractHealthCheck):
     def __init__(self, logger=None, config=None, mysql_connection=None):
         super().__init__(logger=logger, config=config)
         # database connection
-        self.mysql_connection = mysql_connection if mysql_connection is not None else get_connection()
+        self.mysql_connection = mysql_connection if mysql_connection is not None else MySQLConnector().get_connection()
 
     def check_health(self):
         result = False
@@ -96,7 +96,7 @@ class RedisConnectionHealthCheck(AbstractHealthCheck):
     def __init__(self, logger=None, config=None, redis_connection=None):
         super().__init__(logger=logger, config=config)
         # database connection
-        self.redis_connection = redis_connection if redis_connection is not None else redis_get_connection()
+        self.redis_connection = redis_connection if redis_connection is not None else RedisConnector().get_connection()
 
     def check_health(self):
         result = False

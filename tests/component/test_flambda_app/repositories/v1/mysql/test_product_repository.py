@@ -2,7 +2,7 @@ import unittest
 
 from unittest_data_provider import data_provider
 
-from flambda_app.database.mysql import get_connection
+from flambda_app.database.mysql import MySQLConnector
 from flambda_app.request_control import Pagination, Order
 from flambda_app.logging import get_logger
 from flambda_app.repositories.v1.mysql.product_repository import ProductRepository
@@ -85,7 +85,7 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
 
     def setUp(self):
         super().setUp()
-        self.connection = get_connection()
+        self.connection = MySQLConnector().get_connection()
         self.repository = ProductRepository(mysql_connection=self.connection)
         self.repository.debug = True
 
