@@ -22,7 +22,7 @@ class ProductService:
         # logger
         self.logger = logger if logger is None else get_logger()
         # database connection
-        self.mysql_connection = mysql_connection if mysql_connection is not None else MySQLConnector.get_connection()
+        self.mysql_connection = mysql_connection if mysql_connection is not None else MySQLConnector().get_connection()
         # mysql repository
         self.product_repository = product_repository if product_repository is not None \
             else ProductRepository(mysql_connection=mysql_connection)
@@ -32,7 +32,7 @@ class ProductService:
 
         if self.REDIS_ENABLED:
             # redis connection
-            self.redis_connection = redis_connection if redis_connection is not None else RedisConnector.get_connection()
+            self.redis_connection = redis_connection if redis_connection is not None else RedisConnector().get_connection()
             # redis repository
             self.redis_product_repository = redis_product_repository if redis_product_repository is not None \
                 else RedisProductRepository(redis_connection=redis_connection)
