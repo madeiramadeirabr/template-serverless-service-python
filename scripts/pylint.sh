@@ -1,16 +1,16 @@
 #!/bin/bash
 if [ -z "$1" ]; then
-  pylint --rcfile .pylint --verbose ./app.py ./boot.py
+  pylint --rcfile .pylint ./app.py ./boot.py
   if test -d ./lambda_app; then
-    pylint --rcfile .pylint --verbose ./lambda_app
+    pylint --rcfile .pylint ./lambda_app
   fi
   if test -d ./flambda_app; then
-    pylint --rcfile .pylint --verbose ./flambda_app
+    pylint --rcfile .pylint ./flambda_app
   fi
   if test -d ./chalicelib; then
-    pylint --rcfile .pylint --verbose ./chalicelib
+    pylint --rcfile .pylint ./chalicelib
   fi
 
 else
-  pylint --rcfile .pylint --verbose $1
+  pylint --rcfile .pylint $1
 fi
