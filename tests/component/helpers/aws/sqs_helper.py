@@ -9,6 +9,7 @@ from flambda_app.aws.sqs import SQS
 
 class SQSHelper:
     _sqs = None
+
     @classmethod
     def get_message(cls, queue_url):
         # keep one instance only

@@ -22,6 +22,7 @@ _PAYLOAD_SIZE = 25
 _SQS_INSTANCE = None
 _LOGGER = None
 
+
 def get_internal_logger():
     global _LOGGER
     if _LOGGER is None:
@@ -30,6 +31,7 @@ def get_internal_logger():
     else:
         logger = _LOGGER
     return logger
+
 
 def set_sqs_instance(sqs_event):
     global _SQS_INSTANCE
@@ -59,6 +61,7 @@ def divide_chunks(iterable, n=None):
 
 def final_newrelic_sqs_send_records():
     newrelic_sqs_send_records()
+
 
 def stop():
     global _HANDLER_INSTANCE

@@ -16,6 +16,7 @@ def reset():
     global _CONNECTION
     _CONNECTION = False
 
+
 class DynamodbConnector:
     def __init__(self, config=None, logger=None):
         # logger

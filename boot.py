@@ -267,4 +267,4 @@ register_vendor()
 # load env
 loaded = load_env(get_environment(), debug=True)
 if not loaded:
-    loaded = load_dot_env(get_environment(),  debug=True)
+    loaded = load_dot_env(get_environment(), debug=True)

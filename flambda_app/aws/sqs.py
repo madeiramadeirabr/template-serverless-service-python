@@ -15,6 +15,7 @@ import boto3
 _RETRY_COUNT = 0
 _MAX_RETRY_ATTEMPTS = 3
 
+
 class SQS:
 
     def __init__(self, logger=None, config=None, profile=None, session=None):

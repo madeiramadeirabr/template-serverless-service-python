@@ -9,6 +9,7 @@ from flambda_app.aws.s3 import S3
 
 class S3Helper:
     _s3 = None
+
     @classmethod
     def download_file(cls, bucket_name, object_name, file_name):
         # keep one instance only

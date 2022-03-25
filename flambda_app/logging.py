@@ -240,10 +240,11 @@ def remove_handler(logger: logging.Logger, class_name):
     except Exception as err:
         logger.error(err)
 
+
 def remove_last_handler(logger: logging.Logger):
     try:
         count = len(logger.handlers)
-        position = count-1
+        position = count - 1
         del logger.handlers[position]
     except Exception as err:
         logger.error(err)

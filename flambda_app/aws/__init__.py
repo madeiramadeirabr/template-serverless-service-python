@@ -2,6 +2,8 @@
 AWS module - Keep the aws services adpaters
 Version: 1.0.0
 """
+
+
 def change_endpoint(cls):
     endpoint_url = cls.config.get('LOCALSTACK_ENDPOINT', None)
     # Fix para tratar diff entre docker/local

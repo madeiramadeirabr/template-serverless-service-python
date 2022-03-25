@@ -9,6 +9,7 @@ class ProductVO(AbstractVO):
     """
 
     """
+
     def __init__(self, data: dict = None):
         """
         Always the dateobjects must be datetime instances

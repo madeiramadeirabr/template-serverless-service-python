@@ -101,4 +101,4 @@ def get_connection(config=None, connect=True, retry=False):
 
 
 mysql_connector_mock = Mock(MySQLConnector)
-mysql_connector_mock.get_connection.side_effect = get_connection()
+mysql_connector_mock.get_connection.side_effect = get_connection

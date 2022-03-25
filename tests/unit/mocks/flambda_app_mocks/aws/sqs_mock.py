@@ -13,5 +13,3 @@ response_mock = {
 sqs_mock = Mock(SQS)
 sqs_mock.connect.side_effect = lambda retry=False: True
 sqs_mock.send_message.side_effect = lambda message, queue_url: response_mock
-
-

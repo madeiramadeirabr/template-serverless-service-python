@@ -241,4 +241,3 @@ class S3:
             self.logger.error(err)
             self.exception = err
         return bucket
-

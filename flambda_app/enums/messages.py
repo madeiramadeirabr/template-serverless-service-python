@@ -18,7 +18,7 @@ class MessagesEnum(IntEnum):
 
     REQUEST_ERROR = 3, 'common.error.request_error', '%s'
     UNSUPPORTED_MEDIA_TYPE_ERROR = 4, 'common.error.unsupported_media_type_error', \
-                                   'Unsupported media type: %s, supported types are (%s)'
+        'Unsupported media type: %s, supported types are (%s)'
     METHOD_NOT_IMPLEMENTED_ERROR = 5, 'common.error.method_not_implemented_error', 'Method not implemented yet'
     UNKNOWN_ERROR = 6, 'common.error.unknown_error', 'Unknown error'
     INTERNAL_SERVER_ERROR = 7, 'common.error.internal_server_error', 'Internal Server Error'
@@ -30,7 +30,7 @@ class MessagesEnum(IntEnum):
     FIND_ERROR = 14, 'common.error.find_error', 'Unable to find the record'
     INVALID_FILTER_ERROR = 15, 'common.error.invalid_filter_error', 'Invalid filter in request'
     INVALID_FIELD_FILTER_ERROR = 16, 'common.error.invalid_filter_error', \
-                                 'Invalid filter value (%s) for filter (%s). Expected (%s)'
+        'Invalid filter value (%s) for filter (%s). Expected (%s)'
 
     CREATE_ERROR = 17, 'common.error.create_error', 'Unable to create the record'
     UPDATE_ERROR = 18, 'common.error.update_error', 'Unable to update the record'

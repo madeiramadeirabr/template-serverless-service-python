@@ -58,5 +58,6 @@ class RedisTestCase(BaseComponentTestCase):
         # sobrescreve o comportamento do mock
         server.connected = True
 
+
 if __name__ == '__main__':
     unittest.main()

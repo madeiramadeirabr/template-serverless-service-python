@@ -1,6 +1,9 @@
 from time import sleep
+from unittest.mock import Mock
 
 import fakeredis
+
+from flambda_app.database.redis import RedisConnector
 
 _CONNECTION = False
 _RETRY_COUNT = 0
@@ -69,3 +72,7 @@ def get_connection(config=None, retry=False):
         connection = _CONNECTION
 
     return connection
+
+
+redis_connector_mock = Mock(RedisConnector)
+redis_connector_mock.get_connection.side_effect = get_connection

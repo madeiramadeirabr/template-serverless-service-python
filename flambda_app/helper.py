@@ -18,8 +18,10 @@ from flambda_app.logging import get_logger, get_console_logger
 
 TZ_AMERICA_SAO_PAULO = 'America/Sao_Paulo'
 
+
 def generate_process():
     return generate_hash(str("default" + datetime.now().isoformat()))
+
 
 def generate_hash(data):
     event_hash = hashlib.sha256(str(data).encode()).hexdigest()

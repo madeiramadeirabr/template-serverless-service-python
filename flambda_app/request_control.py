@@ -1,4 +1,6 @@
 from flambda_app import constants
+
+
 class PaginationType:
     LIMIT = 'limit'
     OFFSET = 'offset'

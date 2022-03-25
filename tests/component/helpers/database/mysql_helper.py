@@ -105,7 +105,7 @@ class MySQLHelper:
                     cursor.execute(sql, (table_name,))
                     table_exists = cursor.fetchone()
             except Exception as err:
-                 table_exists = False
+                table_exists = False
 
             if not table_exists:
                 sql_file = open(file_name, 'r')

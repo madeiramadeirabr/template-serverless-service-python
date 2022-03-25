@@ -3,7 +3,7 @@ import unittest
 from flambda_app.config import get_config
 from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import RedisConnectionHealthCheck
-from tests.unit.mocks.database.redis_mock import get_connection
+from tests.unit.mocks.database.redis_mock import redis_connector_mock
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
 
 
@@ -18,9 +18,9 @@ class RedisConnectionHealthCheckTestCase(BaseUnitTestCase):
 
     def setUp(self):
         super().setUp()
-        self.connection = get_connection()
+        self.connector = redis_connector_mock
         self.config = get_config()
-        self.service = RedisConnectionHealthCheck(self.logger, self.config, self.connection)
+        self.service = RedisConnectionHealthCheck(self.logger, self.config, self.connector)
 
     def test_check_health(self):
         self.logger.info('Running test: %s', get_function_name(__name__))
@@ -28,7 +28,7 @@ class RedisConnectionHealthCheckTestCase(BaseUnitTestCase):
         result = self.service.check_health()
 
         self.assertIsInstance(result, HealthCheckResult)
-        self.assertEqual(result.status, HealthStatus.HEALTHY)
+        self.assertEqual(HealthStatus.HEALTHY, result.status)
 
 
 if __name__ == '__main__':

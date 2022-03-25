@@ -20,7 +20,5 @@ class ConfigTestCase(BaseUnitTestCase):
         self.logger.info(config_dict)
 
 
-
-
 if __name__ == '__main__':
     unittest.main()

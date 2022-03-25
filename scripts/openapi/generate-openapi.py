@@ -36,6 +36,7 @@ def load_env():
     from flambda_app.helper import get_environment
     load_env(get_environment())
 
+
 def openapi():
     from flambda_app.openapi import generate_openapi_yml
     from app import spec
