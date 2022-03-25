@@ -4,7 +4,7 @@ from flambda_app.vos import AbstractVO
 
 
 class EventVO(AbstractVO):
-    def __init__(self, event_type, data:dict):
+    def __init__(self, event_type, data: dict):
         """
         :param event_type:
         :param dict data:

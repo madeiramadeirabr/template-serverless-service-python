@@ -1,3 +1,7 @@
+"""
+Logging Module for Flambda APP
+Version: 1.0.0
+"""
 import hashlib
 import json
 import os
@@ -13,6 +17,10 @@ import pytz
 from flambda_app.logging import get_logger, get_console_logger
 
 TZ_AMERICA_SAO_PAULO = 'America/Sao_Paulo'
+
+
+def generate_process():
+    return generate_hash(str("default" + datetime.now().isoformat()))
 
 
 def generate_hash(data):

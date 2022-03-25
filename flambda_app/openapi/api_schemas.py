@@ -11,9 +11,11 @@ class DefaultResponseSchema(Schema):
     message = fields.Str(example=MessagesEnum.OK.message)
     params = fields.List(fields.Str())
 
+
 class HateosDefaultResponseSchema(DefaultResponseSchema):
     meta = fields.Nested(MetaSchema)
     links = fields.List(fields.Nested(LinkSchema))
+
 
 class HateosDefaultListResponseSchema(DefaultResponseSchema):
     meta = fields.Nested(MetaSchema)
@@ -21,6 +23,8 @@ class HateosDefaultListResponseSchema(DefaultResponseSchema):
 # ***************************
 # Product
 # ***************************
+
+
 class ProductSchema(Schema):
     id = fields.Int(example=1)
     sku = fields.Int(example=657705)
@@ -46,21 +50,26 @@ class ProductListResponseSchema(DefaultResponseSchema):
     data = fields.List(fields.Nested(ProductSchema))
     control = fields.Nested(RequestControlSchema)
 
+
 class ProductListErrorResponseSchema(ErrorSchema):
     code = fields.Int(example=MessagesEnum.LIST_ERROR.code, required=True)
     label = fields.Str(example=MessagesEnum.LIST_ERROR.label)
     message = fields.Str(example=MessagesEnum.LIST_ERROR.message)
 
+
 class ProductGetResponseSchema(DefaultResponseSchema):
     data = fields.Nested(ProductSchema)
 
+
 class HateosProductGetResponseSchema(HateosDefaultResponseSchema):
     data = fields.Nested(ProductSchema)
+
 
 class ProductGetErrorResponseSchema(ErrorSchema):
     code = fields.Int(example=MessagesEnum.FIND_ERROR.code, required=True)
     label = fields.Str(example=MessagesEnum.FIND_ERROR.label)
     message = fields.Str(example=MessagesEnum.FIND_ERROR.message)
+
 
 class ProductCreateRequestSchema(Schema):
     sku = fields.Int(example=657705)
@@ -104,13 +113,16 @@ class ProductSoftUpdateRequestSchema(Schema):
 class ProductSoftDeleteResponseSchema(DefaultResponseSchema):
     data = fields.Dict(example={"deleted": True})
 
+
 class ProductDeleteResponseSchema(Schema):
     data = fields.Dict(example={"deleted": True})
+
 
 class ProductSoftDeleteErrorResponseSchema(ErrorSchema):
     code = fields.Int(example=MessagesEnum.SOFT_DELETE_ERROR.code, required=True)
     label = fields.Str(example=MessagesEnum.SOFT_DELETE_ERROR.label)
     message = fields.Str(example=MessagesEnum.SOFT_DELETE_ERROR.message)
+
 
 class ProductDeleteErrorResponseSchema(ErrorSchema):
     code = fields.Int(example=MessagesEnum.DELETE_ERROR.code, required=True)
@@ -120,6 +132,7 @@ class ProductDeleteErrorResponseSchema(ErrorSchema):
 # ***************************
 # Event
 # ***************************
+
 
 class EventSchema(Schema):
     type = fields.Str()
@@ -185,6 +198,7 @@ class EventUpdateResponseSchema(EventGetResponseSchema):
 
 class EventDeleteResponseSchema(EventGetResponseSchema):
     data = fields.Nested(DeletionSchema)
+
 
 def register():
     # simple function only to force the import of the script on app.py

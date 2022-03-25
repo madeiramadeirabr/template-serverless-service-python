@@ -1,3 +1,7 @@
+from flambda_app.config import reset as reset_config, get_config
+from boot import reset, load_dot_env, load_env
+from flambda_app.logging import get_logger
+import pymysql
 import sys
 import re
 import os
@@ -35,10 +39,6 @@ def register_paths():
 # register the paths
 register_paths()
 
-import pymysql
-from flambda_app.logging import get_logger
-from boot import reset, load_dot_env, load_env
-from flambda_app.config import reset as reset_config, get_config
 
 logger = get_logger()
 logger.info("ROOT_DIR " + ROOT_DIR)

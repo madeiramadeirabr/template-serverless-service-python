@@ -1,6 +1,9 @@
 # template-serverless-service-python
 Template for build flexible API with AWS ECS services.
 
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
+[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+
 ## Service Architecture
 Example of architecture with Kong API Gateway.
 ![Service-Arch](docs/service-arch.drawio.png)
@@ -110,6 +113,27 @@ Execute the follow command:
 ```
 ./scripts/fixenv.sh
 ```
+
+## Automation scripts information
+Bellow we describe the usage of the automation scripts
+
+| Script           | Description                                                                       | Context           |
+|------------------|-----------------------------------------------------------------------------------|-------------------|
+| autopep8.sh      | Execute the codelint for pep8                                                     | Codelint          |
+| boot.sh          | Boot the application during de container execution                                | Local boot        |
+| boot-db.sh       | Boot the data for the database                                                    | Local boot        |
+| boot-queues.sh   | Boot the queues of the application in the localstack                              | Local boot        |
+| clean-env.sh     | Clean the ./vendor folder                                                         | Local install     |
+| fixenv.sh        | In some cases where the network are deleted, you can fix the container references | Local install     |
+| install.sh       | Script to install the dependencies                                                | Local install     |
+| install-local.sh | Script to install the dependencies in the ./vendor folder                         | Local install     |
+| openapi.sh       | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
+| runenv.sh        | Script to start the project locally                                               | Local development |
+| testenv.sh       | Script to run the environment with focus in the component tests                   | Local development |
+| venv.sh          | Script to install the dependencies in the venv folder                             | Local install     |
+| venv-exec.sh     | Script to execute scripts to install content inside the venv                      | Local install     |
+| zip.sh           | Generate a zip file with the application content                                  | Other             |
+
 
 ## Samples
 See the project samples in this folder [here](samples).

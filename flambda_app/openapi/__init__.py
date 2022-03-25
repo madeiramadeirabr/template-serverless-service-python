@@ -22,9 +22,9 @@ servers = [
 if env == "development":
     servers.append({
         "url": os.environ["LOCAL_API_SERVER"] if "LOCAL_API_SERVER" in os.environ else "http://localhost:5000",
-        "description": os.environ["LOCAL_API_SERVER_DESCRIPTION"] \
-            if "LOCAL_API_SERVER_DESCRIPTION" in os.environ \
-            else "Development server"
+        "description": os.environ["LOCAL_API_SERVER_DESCRIPTION"]
+        if "LOCAL_API_SERVER_DESCRIPTION" in os.environ
+        else "Development server"
     })
 
 

@@ -38,5 +38,3 @@ class AbstractRepository:
 
     def _close(self):
         self.connection.close()
-
-

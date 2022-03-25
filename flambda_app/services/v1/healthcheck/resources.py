@@ -1,3 +1,7 @@
+"""
+HealthCheck Resources Module for Flambda APP
+Version: 1.0.0
+"""
 import os
 
 import requests
@@ -6,7 +10,7 @@ from boot import get_environment
 from flambda_app.services.v1.healthcheck import AbstractHealthCheck, HealthCheckResult
 from flambda_app.database.mysql import MySQLConnector
 from flambda_app.database.redis import RedisConnector
-from flambda_app.aws.sqs import SQSEvents
+from flambda_app.aws.sqs import SQS
 
 
 class SelfConnectionHealthCheck(AbstractHealthCheck):
@@ -66,10 +70,10 @@ class SelfConnectionHealthCheck(AbstractHealthCheck):
 
 
 class MysqlConnectionHealthCheck(AbstractHealthCheck):
-    def __init__(self, logger=None, config=None, mysql_connection=None):
+    def __init__(self, logger=None, config=None, mysql_connector=None):
         super().__init__(logger=logger, config=config)
         # database connection
-        self.mysql_connection = mysql_connection if mysql_connection is not None else MySQLConnector().get_connection()
+        self.mysql_connector = mysql_connector if mysql_connector is not None else MySQLConnector()
 
     def check_health(self):
         result = False
@@ -77,13 +81,14 @@ class MysqlConnectionHealthCheck(AbstractHealthCheck):
         check_result = HealthCheckResult.unhealthy(description)
 
         try:
-            if self.mysql_connection:
-                self.mysql_connection.connect()
-                self.mysql_connection.ping()
+            if self.mysql_connector:
+                connection = self.mysql_connector.get_connection()
+                connection.connect()
+                connection.ping()
                 result = True
                 description = "Connection successful"
             else:
-                raise Exception("mysql_connection is None")
+                raise Exception("mysql_connector is None")
         except Exception as err:
             self.logger.error(err)
 
@@ -93,10 +98,10 @@ class MysqlConnectionHealthCheck(AbstractHealthCheck):
 
 
 class RedisConnectionHealthCheck(AbstractHealthCheck):
-    def __init__(self, logger=None, config=None, redis_connection=None):
+    def __init__(self, logger=None, config=None, redis_connector=None):
         super().__init__(logger=logger, config=config)
         # database connection
-        self.redis_connection = redis_connection if redis_connection is not None else RedisConnector().get_connection()
+        self.redis_connector = redis_connector if redis_connector is not None else RedisConnector()
 
     def check_health(self):
         result = False
@@ -104,8 +109,9 @@ class RedisConnectionHealthCheck(AbstractHealthCheck):
         check_result = HealthCheckResult.unhealthy(description)
 
         try:
-            if self.redis_connection:
-                result = self.redis_connection.set('connection', 'true')
+            if self.redis_connector:
+                redis_connection = self.redis_connector.get_connection()
+                result = redis_connection.set('connection', 'true')
                 description = "Connection successful"
             else:
                 raise Exception("redis_connection is None")
@@ -118,10 +124,10 @@ class RedisConnectionHealthCheck(AbstractHealthCheck):
 
 
 class SQSConnectionHealthCheck(AbstractHealthCheck):
-    def __init__(self, logger=None, config=None, sqs_events=None):
+    def __init__(self, logger=None, config=None, sqs=None):
         super().__init__(logger=logger, config=config)
-        # sqs_events connection
-        self.sqs_events = sqs_events if sqs_events is not None else SQSEvents()
+        # sqs connection
+        self.sqs = sqs if sqs is not None else SQS()
 
     def check_health(self):
         result = False
@@ -129,8 +135,8 @@ class SQSConnectionHealthCheck(AbstractHealthCheck):
         check_result = HealthCheckResult.unhealthy(description)
 
         try:
-            if self.sqs_events:
-                connection = self.sqs_events.connect()
+            if self.sqs:
+                connection = self.sqs.connect()
                 if connection:
                     result = True
                     description = "Connection successful"

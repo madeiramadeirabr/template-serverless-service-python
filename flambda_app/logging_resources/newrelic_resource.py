@@ -24,7 +24,7 @@ class CustomNewRelicContextFormatter(NewRelicContextFormatter):
             try:
                 if hasattr(record, k):
                     logging_default_attributes[k] = getattr(record, k)
-            except Exception as err:
+            except Exception:
                 logging_default_attributes[k] = ""
         output.update(logging_default_attributes)
 

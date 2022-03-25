@@ -3,7 +3,7 @@ import unittest
 from flambda_app.config import get_config
 from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import MysqlConnectionHealthCheck
-from tests.unit.mocks.database.mysql_mock import get_connection
+from tests.unit.mocks.database.mysql_mock import mysql_connector_mock
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
 
 
@@ -18,9 +18,9 @@ class MysqlConnectionHealthCheckTestCase(BaseUnitTestCase):
 
     def setUp(self):
         super().setUp()
-        self.connection = get_connection()
+        self.connector = mysql_connector_mock
         self.config = get_config()
-        self.service = MysqlConnectionHealthCheck(self.logger, self.config, self.connection)
+        self.service = MysqlConnectionHealthCheck(self.logger, self.config, self.connector)
 
     def test_check_health(self):
         self.logger.info('Running test: %s', get_function_name(__name__))
@@ -28,7 +28,7 @@ class MysqlConnectionHealthCheckTestCase(BaseUnitTestCase):
         result = self.service.check_health()
 
         self.assertIsInstance(result, HealthCheckResult)
-        self.assertEqual(result.status, HealthStatus.HEALTHY)
+        self.assertEqual(HealthStatus.HEALTHY, result.status)
 
 
 if __name__ == '__main__':

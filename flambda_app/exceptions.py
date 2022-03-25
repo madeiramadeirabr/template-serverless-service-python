@@ -120,6 +120,7 @@ class ValidationException(ApiException):
         self.message = message_enum.message
         self.params = None
 
+
 class ServiceException(CustomException):
     def __init__(self, message_enum, errors=None):
         """

@@ -1,3 +1,7 @@
+"""
+HealthCheck Service for Flambda APP
+Version: 1.0.0
+"""
 import datetime
 
 from flambda_app.config import get_config

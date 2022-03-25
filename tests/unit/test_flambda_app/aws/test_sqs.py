@@ -3,7 +3,7 @@ import unittest
 from unittest_data_provider import data_provider
 
 from flambda_app.config import get_config
-from flambda_app.aws.sqs import SQSEvents
+from flambda_app.aws.sqs import SQS
 from tests.unit.helpers.events_helper import get_cancelamento_event
 from tests.unit.mocks.boto3_mocks import session_mock
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
@@ -14,20 +14,19 @@ def get_sqs_event_sample():
     return (event,),
 
 
-class SQSEventsTestCase(BaseUnitTestCase):
+class SQSTestCase(BaseUnitTestCase):
     CONFIG = None
 
     @classmethod
     def setUpClass(cls):
         BaseUnitTestCase.setUpClass()
         cls.CONFIG = get_config()
-        cls.CONFIG.SQS_ENDPOINT = cls.SQS_LOCALSTACK
 
     def setUp(self):
         super().setUp()
         self.config = get_config()
         # mock dependencies
-        self.sqs = SQSEvents(logger=self.logger, config=self.config, profile="default", session=session_mock)
+        self.sqs = SQS(logger=self.logger, config=self.config, profile="default", session=session_mock)
 
     def test_connect(self):
         self.logger.info('Running test: %s', get_function_name(__name__))

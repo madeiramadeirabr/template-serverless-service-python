@@ -77,7 +77,7 @@ class LambdaDecorator:
             else:
                 kwargs = {}
             wrapped = _wrap_handler(handler_type, handler_name,
-                                         user_handler)
+                                    user_handler)
             self._register_handler(handler_type, handler_name,
                                    user_handler, wrapped, kwargs)
             return wrapped

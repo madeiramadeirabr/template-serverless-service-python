@@ -1,3 +1,7 @@
+"""
+Logging Module for Flambda APP
+Version: 1.0.2
+"""
 import os
 import logging
 
@@ -20,7 +24,7 @@ _LOG_ATTRIBUTES = {
     "service": "%s:%s" % (APP_NAME, APP_VERSION),
     "service_name": APP_NAME,
     "hostname": os.environ["API_SERVER"] if "API_SERVER" in os.environ else "",
-    "environment": get_environment(),
+    "environment": get_environment()
 }
 
 
@@ -28,6 +32,7 @@ class LoggerProfile:
     CONSOLE = 'console'
     ELK = 'elk'
     NEWRELIC = 'newrelic'
+    NEWRELIC_SQS = 'newrelic_sqs'
 
 
 _LOGGER_PROFILE = LoggerProfile.CONSOLE
@@ -84,6 +89,7 @@ def get_console_logger():
     log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     logging.basicConfig(format=log_format, filename=log_filename, level=log_level)
     logger = logging.getLogger(log_name)
+    # print('get_console_logger - logger.level', logger.level)
     return logger
 
 
@@ -91,22 +97,42 @@ def get_stream_handler():
     return get_console_logger().parent.handlers[0]
 
 
-def set_debug_mode(logger, level=None):
+def set_debug_mode(logger, level=None, add_stream_handler=True):
+    global _LOGGER_PROFILE
     has_stream_logger = False
     for handler in logger.handlers:
         if isinstance(handler, logging.StreamHandler):
             has_stream_logger = True
             break
+    # verify root logger
     if not has_stream_logger:
-        logger.addHandler(get_stream_handler())
-    logger.level = level if level is not None else logging.INFO
+        for handler in logger.root.handlers:
+            if isinstance(handler, logging.StreamHandler):
+                if _LOGGER_PROFILE == LoggerProfile.CONSOLE:
+                    has_stream_logger = True
+                else:
+                    # ignore StreamHandler stderr (NOTSET)
+                    if handler.name is not None and handler.level != 0:
+                        has_stream_logger = True
+                        break
+
+    if not has_stream_logger and add_stream_handler:
+        stream_handler = get_stream_handler()
+        stream_handler.setLevel(get_log_level())
+        logger.addHandler(stream_handler)
+    logger.level = level if level is not None else logging.DEBUG
 
 
 def get_logger(profile: LoggerProfile = None, **kwargs):
     global _LOGGER
+    force = False
     log_level = get_log_level()
-    if not _LOGGER:
-        log_name = APP_NAME
+
+    if 'force' in kwargs:
+        force = kwargs['force']
+
+    if not _LOGGER or force:
+        log_name = kwargs['log_name'] if 'log_name' in kwargs else APP_NAME
         log_filename = None
 
         if profile:
@@ -129,6 +155,9 @@ def get_logger(profile: LoggerProfile = None, **kwargs):
 
         # force log level
         logger.setLevel(log_level)
+        # print('get_logger - profile', profile)
+        # print('get_logger - setting log level', log_level)
+        # print('get_logger - logger', logger)
 
         # factory
         logging.setLogRecordFactory(record_factory)
@@ -175,13 +204,20 @@ def add_handler_by_profile(logger: logging.Logger, profile=None, **kwargs):
 
         elif profile == LoggerProfile.NEWRELIC:
             from flambda_app.logging_resources.newrelic_resource import add_newrelic_handler
-            logger.info('newrelic test')
             # new relic attrib
             if "NEW_RELIC_ENTITY_GUID" in os.environ:
                 set_log_attributes({"entity.guid": os.environ["NEW_RELIC_ENTITY_GUID"]})
 
             stream_handler = logger.handlers[0] if len(logger.handlers) > 0 else None
             add_newrelic_handler(logger, stream_handler, **kwargs)
+
+        elif profile == LoggerProfile.NEWRELIC_SQS:
+            from flambda_app.logging_resources.newrelic_sqs_resource import add_newrelic_handler
+            # new relic attrib
+            if "NEW_RELIC_ENTITY_GUID" in os.environ:
+                set_log_attributes({"entity.guid": os.environ["NEW_RELIC_ENTITY_GUID"]})
+
+            add_newrelic_handler(logger, **kwargs)
 
         # force log level
         logger.setLevel(get_log_level())
@@ -204,10 +240,11 @@ def remove_handler(logger: logging.Logger, class_name):
     except Exception as err:
         logger.error(err)
 
+
 def remove_last_handler(logger: logging.Logger):
     try:
         count = len(logger.handlers)
-        position = count-1
+        position = count - 1
         del logger.handlers[position]
     except Exception as err:
         logger.error(err)
