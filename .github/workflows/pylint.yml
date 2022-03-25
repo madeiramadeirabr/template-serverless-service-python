@@ -21,7 +21,8 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        python-version: [ "3.8", "3.9" ]
+#        python-version: [ "3.8", "3.9" ]
+        python-version: [ "3.8" ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -32,6 +33,9 @@ jobs:
   setup-project:
     name: Setup project (Ubuntu 18.04 - Python 3.x)
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [ "3.8" ]
     needs: setup-environment
     steps:
         - uses: actions/checkout@v2
@@ -40,6 +44,9 @@ jobs:
             python -m pip install --upgrade pip
             python -m pip install -r ./requirements.txt -t .
             python -m pip install -r ./requirements-vendor.txt -t .
+          with:
+            python-version: ${{ matrix.python-version }}
+            architecture: x64
   pylint:
     name: Setup pylint (Ubuntu 18.04)
     runs-on: ubuntu-18.04
@@ -54,3 +61,6 @@ jobs:
             # pylint ./app.py ./lambda_app ./tests/unit ./tests/integration ./tests/component
             # pylint ./app.py ./boot.py ./flambda_app
             ./scripts/pylint.sh
+          with:
+            python-version: ${{ matrix.python-version }}
+            architecture: x64
