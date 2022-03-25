@@ -12,6 +12,8 @@ from pymysql import OperationalError
 # ************************
 # def execute(self, query, args=None):
 #     return True
+from flambda_app.database.mysql import MySQLConnector
+
 iterable = MagicMock(return_value=iter([MagicMock(return_value=1), MagicMock(return_value=2)]))
 cursor_mock = Mock(pymysql.cursors.DictCursor)
 cursor_mock.__iter__ = iterable
@@ -96,3 +98,7 @@ def get_connection(config=None, connect=True, retry=False):
         connection = _CONNECTION
 
     return connection
+
+
+mysql_connector_mock = Mock(MySQLConnector)
+mysql_connector_mock.get_connection.side_effect = get_connection()

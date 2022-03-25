@@ -27,9 +27,9 @@ class MysqlConnectionHealthCheckTestCase(BaseComponentTestCase):
 
     def setUp(self):
         super().setUp()
-        self.connection = MySQLConnector().get_connection()
+        self.connector = MySQLConnector()
         self.config = get_config()
-        self.service = MysqlConnectionHealthCheck(self.logger, self.config, self.connection)
+        self.service = MysqlConnectionHealthCheck(self.logger, self.config, self.connector)
 
     def test_check_health(self):
         self.logger.info('Running test: %s', get_function_name(__name__))
@@ -37,7 +37,7 @@ class MysqlConnectionHealthCheckTestCase(BaseComponentTestCase):
         result = self.service.check_health()
 
         self.assertIsInstance(result, HealthCheckResult)
-        self.assertEqual(result.status, HealthStatus.HEALTHY)
+        self.assertEqual(HealthStatus.HEALTHY, result.status)
 
 
 if __name__ == '__main__':

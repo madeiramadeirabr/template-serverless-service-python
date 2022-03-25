@@ -1,3 +1,7 @@
+"""
+Redis Module for Flambda APP
+Version: 1.0.0
+"""
 from time import sleep
 
 import redis
@@ -22,15 +26,17 @@ class RedisConnector:
         self.config = config if config is not None else get_config()
         # last_exception
         self.exception = None
+        # singleton
+        self.connection = None
 
     def get_connection(self, retry=False):
         global _CONNECTION, _RETRY_COUNT, _MAX_RETRY_ATTEMPTS
-        if not _CONNECTION:
+        if not self.connection:
             connection = None
 
             try:
-                host = self.config.REDIS_HOST
-                port = self.config.REDIS_PORT
+                host = self.config.get('REDIS_HOST', None)
+                port = self.config.get('REDIS_PORT', None)
                 test = False
                 try:
                     connection = redis.Redis(
@@ -53,6 +59,7 @@ class RedisConnector:
                 if not test:
                     raise Exception('Redis - Unable to connect')
                 else:
+                    self.connection = connection
                     _CONNECTION = connection
                     _RETRY_COUNT = 0
                     self.logger.info('Redis - Connected')
@@ -72,6 +79,6 @@ class RedisConnector:
                         _RETRY_COUNT += 1
                         return self.get_connection()
         else:
-            connection = _CONNECTION
+            connection = self.connection
 
         return connection

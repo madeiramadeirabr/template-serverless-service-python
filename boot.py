@@ -1,3 +1,7 @@
+"""
+Boot module for Flambda App
+Version: 1.0.4
+"""
 import json
 import os
 import sys
@@ -53,8 +57,9 @@ def get_env_keys():
 def get_internal_logger():
     from flambda_app import APP_NAME
     try:
-        from flambda_app.logging import get_logger, reset as reset_logger
-        logger = get_logger()
+        from flambda_app.logging import LoggerProfile, get_logger, get_log_level, reset as reset_logger
+        logger = get_logger(LoggerProfile.CONSOLE)
+        logger.setLevel(get_log_level())
         reset_logger()
 
     except Exception as err:
@@ -65,7 +70,7 @@ def get_internal_logger():
     return logger
 
 
-def load_dot_env(env='development', force=False):
+def load_dot_env(env='development', force=False, debug=False):
     result = False
     from dotenv import dotenv_values
     # env default value
@@ -76,14 +81,17 @@ def load_dot_env(env='development', force=False):
 
     global _LOADED, _ENV_KEYS, _DEFAULT_ENV_CONFIGS
     if not _LOADED or force:
-        logger.info('Boot - Loading env: {}'.format(env))
+        if debug:
+            logger.info('Boot - load_dot_env - Loading env: {}'.format(env))
 
         # Default
         for k, v in _DEFAULT_ENV_CONFIGS.items():
             _ENV_KEYS.append(k)
             if k == 'APP_ENV':
                 v = env
-            os.environ[k] = v
+            # se não estiver setado ainda no env, cria o valor default
+            if k not in os.environ:
+                os.environ[k] = v
 
         config_path = '{}env/{}.env'.format(current_path, env)
         if os.path.isfile(config_path):
@@ -104,14 +112,15 @@ def load_dot_env(env='development', force=False):
                 if result:
                     _LOADED = True
                 else:
-                    logger.error('Unable to load config')
+                    if debug:
+                        logger.error('Unable to load config')
 
     else:
         result = True
     return result
 
 
-def load_secrets(env='staging'):
+def load_secrets(env='staging', debug=False):
     global _ENV_KEYS
     from flambda_app.aws.secrets import Secrets
     from flambda_app import APP_NAME
@@ -126,7 +135,8 @@ def load_secrets(env='staging'):
         secrets_dict = Secrets().get_secrets(secret_name=secret_name)
     except Exception as err:
         secrets_dict = None
-        logger.error(err)
+        if debug:
+            logger.error(err)
 
     if secrets_dict is not None:
         for k, v in secrets_dict.items():
@@ -136,7 +146,7 @@ def load_secrets(env='staging'):
     return result
 
 
-def load_env(env='dev', force=False):
+def load_env(env='dev', force=False, debug=False):
     result = False
     # env default value
     if env is None:
@@ -146,18 +156,12 @@ def load_env(env='dev', force=False):
 
     global _LOADED, _ENV_KEYS, _DEFAULT_ENV_CONFIGS
     if not _LOADED or force:
-
-        logger.info('Boot - Loading env: {}'.format(env))
-
-        # Default
-        for k, v in _DEFAULT_ENV_CONFIGS.items():
-            _ENV_KEYS.append(k)
-            if k == 'APP_ENV':
-                v = env
-            os.environ[k] = v
+        if debug:
+            logger.info('Boot - load_env - Loading env: {}'.format(env))
 
         chalice_config_path = '{}.chalice/config.json'.format(current_path)
 
+        # todo tratar cenários novos que não serão baseado em arquivos
         if os.path.isfile(chalice_config_path):
             file = open(chalice_config_path, 'r')
             data = file.read()
@@ -175,25 +179,44 @@ def load_env(env='dev', force=False):
                 if isinstance(env_vars, dict):
                     for k, v in env_vars.items():
                         _ENV_KEYS.append(k)
+                        # não remover, senão vai sobrescrever as variaveis pelo arquivo config.json, sabemos que em
+                        # ambientes como de prod isso é ruim
                         if k not in os.environ:
                             os.environ[k] = v
+                            if debug:
+                                logger.debug('setting env configs.stages.env k = v {} = {}'.format(k, v))
+                        else:
+                            if debug:
+                                logger.debug('ENV k = v {} = {}'.format(k, os.environ[k]))
                     _LOADED = True
                     result = True
                 else:
-                    logger.error("Unable to load env_vars from chalice: {}".format(env_vars))
+                    if debug:
+                        logger.error("Unable to load env_vars from chalice: {}".format(env_vars))
             else:
                 # solution for projects with development flag instead of dev
                 if env == 'dev':
                     result = load_env('development')
                 else:
-                    logger.error('Unable to load config')
+                    if debug:
+                        logger.error('Unable to load config')
                     _LOADED = False
             # close the file
             file.close()
 
         else:
-            logger.error('Unable to load config')
+            if debug:
+                logger.error('Unable to load config')
             _LOADED = False
+
+        # Carrega as variaves default, só seta valores caso não tenham sido carregadas via arquivo ou env (secrets)
+        for k, v in _DEFAULT_ENV_CONFIGS.items():
+            _ENV_KEYS.append(k)
+            if k == 'APP_ENV':
+                v = env
+            # se não estiver setado ainda no env, cria o valor default
+            if k not in os.environ:
+                os.environ[k] = v
     else:
         result = True
     return result
@@ -231,6 +254,10 @@ def get_environment():
         environment = os.environ['ENVIRONMENT_NAME']
     elif 'APP_ENV' in os.environ:
         environment = os.environ['APP_ENV']
+
+    if environment == "dev":
+        environment = "development"
+
     return environment
 
 
@@ -238,6 +265,6 @@ def get_environment():
 register_vendor()
 
 # load env
-loaded = load_env(get_environment())
+loaded = load_env(get_environment(), debug=True)
 if not loaded:
-    loaded = load_dot_env(get_environment())
+    loaded = load_dot_env(get_environment(),  debug=True)

@@ -36,7 +36,7 @@ DEBUG = helper.debug_mode()
 # keep in this order, the app generic stream handler will be removed
 APP = Flambda(APP_NAME)
 # Logger
-LOGGER = get_logger()
+LOGGER = get_logger(force=True)
 # override the APP logger
 APP.logger = LOGGER
 # override the log configs

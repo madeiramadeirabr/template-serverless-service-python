@@ -1,9 +1,13 @@
+"""
+AWS SQS Module Component Test for Flambda APP
+Version: 1.0.0
+"""
 import unittest
 
 from unittest_data_provider import data_provider
 
 from flambda_app.config import get_config
-from flambda_app.aws.sqs import SQSEvents
+from flambda_app.aws.sqs import SQS
 from flambda_app.logging import get_logger
 from tests.component.componenttestutils import BaseComponentTestCase
 from tests.component.helpers.aws.sqs_helper import SQSHelper
@@ -16,7 +20,7 @@ def get_sqs_event_sample():
     return (event,),
 
 
-class SQSEventsTestCase(BaseComponentTestCase):
+class SQSTestCase(BaseComponentTestCase):
     EXECUTE_FIXTURE = True
     CONFIG = None
 
@@ -57,7 +61,22 @@ class SQSEventsTestCase(BaseComponentTestCase):
 
     def setUp(self):
         super().setUp()
-        self.sqs = SQSEvents()
+        self.sqs = SQS()
+
+    def test_multi_connection(self):
+        self.logger.info('Running test: %s', get_function_name(__name__))
+        sqs = SQS()
+        _conn = None
+        _last_conn = None
+        for i in range(0, 3):
+            self.logger.info('i: {}'.format(i))
+            conn = sqs.connect()
+            _last_conn = conn
+            if i == 0:
+                _conn = conn
+
+        self.assertIsNotNone(_conn)
+        self.assertEqual(_conn, _last_conn)
 
     def test_connect(self):
         self.logger.info('Running test: %s', get_function_name(__name__))

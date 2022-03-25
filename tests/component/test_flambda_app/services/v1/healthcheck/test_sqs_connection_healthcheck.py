@@ -1,7 +1,7 @@
 import unittest
 
 from flambda_app.config import get_config
-from flambda_app.aws.sqs import SQSEvents
+from flambda_app.aws.sqs import SQS
 from flambda_app.logging import get_logger
 from flambda_app.services.v1.healthcheck import HealthStatus, HealthCheckResult
 from flambda_app.services.v1.healthcheck.resources import SQSConnectionHealthCheck
@@ -51,7 +51,7 @@ class SQSConnectionHealthCheckTestCase(BaseComponentTestCase):
     def setUp(self):
         super().setUp()
         self.config = get_config()
-        self.sqs = SQSEvents(logger=self.logger, config=self.config)
+        self.sqs = SQS(logger=self.logger, config=self.config)
         self.service = SQSConnectionHealthCheck(self.logger, self.config, self.sqs)
 
     def test_check_health(self):
