@@ -50,6 +50,9 @@ jobs:
   pylint:
     name: Setup pylint (Ubuntu 18.04)
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [ "3.8" ]
     needs: setup-project
     steps:
         - uses: actions/checkout@v2
