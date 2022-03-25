@@ -1,6 +1,9 @@
 # template-serverless-service-python
 Template for build flexible API with AWS ECS services.
 
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
+[![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+
 ## Service Architecture
 Example of architecture with Kong API Gateway.
 ![Service-Arch](docs/service-arch.drawio.png)
