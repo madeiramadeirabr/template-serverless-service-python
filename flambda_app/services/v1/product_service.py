@@ -17,25 +17,27 @@ class ProductService:
     DEBUG = False
     REDIS_ENABLED = False
 
-    def __init__(self, logger=None, mysql_connection=None, redis_connection=None, product_repository=None,
+    def __init__(self, logger=None, mysql_connector=None, redis_connector=None, product_repository=None,
                  redis_product_repository=None):
         # logger
         self.logger = logger if logger is None else get_logger()
         # database connection
-        self.mysql_connection = mysql_connection if mysql_connection is not None else MySQLConnector().get_connection()
+        self.mysql_connector = mysql_connector if mysql_connector is not None else MySQLConnector()
+        # todo passar apenas connector
         # mysql repository
         self.product_repository = product_repository if product_repository is not None \
-            else ProductRepository(mysql_connection=mysql_connection)
+            else ProductRepository(mysql_connection=self.mysql_connector.get_connection())
 
         # exception
         self.exception = None
 
         if self.REDIS_ENABLED:
             # redis connection
-            self.redis_connection = redis_connection if redis_connection is not None else RedisConnector().get_connection()
+            self.redis_connector = redis_connector if redis_connector is not None else RedisConnector()
+            # todo passar apenas connector
             # redis repository
             self.redis_product_repository = redis_product_repository if redis_product_repository is not None \
-                else RedisProductRepository(redis_connection=redis_connection)
+                else RedisProductRepository(redis_connection=self.redis_connector.get_connection())
 
         self.debug(self.DEBUG)
 
@@ -73,7 +75,7 @@ class ProductService:
             if data:
                 vo_data = []
                 for item in data:
-                    vo_data.append(ProductVO(item).to_api_response())
+                    vo_data.append(ProductVO(item, default_values=False).to_api_response())
                 data = vo_data
 
             # set exception if it happens
@@ -138,7 +140,7 @@ class ProductService:
 
             # convert to vo and prepare for api response
             if data:
-                data = ProductVO(data).to_api_response()
+                data = ProductVO(data, default_values=False).to_api_response()
 
             # set exception if it happens
             if self.product_repository.get_exception():

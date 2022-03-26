@@ -1,7 +1,18 @@
-import datetime
+"""
+Value Object Module for Flambda APP
+Version: 1.0.0
+"""
 import json
 
 from flambda_app import helper
+
+
+def remove_null_params(self_dict: dict):
+    final_dict = {}
+    for k, v in self_dict.items():
+        if v is not None:
+            final_dict[k] = v
+    return final_dict
 
 
 class AbstractVO:
@@ -22,7 +33,8 @@ class AbstractVO:
         Apply iso format to result
         """
         helper.convert_object_dates_to_iso_utc(self)
-        return helper.to_dict(self, force_str=False)
+        self_dict = helper.to_dict(self, force_str=False)
+        return remove_null_params(self_dict)
 
     def __getitem__(self, n):
         """
