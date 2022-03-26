@@ -116,11 +116,15 @@ Execute the follow command:
 ```
 
 ## Automation scripts information
-Bellow we describe the usage of the automation scripts
+Bellow we describe the usage of the automation scripts.
+These kebab case scripts helps the developer in general tasks.
+
+### General scripts
+Kebab case script to help the developer in general tasks.
 
 | Script           | Description                                                                       | Context           |
 |------------------|-----------------------------------------------------------------------------------|-------------------|
-| autopep8.sh      | Execute the codelint for pep8                                                     | Codelint          |
+| autopep8.sh      | Execute the code-lint for pep8                                                    | Codelint          |
 | boot.sh          | Boot the application during de container execution                                | Local boot        |
 | boot-db.sh       | Boot the data for the database                                                    | Local boot        |
 | boot-queues.sh   | Boot the queues of the application in the localstack                              | Local boot        |
@@ -129,14 +133,25 @@ Bellow we describe the usage of the automation scripts
 | install.sh       | Script to install the dependencies                                                | Local install     |
 | install-local.sh | Script to install the dependencies in the ./vendor folder                         | Local install     |
 | openapi.sh       | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
-| pylint.sh        | Script to execute the pylint analisys                                             | Local development |
+| pylint.sh        | Script to execute the pylint analysis                                             | Local development |
 | runenv.sh        | Script to start the project locally                                               | Local development |
 | testenv.sh       | Script to run the environment with focus in the component tests                   | Local development |
 | venv.sh          | Script to install the dependencies in the venv folder                             | Local install     |
 | venv-exec.sh     | Script to execute scripts to install content inside the venv                      | Local install     |
 | zip.sh           | Generate a zip file with the application content                                  | Other             |
 
-
+### Docker scripts
+Helper scripts to do tasks for docker context;
+### Flask scripts
+Helper scripts to run flask locally, not inside a docker container;
+### Localstack scripts
+Helper scripts to run commands over Localstack resources like S3, SQS, Lambda, etc;
+### Migrations scripts
+Helper scripts to execute migrations;
+### OpenApi scripts
+Helper scripts to generate openapi schemas and specifications;
+### Tests scripts
+Helper scripts to execute tests and generate reports;
 ## Samples
 See the project samples in this folder [here](samples).
 
