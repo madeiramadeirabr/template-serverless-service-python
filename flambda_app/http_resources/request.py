@@ -1,3 +1,7 @@
+"""
+HTTP Request Module for Flambda APP
+Version: 1.0.0
+"""
 import copy
 import json
 import uuid

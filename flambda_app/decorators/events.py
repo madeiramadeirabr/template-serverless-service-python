@@ -1,3 +1,7 @@
+"""
+Flambda Framework Events Module - Chalice Compatible
+Version: 1.0.0
+"""
 from urllib.parse import unquote_plus
 
 unquote_str = unquote_plus

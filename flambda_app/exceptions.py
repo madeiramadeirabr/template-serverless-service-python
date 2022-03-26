@@ -1,3 +1,7 @@
+"""
+Exception Module for Flambda APP
+Version: 1.0.0
+"""
 import json
 
 from flambda_app import helper

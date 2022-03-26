@@ -1,3 +1,7 @@
+"""
+AWS Opensearch Module
+Version: 1.0.1
+"""
 import os
 from elasticsearch import Elasticsearch
 from elasticsearch.transport import Transport

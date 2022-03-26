@@ -1,19 +1,17 @@
+"""
+Redis Product Repository Module for Flambda APP
+Version: 1.0.0
+"""
 import json
 import math
-from itertools import zip_longest
 
 from flambda_app.database.redis import RedisConnector
 from flambda_app.enums.messages import MessagesEnum
 from flambda_app.exceptions import DatabaseException
 from flambda_app.logging import get_logger
-
 # iterate a list in batches of size n
+from flambda_app.repositories.v1.redis import batcher
 from flambda_app.request_control import Pagination
-
-
-def batcher(iterable, n):
-    args = [iter(iterable)] * n
-    return zip_longest(*args)
 
 
 class ProductRepository:

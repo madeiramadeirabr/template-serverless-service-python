@@ -1,3 +1,7 @@
+"""
+App Messages Enum Module for Flambda APP
+Version: 1.0.0
+"""
 from enum import IntEnum
 
 

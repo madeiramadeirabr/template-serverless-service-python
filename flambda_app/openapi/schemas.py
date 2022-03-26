@@ -1,3 +1,7 @@
+"""
+Default API Schemas Module for Flambda APP
+Version: 1.0.0
+"""
 from marshmallow import Schema, fields
 
 from flambda_app.enums.messages import MessagesEnum
@@ -49,3 +53,20 @@ class PingSchema(Schema):
 
 class AliveSchema(Schema):
     app = fields.Str(example="I'm alive!")
+
+
+class DefaultResponseSchema(Schema):
+    success = fields.Bool(example=True, default=True)
+    code = fields.Int(example=MessagesEnum.OK.code, required=True)
+    label = fields.Str(example=MessagesEnum.OK.label)
+    message = fields.Str(example=MessagesEnum.OK.message)
+    params = fields.List(fields.Str())
+
+
+class HateosDefaultResponseSchema(DefaultResponseSchema):
+    meta = fields.Nested(MetaSchema)
+    links = fields.List(fields.Nested(LinkSchema))
+
+
+class HateosDefaultListResponseSchema(DefaultResponseSchema):
+    meta = fields.Nested(MetaSchema)

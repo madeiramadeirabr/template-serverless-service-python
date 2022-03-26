@@ -1,3 +1,7 @@
+"""
+Flambda Framework Decorator Module - Chalice Compatible
+Version: 1.0.0
+"""
 from flambda_app import helper
 from flambda_app.decorators.events import SQSRecord, SQSEvent
 

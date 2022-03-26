@@ -83,7 +83,7 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
         self.logger.info('key: {}'.format(key))
 
         config = get_config()
-        connection = RedisConnector().get_connection()
+        connection = RedisConnector().get_connection(config)
 
         repository = ProductRepository(redis_connection=connection)
         result = repository.create(key, product.to_json())
@@ -103,7 +103,7 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
         self.logger.info('key: {}'.format(key))
 
         config = get_config()
-        connection = RedisConnector().get_connection()
+        connection = RedisConnector().get_connection(config)
 
         repository = ProductRepository(redis_connection=connection)
         result = repository.create(key, product.to_json())
@@ -119,7 +119,7 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
         self.logger.info('Running test: %s', get_function_name(__name__))
 
         config = get_config()
-        connection = RedisConnector().get_connection()
+        connection = RedisConnector().get_connection(config)
 
         repository = ProductRepository(redis_connection=connection)
 
@@ -137,7 +137,7 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
     #     key = '%s:%s' % (event_type, event.hash)
     #
     #     config = get_config()
-    #     connection = RedisConnector().get_connection()
+    #     connection = get_connection(config)
     #
     #     repository = EventRepository(redis_connection=connection)
     #
@@ -159,7 +159,7 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
     #     key = '%s:%s' % (event_type, event.hash)
     #
     #     config = get_config()
-    #     connection = RedisConnector().get_connection()
+    #     connection = get_connection(config)
     #
     #     repository = EventRepository(redis_connection=connection)
     #

@@ -1,3 +1,7 @@
+"""
+HTTP Helper Module for Flambda APP
+Version: 1.0.0
+"""
 from flask import Response
 from flambda_app import APP_VERSION, APP_ARCH_VERSION, helper
 

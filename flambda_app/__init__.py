@@ -1,5 +1,6 @@
 """
-Main module of th app
+Main module for Flambda APP
+Version: 1.0.0
 """
 import os
 

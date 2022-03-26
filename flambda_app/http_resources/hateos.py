@@ -1,3 +1,7 @@
+"""
+HTTP HATEOS Module for Flambda APP
+Version: 1.0.0
+"""
 from flambda_app.enums import CustomStringEnum
 
 

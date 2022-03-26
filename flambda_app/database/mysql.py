@@ -1,3 +1,7 @@
+"""
+MySQL Module for Flambda APP
+Version: 1.0.0
+"""
 from time import sleep
 
 import pymysql

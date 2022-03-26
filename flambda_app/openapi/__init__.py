@@ -1,3 +1,7 @@
+"""
+OpenAPI Module for Flambda APP
+Version: 1.0.0
+"""
 import os
 
 import yaml

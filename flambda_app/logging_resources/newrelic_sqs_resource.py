@@ -1,8 +1,9 @@
-'''
-New relic resource module
+"""
+NewRelic Logging Resource SQS Based Module for Flambda APP
+Version: 1.0.0
 Import the logging module and the New Relic log formatter
 https://docs.newrelic.com/docs/logs/logs-context/configure-logs-context-python/#python-formatter
-'''
+"""
 import atexit
 import logging
 import queue

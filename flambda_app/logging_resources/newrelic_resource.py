@@ -1,8 +1,9 @@
-'''
-New relic resource module
+"""
+NewRelic Logging Resource Module for Flambda APP
+Version: 1.0.0
 Import the logging module and the New Relic log formatter
 https://docs.newrelic.com/docs/logs/logs-context/configure-logs-context-python/#python-formatter
-'''
+"""
 import logging
 
 from newrelic.agent import NewRelicContextFormatter

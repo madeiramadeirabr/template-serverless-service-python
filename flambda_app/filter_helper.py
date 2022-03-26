@@ -1,3 +1,7 @@
+"""
+Filter Helper Module for Flambda APP
+Version: 1.0.0
+"""
 import re
 
 from flambda_app import helper
