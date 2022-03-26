@@ -6,6 +6,7 @@ Template for build flexible API with AWS ECS services.
 
 ## Service Architecture
 Example of architecture with Kong API Gateway.
+
 ![Service-Arch](docs/service-arch.drawio.png)
 
 ## General Service Routes Architecture

@@ -1,30 +1,17 @@
+"""
+API Schemas Module for Flambda APP
+Version: 1.0.0
+"""
 from marshmallow import Schema, fields, validate
 
 from flambda_app.enums.messages import MessagesEnum
-from flambda_app.openapi.schemas import DeletionSchema, RequestControlSchema, MetaSchema, LinkSchema, ErrorSchema
+from flambda_app.openapi.schemas import DeletionSchema, RequestControlSchema, MetaSchema, LinkSchema, ErrorSchema, \
+    HateosDefaultListResponseSchema, DefaultResponseSchema, HateosDefaultResponseSchema
 
-
-class DefaultResponseSchema(Schema):
-    success = fields.Bool(example=True, default=True)
-    code = fields.Int(example=MessagesEnum.OK.code, required=True)
-    label = fields.Str(example=MessagesEnum.OK.label)
-    message = fields.Str(example=MessagesEnum.OK.message)
-    params = fields.List(fields.Str())
-
-
-class HateosDefaultResponseSchema(DefaultResponseSchema):
-    meta = fields.Nested(MetaSchema)
-    links = fields.List(fields.Nested(LinkSchema))
-
-
-class HateosDefaultListResponseSchema(DefaultResponseSchema):
-    meta = fields.Nested(MetaSchema)
 
 # ***************************
 # Product
 # ***************************
-
-
 class ProductSchema(Schema):
     id = fields.Int(example=1)
     sku = fields.Int(example=657705)
