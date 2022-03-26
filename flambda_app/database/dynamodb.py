@@ -1,3 +1,7 @@
+"""
+DynamoDB Module for Flambda APP
+Version: 1.0.0
+"""
 import os
 from time import sleep
 

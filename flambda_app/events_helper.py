@@ -1,3 +1,7 @@
+"""
+Events Helper Module for Flambda APP
+Version: 1.0.0
+"""
 import ast
 import json
 

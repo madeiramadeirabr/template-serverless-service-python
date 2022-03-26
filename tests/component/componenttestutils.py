@@ -62,13 +62,14 @@ class BaseComponentTestCase(unittest.TestCase):
         self.config = get_config()
 
     @classmethod
-    def fixture_sqs(cls, logger, queue_url):
+    def fixture_sqs(cls, logger, queue_url, attributes=None):
         queue_name = SQSHelper.get_queue_name(queue_url)
         deleted = SQSHelper.delete_queue(queue_url)
         if deleted:
             logger.info(f'Deleting queue name: {queue_name}')
 
-        attributes = {'DelaySeconds': '1'}
+        if attributes is None:
+            attributes = {'DelaySeconds': '0'}
         result = SQSHelper.create_queue(queue_url, attributes)
         if result is not None:
             logger.info(f'queue {queue_name} created')

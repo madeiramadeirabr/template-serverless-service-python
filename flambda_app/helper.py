@@ -1,5 +1,5 @@
 """
-Logging Module for Flambda APP
+General Helper Module for Flambda APP
 Version: 1.0.0
 """
 import hashlib

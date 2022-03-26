@@ -1,3 +1,7 @@
+"""
+HTTP Response Module for Flambda APP
+Version: 1.0.0
+"""
 import json
 import traceback
 

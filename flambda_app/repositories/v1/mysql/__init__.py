@@ -1,3 +1,7 @@
+"""
+Mysql Repositories Module for Flambda APP
+Version: 1.0.0
+"""
 from flambda_app.database.mysql import MySQLConnector
 from flambda_app.logging import get_logger
 import pymysql
@@ -6,6 +10,7 @@ import pymysql
 class AbstractRepository:
     def __init__(self, logger, mysql_connection):
         self.logger = logger if logger is not None else get_logger()
+        # todo utilizar connector
         self.connection = mysql_connection if mysql_connection is not None else MySQLConnector().get_connection()
         self._exception = None
         self.debug = False

@@ -1,3 +1,7 @@
+"""
+Flambda Framework Module
+Version: 1.0.0
+"""
 from flask import Flask
 
 try:

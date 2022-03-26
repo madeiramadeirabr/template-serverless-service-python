@@ -65,23 +65,10 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
         if cls.EXECUTE_FIXTURE:
             logger = get_logger()
             logger.info("Fixture: drop table")
-
+            database_name="store"
             table_name = ProductRepository.BASE_TABLE
-            cls.fixture_table(logger, mysql_connection, table_name)
+            cls.fixture_table(logger, mysql_connection, table_name, database_name)
 
-    @classmethod
-    def fixture_table(cls, logger, mysql_connection, table_name):
-        dropped = MySQLHelper.drop_table(mysql_connection, table_name)
-        if dropped:
-            logger.info(f"Table dropped:: {table_name}")
-        file_name = ROOT_DIR + f"tests/datasets/database/structure/mysql/create.table.store.{table_name}.sql"
-        created = MySQLHelper.create_table(mysql_connection, table_name, file_name)
-        if created:
-            logger.info(f"Table created:: {table_name}")
-        file_name = ROOT_DIR + f"tests/datasets/database/seeders/mysql/seeder.table.store.{table_name}.sql"
-        populated = MySQLHelper.sow_table(mysql_connection, table_name, file_name)
-        if populated:
-            logger.info(f"Table populated:: {table_name}")
 
     def setUp(self):
         super().setUp()

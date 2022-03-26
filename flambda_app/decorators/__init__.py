@@ -1,3 +1,7 @@
+"""
+Flambda Framework Decorator Module - Chalice Compatible
+Version: 1.0.0
+"""
 from flambda_app.decorators.events import SQSEvent, SNSEvent
 from flambda_app.decorators.wrappers import PureLambdaWrapper, SQSLambdaWrapper, EventSourceHandler
 

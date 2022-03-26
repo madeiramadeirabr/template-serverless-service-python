@@ -3,9 +3,12 @@ Template for build flexible API with AWS ECS services.
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=madeiramadeirabr_acl-authorizer&metric=alert_status&token=a384bfd0d27466b30532d44406075652b1cf5713)](https://sonarcloud.io/summary/new_code?id=madeiramadeirabr_acl-authorizer)
+
 
 ## Service Architecture
 Example of architecture with Kong API Gateway.
+
 ![Service-Arch](docs/service-arch.drawio.png)
 
 ## General Service Routes Architecture
@@ -115,11 +118,15 @@ Execute the follow command:
 ```
 
 ## Automation scripts information
-Bellow we describe the usage of the automation scripts
+Bellow we describe the usage of the automation scripts.
+These kebab case scripts helps the developer in general tasks.
+
+### General scripts
+Kebab case script to help the developer in general tasks.
 
 | Script           | Description                                                                       | Context           |
 |------------------|-----------------------------------------------------------------------------------|-------------------|
-| autopep8.sh      | Execute the codelint for pep8                                                     | Codelint          |
+| autopep8.sh      | Execute the code-lint for pep8                                                    | Codelint          |
 | boot.sh          | Boot the application during de container execution                                | Local boot        |
 | boot-db.sh       | Boot the data for the database                                                    | Local boot        |
 | boot-queues.sh   | Boot the queues of the application in the localstack                              | Local boot        |
@@ -128,13 +135,25 @@ Bellow we describe the usage of the automation scripts
 | install.sh       | Script to install the dependencies                                                | Local install     |
 | install-local.sh | Script to install the dependencies in the ./vendor folder                         | Local install     |
 | openapi.sh       | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
+| pylint.sh        | Script to execute the pylint analysis                                             | Local development |
 | runenv.sh        | Script to start the project locally                                               | Local development |
 | testenv.sh       | Script to run the environment with focus in the component tests                   | Local development |
 | venv.sh          | Script to install the dependencies in the venv folder                             | Local install     |
 | venv-exec.sh     | Script to execute scripts to install content inside the venv                      | Local install     |
 | zip.sh           | Generate a zip file with the application content                                  | Other             |
 
-
+### Docker scripts
+Helper scripts to do tasks for docker context;
+### Flask scripts
+Helper scripts to run flask locally, not inside a docker container;
+### Localstack scripts
+Helper scripts to run commands over Localstack resources like S3, SQS, Lambda, etc;
+### Migrations scripts
+Helper scripts to execute migrations;
+### OpenApi scripts
+Helper scripts to generate openapi schemas and specifications;
+### Tests scripts
+Helper scripts to execute tests and generate reports;
 ## Samples
 See the project samples in this folder [here](samples).
 
@@ -229,3 +248,28 @@ See the license [LICENSE.md](LICENSE.md).
 ## Contributions
 * Anderson de Oliveira Contreira [andersoncontreira](https://github.com/andersoncontreira)
 
+## IDE configuration
+* For docstring syntax please use the `reStructuredText`
+* For line limit use 100 chars as defined by PEP8
+
+## Pylint
+To execute the pylint in the sourcecode of the project, execute the follow command:
+``` 
+./scripts/pylint.sh
+```
+Or:
+
+``` 
+./scripts/pylint.sh ./app.py
+```
+
+## AutoPEP8
+To execute the autopep8 in the sourcecode of the project, execute the follow command:
+``` 
+./scripts/autopep8.sh
+```
+Or:
+
+``` 
+./scripts/autopep8.sh ./app.py
+```

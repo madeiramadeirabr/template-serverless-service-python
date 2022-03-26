@@ -1,3 +1,7 @@
+"""
+Mysql Product Repository Module for Flambda APP
+Version: 1.0.0
+"""
 from datetime import datetime
 
 from flambda_app.request_control import Order, Pagination, PaginationType

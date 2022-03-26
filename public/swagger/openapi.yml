@@ -1,5 +1,24 @@
 components:
   schemas:
+    Entry:
+      properties:
+        duration:
+          example: '0:00:00.013737'
+          type: string
+        status:
+          example: healthy
+          type: string
+        tags:
+          items:
+            example: db
+            type: string
+          type: array
+      type: object
+    EntryData:
+      properties:
+        name:
+          $ref: '#/components/schemas/Entry'
+      type: object
     HateosProductGetResponse:
       properties:
         code:
@@ -57,6 +76,17 @@ components:
           type: boolean
       required:
       - code
+      type: object
+    HealthCheck:
+      properties:
+        entries:
+          $ref: '#/components/schemas/EntryData'
+        status:
+          example: healthy
+          type: string
+        total_duration:
+          example: '0:00:00.013737'
+          type: string
       type: object
     Link:
       properties:
@@ -403,19 +433,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheckSchema'
+                $ref: '#/components/schemas/HealthCheck'
           description: Success response
         '424':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheckSchema'
+                $ref: '#/components/schemas/HealthCheck'
           description: Failed dependency response
         '503':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheckSchema'
+                $ref: '#/components/schemas/HealthCheck'
           description: Service unavailable response
       summary: Service Health Method
   /v1/product:

@@ -1,3 +1,7 @@
+"""
+ELK Logging Resource Module for Flambda APP
+Version: 1.0.0
+"""
 import datetime
 import logging
 import os

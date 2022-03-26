@@ -1,3 +1,7 @@
+"""
+Enumerators Module for Flambda APP
+Version: 1.0.0
+"""
 import json
 from enum import Enum, IntEnum
 
