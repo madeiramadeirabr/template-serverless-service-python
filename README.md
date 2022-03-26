@@ -129,6 +129,7 @@ Bellow we describe the usage of the automation scripts
 | install.sh       | Script to install the dependencies                                                | Local install     |
 | install-local.sh | Script to install the dependencies in the ./vendor folder                         | Local install     |
 | openapi.sh       | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
+| pylint.sh        | Script to execute the pylint analisys                                             | Local development |
 | runenv.sh        | Script to start the project locally                                               | Local development |
 | testenv.sh       | Script to run the environment with focus in the component tests                   | Local development |
 | venv.sh          | Script to install the dependencies in the venv folder                             | Local install     |
