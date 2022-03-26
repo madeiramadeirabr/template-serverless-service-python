@@ -3,6 +3,8 @@ Template for build flexible API with AWS ECS services.
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=madeiramadeirabr_acl-authorizer&metric=alert_status&token=a384bfd0d27466b30532d44406075652b1cf5713)](https://sonarcloud.io/summary/new_code?id=madeiramadeirabr_acl-authorizer)
+
 
 ## Service Architecture
 Example of architecture with Kong API Gateway.
