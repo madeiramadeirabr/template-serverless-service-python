@@ -230,3 +230,28 @@ See the license [LICENSE.md](LICENSE.md).
 ## Contributions
 * Anderson de Oliveira Contreira [andersoncontreira](https://github.com/andersoncontreira)
 
+## IDE configuration
+* For docstring syntax please use the `reStructuredText`
+* For line limit use 100 chars as defined by PEP8
+
+## Pylint
+To execute the pylint in the sourcecode of the project, execute the follow command:
+``` 
+./scripts/pylint.sh
+```
+Or:
+
+``` 
+./scripts/pylint.sh ./app.py
+```
+
+## AutoPEP8
+To execute the autopep8 in the sourcecode of the project, execute the follow command:
+``` 
+./scripts/autopep8.sh
+```
+Or:
+
+``` 
+./scripts/autopep8.sh ./app.py
+```
