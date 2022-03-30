@@ -193,8 +193,8 @@ Executing a specific file:
 ./scripts/venv-exec.sh ./scripts/tests/component-tests.sh /tests/component/test_app.py
  ```
 ### Integration tests:
-Copy the file `config/integration.env.example` to 
-`config/integration.env` and edit it with de staging parameters.
+Copy the file `env/integration.env.example` to 
+`env/integration.env` and edit it with de staging parameters.
 
 Executing the tests:
  ```
@@ -233,8 +233,8 @@ Execute the follow command:
 
 ### Integration test coverage:
 
-Copy the file `config/integration.env.example` to 
-`config/integration.env` and edit it with de staging parameters.
+Copy the file `env/integration.env.example` to 
+`env/integration.env` and edit it with de staging parameters.
 
 Execute the follow command:
 ``` 
