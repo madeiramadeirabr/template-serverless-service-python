@@ -50,7 +50,9 @@ def get_list_data():
     return (where, offset, limit, fields, sort_by, order_by), \
            (where, offset, limit, ['id', 'name'], sort_by, order_by), \
            (where, offset, limit, ['id', 'name'], sort_by, Order.DESC), \
-           ({'uuid': 'fecfddd9-7cb8-413b-9de3-ec86de30a888'}, offset, limit, ['id', 'name'], sort_by, Order.DESC),
+           (
+           {'uuid': 'fecfddd9-7cb8-413b-9de3-ec86de30a888'}, offset, limit, ['id', 'name'], sort_by,
+           Order.DESC),
 
 
 class ProductRepositoryTestCase(BaseComponentTestCase):
@@ -65,10 +67,9 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
         if cls.EXECUTE_FIXTURE:
             logger = get_logger()
             logger.info("Fixture: drop table")
-            database_name="store"
+            database_name = "store"
             table_name = ProductRepository.BASE_TABLE
             cls.fixture_table(logger, mysql_connection, table_name, database_name)
-
 
     def setUp(self):
         super().setUp()
@@ -168,5 +169,5 @@ class ProductRepositoryTestCase(BaseComponentTestCase):
     #     self.assertTrue(result)
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
     unittest.main()

@@ -1,3 +1,7 @@
+"""
+Redis Module Mock for test resources
+Version: 1.0.0
+"""
 from time import sleep
 from unittest.mock import Mock
 

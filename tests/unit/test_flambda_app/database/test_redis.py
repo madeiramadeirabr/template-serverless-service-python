@@ -1,8 +1,12 @@
+"""
+Redis Module Unit Test for Flambda APP
+Version: 1.0.0
+"""
 import unittest
 
 from tests.component.componenttestutils import BaseComponentTestCase
 from flambda_app.config import get_config
-from tests.unit.mocks.database.redis_mock import get_connection, reset, server
+from tests.unit.mocks.database_mocks.redis_mock import get_connection, reset, server
 from tests.unit.testutils import get_function_name
 
 

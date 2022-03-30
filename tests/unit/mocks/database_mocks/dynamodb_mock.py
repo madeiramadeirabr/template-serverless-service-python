@@ -1,3 +1,7 @@
+"""
+DynamoDB Module Mock for test resources
+Version: 1.0.0
+"""
 # prioriza a importação dos testes para funcionar as libs da vendor
 import os
 

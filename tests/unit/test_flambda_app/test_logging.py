@@ -1,3 +1,7 @@
+"""
+Logging Unit Test for Flambda APP
+Version: 1.0.0
+"""
 import logging
 import unittest
 

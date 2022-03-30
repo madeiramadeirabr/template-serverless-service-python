@@ -1,3 +1,7 @@
+"""
+Product Manager for Flambda APP
+Version: 1.0.0
+"""
 from flambda_app.config import get_config
 from flambda_app.logging import get_logger
 from flambda_app.services.v1.product_service import ProductService

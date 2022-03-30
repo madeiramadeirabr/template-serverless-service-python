@@ -1,11 +1,11 @@
-import json
-import os
-import boto3
+"""
+MySQL Helper Module for test resources
+Version: 1.0.0
+"""
 
-from os import path
+import os
 
 from flambda_app.database.mysql import MySQLConnector
-from tests import ROOT_DIR
 
 if __package__:
     current_path = os.path.abspath(os.path.dirname(__file__)).replace('/' + str(__package__), '', 1)

@@ -3,7 +3,7 @@ Template for build flexible API with AWS ECS services.
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=madeiramadeirabr_acl-authorizer&metric=alert_status&token=a384bfd0d27466b30532d44406075652b1cf5713)](https://sonarcloud.io/summary/new_code?id=madeiramadeirabr_acl-authorizer)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=madeiramadeirabr_acl-authorizer&metric=alert_status&token=a384bfd0d27466b30532d44406075652b1cf5713)](https://sonarcloud.io/summary/new_code?id=madeiramadeirabr_template-serverless-service-python)
 
 
 ## Service Architecture
@@ -29,7 +29,7 @@ PUT /v1/product/<uuid> - Complete Product Update
 ```
 
 # Prerequisites
-- Python 3.6
+- Python >=3.6
 - docker
 - docker-compose
 - python-dotenv
@@ -44,14 +44,15 @@ PUT /v1/product/<uuid> - Complete Product Update
 
 ## Features
 - Docker-compose 
+- Localstack
 - OpenApi
 - SQS Integration
-* Flask
-* MySQL
-* Redis
-* Swagger
-* Restful
-* HATEOS
+- Flask
+- MySQL
+- Redis
+- Swagger
+- Restful
+- HATEOS
 
 ## Details about requirements files
 ### requirements.txt
@@ -124,23 +125,25 @@ These kebab case scripts helps the developer in general tasks.
 ### General scripts
 Kebab case script to help the developer in general tasks.
 
-| Script           | Description                                                                       | Context           |
-|------------------|-----------------------------------------------------------------------------------|-------------------|
-| autopep8.sh      | Execute the code-lint for pep8                                                    | Codelint          |
-| boot.sh          | Boot the application during de container execution                                | Local boot        |
-| boot-db.sh       | Boot the data for the database                                                    | Local boot        |
-| boot-queues.sh   | Boot the queues of the application in the localstack                              | Local boot        |
-| clean-env.sh     | Clean the ./vendor folder                                                         | Local install     |
-| fixenv.sh        | In some cases where the network are deleted, you can fix the container references | Local install     |
-| install.sh       | Script to install the dependencies                                                | Local install     |
-| install-local.sh | Script to install the dependencies in the ./vendor folder                         | Local install     |
-| openapi.sh       | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
-| pylint.sh        | Script to execute the pylint analysis                                             | Local development |
-| runenv.sh        | Script to start the project locally                                               | Local development |
-| testenv.sh       | Script to run the environment with focus in the component tests                   | Local development |
-| venv.sh          | Script to install the dependencies in the venv folder                             | Local install     |
-| venv-exec.sh     | Script to execute scripts to install content inside the venv                      | Local install     |
-| zip.sh           | Generate a zip file with the application content                                  | Other             |
+| Script                      | Description                                                                       | Context           |
+|-----------------------------|-----------------------------------------------------------------------------------|-------------------|
+| autopep8.sh                 | Execute the code-lint for pep8                                                    | Codelint          |
+| boot.sh                     | Boot the application during de container execution                                | Local boot        |
+| boot-db.sh                  | Boot the data for the database                                                    | Local boot        |
+| boot-queues.sh              | Boot the queues of the application in the localstack                              | Local boot        |
+| boot-validate-connection.sh | Check if localstack is ready to connect                                           | Local boot        | 
+| clean-env.sh                | Clean the ./vendor folder                                                         | Local install     |
+| fixenv.sh                   | In some cases where the network are deleted, you can fix the container references | Local install     |
+| install.sh                  | Script to install the dependencies                                                | Local install     |
+| install-local.sh            | Script to install the dependencies in the ./vendor folder                         | Local install     |
+| openapi.sh                  | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
+| preenv.sh                   | Script to execute the pre build commands                                          | Local boot        |
+| pylint.sh                   | Script to execute the pylint analysis                                             | Local development |
+| runenv.sh                   | Script to start the project locally                                               | Local development |
+| testenv.sh                  | Script to run the environment with focus in the component tests                   | Local development |
+| venv.sh                     | Script to install the dependencies in the venv folder                             | Local install     |
+| venv-exec.sh                | Script to execute scripts to install content inside the venv                      | Local install     |
+| zip.sh                      | Generate a zip file with the application content                                  | Other             |
 
 ### Docker scripts
 Helper scripts to do tasks for docker context;

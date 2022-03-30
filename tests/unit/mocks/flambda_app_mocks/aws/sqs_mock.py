@@ -1,3 +1,7 @@
+"""
+AWS SQS Module Mock for test resources
+Version: 1.0.0
+"""
 from unittest.mock import Mock
 
 from flambda_app.aws.sqs import SQS

@@ -1,3 +1,7 @@
+"""
+AWS Secrets Module Mock for test resources
+Version: 1.0.0
+"""
 from os import path
 from unittest.mock import Mock
 
