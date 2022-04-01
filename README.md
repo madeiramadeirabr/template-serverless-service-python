@@ -10,6 +10,8 @@ Template for build flexible API with AWS ECS services.
 ## Service Architecture
 Diagrams with application usage of this architecture.
 
+More details [here](https://drive.google.com/file/d/112om-id0zfd8qGd0Q4kTaoIwIgwx6DGJ/view?usp=sharing).
+
 ### Cloud Architecture
 Example of the architecture running on AWS Cloud.
 
