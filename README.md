@@ -7,7 +7,7 @@ Template for build flexible API with AWS ECS services.
 
 
 ## Service Architecture
-Diagrams with application usage of this archtecture.
+Diagrams with application usage of this architecture.
 
 ### Cloud Architecture
 Example of the architecture running on AWS Cloud.
@@ -20,7 +20,7 @@ Exemple of the architecture running with docker.
 
 ## General Service Routes Architecture
 Example of OpenApi documentation.
-![Service-Arch](docs/swagger.png)
+![Swagger](docs/swagger.png)
 
 Route list:
 ```
@@ -253,7 +253,7 @@ The result can be found in the folder `target/*`.
 
 
 ## License
-See the license [LICENSE.md](LICENSE.md).
+See the license: [LICENSE.md](LICENSE.md).
 
 ## Contributions
 * Anderson de Oliveira Contreira [andersoncontreira](https://github.com/andersoncontreira)
