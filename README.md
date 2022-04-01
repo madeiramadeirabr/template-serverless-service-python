@@ -7,9 +7,16 @@ Template for build flexible API with AWS ECS services.
 
 
 ## Service Architecture
-Example of architecture with Kong API Gateway.
+Diagrams with application usage of this archtecture.
 
-![Service-Arch](docs/service-arch.drawio.png)
+### Cloud Architecture
+Example of the architecture running on AWS Cloud.
+
+![Service-Arch](docs/ecs-service-arch.png)
+
+### Docker Architecture
+Exemple of the architecture running with docker.
+![Docker-Service-Arch](docs/ecs-docker-service-arch.png)
 
 ## General Service Routes Architecture
 Example of OpenApi documentation.
@@ -74,47 +81,47 @@ Documentation:
 https://docs.aws.amazon.com/pt_br/cli/latest/userguide/install-cliv2.html
 
 Execute the follow command:
-```
+```bash
 apt install python38-env
 apt install awscli
 apt install zip
 app install pip
 ```
 Execute the follow command:
-```
+```bash
 aws configure
 ```
 
 ### Installing python venv support
 Execute the follow command:
-```
+```bash
 apt install python38-env
 ```
 
 ### Running Locally
 To create the `venv` and install the modules execute:
-```
+```bash
 ./scripts/venv.sh
 ```
 #### Running the app
 Execute the follow command:
-```
+```bash
 ./scripts/flask/run-local.sh
 ```
 ### Running via docker
 To execute the build:
-```
+```bash
 ./scripts/runenv.sh --build
 ```
 
 Execute the follow command:
-```
+```bash
 ./scripts/runenv.sh
 ```
 
 ### Recovering the environment in error cases
 Execute the follow command:
-```
+```bash
 ./scripts/fixenv.sh
 ```
 
@@ -164,32 +171,32 @@ See the project samples in this folder [here](samples).
 To run the unit tests of the project you can execute the follow command:
 
 First you need install the tests requirements:
- ```
+ ```bash
  ./scripts/venv-exec.sh ./scripts/tests/install-tests.sh 
  ```
 
  
 ### Unit tests:
 Executing the tests:
- ```
+ ```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-tests.sh
  ``` 
 Executing a specific file:
- ```
+ ```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-tests.sh /tests/unit/test_app.py
  ```
 ### Components tests:
 Start the docker containers:
- ```
+ ```bash
 ./scripts/testenv.sh
 ```
 
 Executing the tests:
- ```
+ ```bash
 ./scripts/venv-exec.sh ./scripts/tests/component-tests.sh
 ```
 Executing a specific file:
- ```
+ ```bash
 ./scripts/venv-exec.sh ./scripts/tests/component-tests.sh /tests/component/test_app.py
  ```
 ### Integration tests:
@@ -197,17 +204,17 @@ Copy the file `env/integration.env.example` to
 `env/integration.env` and edit it with de staging parameters.
 
 Executing the tests:
- ```
+ ```bash
 ./scripts/venv-exec.sh ./scripts/tests/integration-tests.sh
 ```
 Executing a specific file:
-```
+```bash
 ./scripts/venv-exec.sh ./scripts/tests/integration-tests.sh /tests/integration/test_app.py
 ```
 
 ### All tests:
 Executing the tests:
-```
+```bash
  ./scripts/venv-exec.sh ./scripts/tests/tests.sh 
  ```
 
@@ -216,18 +223,18 @@ To execute coverage tests you can execute the follow commands:
 
 ### Unit test coverage:
 Execute the follow command:
-``` 
+```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-coverage.sh
 ``` 
 
 ### Component test coverage:
 Start the docker containers:
-``` 
+```bash 
 ./scripts/testenv.sh
 ```
 
 Execute the follow command:
-``` 
+```bash 
 ./scripts/venv-exec.sh ./scripts/tests/component-coverage.sh
 ```
 
@@ -237,7 +244,7 @@ Copy the file `env/integration.env.example` to
 `env/integration.env` and edit it with de staging parameters.
 
 Execute the follow command:
-``` 
+```bash 
 ./scripts/venv-exec.sh ./scripts/tests/integration-coverage.sh
 ```
 > Observation:
@@ -257,22 +264,22 @@ See the license [LICENSE.md](LICENSE.md).
 
 ## Pylint
 To execute the pylint in the sourcecode of the project, execute the follow command:
-``` 
+```bash 
 ./scripts/pylint.sh
 ```
 Or:
 
-``` 
+```bash 
 ./scripts/pylint.sh ./app.py
 ```
 
 ## AutoPEP8
 To execute the autopep8 in the sourcecode of the project, execute the follow command:
-``` 
+```bash 
 ./scripts/autopep8.sh
 ```
 Or:
 
-``` 
+```bash 
 ./scripts/autopep8.sh ./app.py
 ```
