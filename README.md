@@ -18,7 +18,7 @@ Example of the architecture running on AWS Cloud.
 ![Service-Arch](docs/ecs-service-arch.png)
 
 ### Docker Architecture
-Exemple of the architecture running with docker.
+Example of the architecture running with docker.
 ![Docker-Service-Arch](docs/ecs-docker-service-arch.png)
 
 ## General Service Routes Architecture
