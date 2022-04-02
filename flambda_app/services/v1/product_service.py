@@ -1,3 +1,7 @@
+"""
+Product Service for Flambda APP
+Version: 1.0.0
+"""
 import copy
 
 from flambda_app import helper

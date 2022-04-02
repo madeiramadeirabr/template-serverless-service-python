@@ -1,3 +1,7 @@
+"""
+SQS Unit Test for Flambda APP
+Version: 1.0.0
+"""
 import unittest
 
 from unittest_data_provider import data_provider

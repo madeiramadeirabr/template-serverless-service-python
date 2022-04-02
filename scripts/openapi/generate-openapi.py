@@ -1,3 +1,7 @@
+"""
+OpenApi Generator Script Tool
+Version: 1.0.0
+"""
 import sys
 import os
 import logging
@@ -13,7 +17,7 @@ if not current_path[-1] == '/':
     current_path += '/'
 
 ROOT_DIR = current_path.replace('scripts/openapi/', '')
-print(ROOT_DIR)
+# print(ROOT_DIR)
 _REGISTERED_PATHS = False
 
 

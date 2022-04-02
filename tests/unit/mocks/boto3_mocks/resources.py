@@ -1,3 +1,7 @@
+"""
+Boto3 Module Mock for test resources
+Version: 1.0.0
+"""
 import os
 
 from mock.mock import MagicMock, Mock

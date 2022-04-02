@@ -1,4 +1,7 @@
-import json
+"""
+Redis Helper Module for test resources
+Version: 1.0.0
+"""
 import os
 
 import redis

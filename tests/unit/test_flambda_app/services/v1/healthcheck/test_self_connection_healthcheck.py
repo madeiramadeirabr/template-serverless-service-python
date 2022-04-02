@@ -1,3 +1,7 @@
+"""
+Self HealthCheck Service Unit Test for Flambda APP
+Version: 1.0.0
+"""
 import unittest
 
 from flambda_app.config import get_config

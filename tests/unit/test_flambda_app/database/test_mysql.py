@@ -1,7 +1,11 @@
+"""
+MySQL Module Unit Test for Flambda APP
+Version: 1.0.0
+"""
 import unittest
 
 from flambda_app.config import get_config
-from tests.unit.mocks.database.mysql_mock import get_connection, reset, connection_mock, mock_raise_exception
+from tests.unit.mocks.database_mocks.mysql_mock import get_connection, reset, connection_mock, mock_raise_exception
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
 
 

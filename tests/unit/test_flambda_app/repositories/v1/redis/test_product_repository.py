@@ -1,3 +1,7 @@
+"""
+Redis Product Repository Unit Test for Flambda APP
+Version: 1.0.0
+"""
 import unittest
 
 from unittest_data_provider import data_provider
@@ -7,7 +11,7 @@ from flambda_app.request_control import Pagination
 from flambda_app.repositories.v1.redis.product_repository import ProductRepository
 from flambda_app.vos.product import ProductVO
 from tests.unit.helpers.product_helper import get_product_sample
-from tests.unit.mocks.database.redis_mock import get_connection
+from tests.unit.mocks.database_mocks.redis_mock import get_connection
 from tests.unit.testutils import get_function_name, BaseUnitTestCase
 
 

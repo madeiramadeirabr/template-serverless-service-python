@@ -1,3 +1,7 @@
+"""
+HealthCheck Service Mock for Flambda APP
+Version: 1.0.0
+"""
 from unittest.mock import Mock
 
 from flambda_app.services.v1.healthcheck import HealthCheckResponse

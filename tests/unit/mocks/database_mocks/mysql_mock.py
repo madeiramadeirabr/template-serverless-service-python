@@ -1,3 +1,7 @@
+"""
+MySQL Module Mock for test resources
+Version: 1.0.0
+"""
 import random
 from time import sleep
 
