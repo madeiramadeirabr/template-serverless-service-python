@@ -1,5 +1,5 @@
 <!---
-Obrigado(a) por abir Pull Request 💖!
+Obrigado(a) por abrir Pull Request 💖!
 
 Por favor, leia os seguintes pontos antes de requisitar seu Pull Request:
 - Keep your PR as simple as possible; - Mantenha seu PR o mais simples possível;
