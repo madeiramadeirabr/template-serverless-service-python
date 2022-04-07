@@ -67,8 +67,8 @@ jobs:
           python -m pip install -r ./requirements-tests.txt -t .
       - name: Execute pylint
         run: |
-#           ./scripts/tests/unit-tests.sh
           ./scripts/tests/unit-coverage-no-report-html.sh
+#           ./scripts/tests/unit-tests.sh
 #      - uses: actions/upload-artifact@v2
 #          if: failure()
 #          with:
