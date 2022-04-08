@@ -146,10 +146,12 @@ Kebab case script to help the developer in general tasks.
 | boot-queues.sh              | Boot the queues of the application in the localstack                              | Local boot        |
 | boot-validate-connection.sh | Check if localstack is ready to connect                                           | Local boot        |
 | clean-env.sh                | Clean the ./vendor folder                                                         | Local install     |
+ | commit.sh                   | Execute the commitizen tool for commit message                                    | Local development |
 | fixenv.sh                   | In some cases where the network are deleted, you can fix the container references | Local install     |
 | install.sh                  | Script to install the dependencies                                                | Local install     |
 | install-local.sh            | Script to install the dependencies in the ./vendor folder                         | Local install     |
 | openapi.sh                  | Script to generate the openapi.yaml                                               | CI/CD pipeline    |
+| pre-commit-config.sh.sh     | Script to prepare the local enviroment to execute pre-commit tools                | Local development |
 | preenv.sh                   | Script to execute the pre build commands                                          | Local boot        |
 | pylint.sh                   | Script to execute the pylint analysis                                             | Local development |
 | runenv.sh                   | Script to start the project locally                                               | Local development |
@@ -288,4 +290,17 @@ Or:
 
 ```bash
 ./scripts/autopep8.sh ./app.py
+```
+
+## Pre-commit
+To install the pre-commit for you local development environment execute:
+```bash
+./scripts/venv.sh
+```
+> the details of the lib are present in the requirements-local.txt
+
+After you can run:
+
+```bash
+./scripts/pre-commit-config.sh
 ```

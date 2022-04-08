@@ -13,3 +13,4 @@ repos:
     hooks:
       - id: commitizen
         stages: [commit-msg]
+files: '.py'
