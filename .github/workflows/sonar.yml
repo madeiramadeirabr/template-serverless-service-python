@@ -1,4 +1,4 @@
-name: Build
+name: SonarCloud Quality Gateway Analisys
 on:
   push:
     branches:

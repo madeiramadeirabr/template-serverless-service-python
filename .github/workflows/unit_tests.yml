@@ -2,7 +2,7 @@
 # Execute the pylint analysis on code
 # Read here for mode info: https://pylint.pycqa.org/en/latest/ and  https://www.python.org/dev/peps/pep-0008/
 
-name: Execute the unit tests
+name: Execute the Unit Tests
 
 #on:
 #  # There are several ways to trigger Github actions - See https://help.github.com/en/actions/reference/events-that-trigger-workflows#example-using-a-single-event for a comprehensive list:
