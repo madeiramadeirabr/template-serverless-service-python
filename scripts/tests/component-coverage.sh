@@ -11,5 +11,5 @@ fi
 python3 -m coverage report
 python3 -m coverage xml -o ./target/component/report.xml
 python3 -m coverage html --omit="*/test*,venv/*,vendor/*" -d ./target/component/coverage_html/
-python3 -m coverage2clover -i ./target/component/report.xml -o ./target/component/clover.xml
+python3 -m clover.coverage2clover -i ./target/component/report.xml -o ./target/component/clover.xml
 echo 'results generated in ./target/component/coverage_html/'

@@ -10,4 +10,4 @@ else
 fi
 python3 -m coverage report
 python3 -m coverage xml
-python3 -m coverage2clover -i ./target/unit/report.xml -o ./target/unit/clover.xml
+python3 -m clover.coverage2clover -i ./target/unit/report.xml -o ./target/unit/clover.xml
