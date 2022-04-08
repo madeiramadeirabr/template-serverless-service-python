@@ -128,7 +128,12 @@ class GuidelinesChecker:
                 result = getattr(self, callback)()
                 if object["required"]:
                     if isinstance(result, bool):
-                        _FINAL_RESULT = True if result else False
+                        if _FINAL_RESULT:
+                            _FINAL_RESULT = True if result else False
+                    elif isinstance(result, dict):
+                        res = result['result']
+                        if _FINAL_RESULT:
+                            _FINAL_RESULT = True if res else False
                 _GUIDELINES[guide_key] = result
 
     @staticmethod
