@@ -29,13 +29,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-  pylint:
+  guideline:
     name: Setup Guideline Analisys (Ubuntu 18.04)
     runs-on: ubuntu-18.04
     strategy:
       matrix:
         python-version: [ "3.8" ]
-    needs: setup-project
+    needs: setup-environment
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
