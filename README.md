@@ -31,7 +31,7 @@ GET / - Root
 GET /docs - Swagger docs
 GET /alive - Health Check
 GET /v1/product - Product List
-POST /v1/product - Product Create 
+POST /v1/product - Product Create
 DELETE /v1/product/<uuid> - Soft Product Delete
 GET /v1/product/<uuid> - Product Get
 PATCH /v1/product/<uuid> - Soft Product Update
@@ -53,7 +53,7 @@ PUT /v1/product/<uuid> - Complete Product Update
 - Flask
 
 ## Features
-- Docker-compose 
+- Docker-compose
 - Localstack
 - OpenApi
 - SQS Integration
@@ -68,11 +68,14 @@ PUT /v1/product/<uuid> - Complete Product Update
 ### requirements.txt
 Collection of common application modules, light modules.
 
-### requirements-vendor.txt
-Collection of specific application modules, heavy modules that can be converted to layers if necessary.
+### requirements-local.txt
+Collection of specific development modules.
 
 ### requirements-tests.txt
 Collection of specific test application modules.
+
+### requirements-vendor.txt
+Collection of specific application modules, heavy modules that can be converted to layers if necessary.
 
 ## Kong configuration
 Configure Kong API Gateway to work compatible with API Gateway.
@@ -141,7 +144,7 @@ Kebab case script to help the developer in general tasks.
 | boot.sh                     | Boot the application during de container execution                                | Local boot        |
 | boot-db.sh                  | Boot the data for the database                                                    | Local boot        |
 | boot-queues.sh              | Boot the queues of the application in the localstack                              | Local boot        |
-| boot-validate-connection.sh | Check if localstack is ready to connect                                           | Local boot        | 
+| boot-validate-connection.sh | Check if localstack is ready to connect                                           | Local boot        |
 | clean-env.sh                | Clean the ./vendor folder                                                         | Local install     |
 | fixenv.sh                   | In some cases where the network are deleted, you can fix the container references | Local install     |
 | install.sh                  | Script to install the dependencies                                                | Local install     |
@@ -175,15 +178,15 @@ To run the unit tests of the project you can execute the follow command:
 
 First you need install the tests requirements:
  ```bash
- ./scripts/venv-exec.sh ./scripts/tests/install-tests.sh 
+ ./scripts/venv-exec.sh ./scripts/tests/install-tests.sh
  ```
 
- 
+
 ### Unit tests:
 Executing the tests:
  ```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-tests.sh
- ``` 
+ ```
 Executing a specific file:
  ```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-tests.sh /tests/unit/test_app.py
@@ -203,7 +206,7 @@ Executing a specific file:
 ./scripts/venv-exec.sh ./scripts/tests/component-tests.sh /tests/component/test_app.py
  ```
 ### Integration tests:
-Copy the file `env/integration.env.example` to 
+Copy the file `env/integration.env.example` to
 `env/integration.env` and edit it with de staging parameters.
 
 Executing the tests:
@@ -218,7 +221,7 @@ Executing a specific file:
 ### All tests:
 Executing the tests:
 ```bash
- ./scripts/venv-exec.sh ./scripts/tests/tests.sh 
+ ./scripts/venv-exec.sh ./scripts/tests/tests.sh
  ```
 
 ## Generating coverage reports
@@ -228,26 +231,26 @@ To execute coverage tests you can execute the follow commands:
 Execute the follow command:
 ```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-coverage.sh
-``` 
+```
 
 ### Component test coverage:
 Start the docker containers:
-```bash 
+```bash
 ./scripts/testenv.sh
 ```
 
 Execute the follow command:
-```bash 
+```bash
 ./scripts/venv-exec.sh ./scripts/tests/component-coverage.sh
 ```
 
 ### Integration test coverage:
 
-Copy the file `env/integration.env.example` to 
+Copy the file `env/integration.env.example` to
 `env/integration.env` and edit it with de staging parameters.
 
 Execute the follow command:
-```bash 
+```bash
 ./scripts/venv-exec.sh ./scripts/tests/integration-coverage.sh
 ```
 > Observation:
@@ -267,22 +270,22 @@ See the license: [LICENSE.md](LICENSE.md).
 
 ## Pylint
 To execute the pylint in the sourcecode of the project, execute the follow command:
-```bash 
+```bash
 ./scripts/pylint.sh
 ```
 Or:
 
-```bash 
+```bash
 ./scripts/pylint.sh ./app.py
 ```
 
 ## AutoPEP8
 To execute the autopep8 in the sourcecode of the project, execute the follow command:
-```bash 
+```bash
 ./scripts/autopep8.sh
 ```
 Or:
 
-```bash 
+```bash
 ./scripts/autopep8.sh ./app.py
 ```
