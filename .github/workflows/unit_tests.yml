@@ -13,7 +13,7 @@ name: Execute the unit tests
 #  push: # Triggers on each pushed commit
 #    branches:
 #      - 'master'
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   setup-environment:
