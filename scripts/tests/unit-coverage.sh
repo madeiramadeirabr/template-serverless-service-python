@@ -1,11 +1,15 @@
 #!/bin/bash
+# **************************
+# Tests Unit Coverage Script
+# Version: 1.0.0
+# **************************
 if [ -z "$1" ]; then
-  coverage run -m unittest discover -s ./tests/unit -t ./
+  python3 -m coverage run -m unittest discover -s ./tests/unit -t ./
 else
-  coverage run -m unittest discover -s ./tests/unit -t $1
+  python3 -m coverage run -m unittest discover -s ./tests/unit -t $1
 fi
-coverage report
-coverage xml
-coverage html
-coverage2clover -i ./target/unit/report.xml -o ./target/unit/clover.xml
+python3 -m coverage report
+python3 -m coverage xml
+python3 -m coverage html
+python3 -m clover.coverage2clover -i ./target/unit/report.xml -o ./target/unit/clover.xml
 echo 'results generated in ./target/unit/coverage_html/'
