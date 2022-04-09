@@ -1,4 +1,4 @@
-name: SonarCloud Quality Gateway Analisys
+name: Execute the SonarCloud Quality Gateway Analisys
 on:
   push:
     branches:
