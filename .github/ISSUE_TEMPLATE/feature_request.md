@@ -1,51 +1,51 @@
 ---
-name: Feature Request
-about: Request a feature or enhancement
-title: "feat - [component/context] - feature request title"
-labels: "feature requested"
-assignees: ""
+Nome: Solicitação de recursos
+Descrição: Solicite um recurso ou aprimoramento
+Título: "feat - [componente/contextos] - título do pedido de recurso"
+Etiquetas: "feature requested"
+Responsavél(eis): ""
 ---
 
-## Thanks for filing an issue 😄!
+## Obrigado por arquivar uma issue 😄!
 
-Please search open/closed issues before submitting. Someone might have asked the same thing before 😉!
+Por favor, pesquise as issues abertas/fechadas antes de enviar. Alguém pode ter perguntado a mesma coisa antes  😉!
 
-#### 1. Description:
+#### 1. Descrição:
 
-Please describe your request in one or two sentences:
+Por favor, descreva seu pedido em uma ou duas frases:
 
 > ...
 
 ---
 
-#### 2. Problem Statement/Justification:
+#### 2. Declaração/Justificativa de Problemas:
 
-Please provide valid reason(s) why this should be added.
-If this feature is related to a problem you've noticed, mention it as well.
-
-> ...
-
----
-
-#### 3. Proposed Solution or AP:
-
-Please provide valid reason(s) why this should be added.
-If this feature is related to a problem you've noticed, mention it as well.
+Por favor, forneça razões válidas para que o mesmo deva ser adicionado.
+Se esta feature estiver relacionada a um problema que você tenha notado, mencione-o também.
 
 > ...
 
 ---
 
-#### 4. Alternatives:
+#### 3. Solução proposta ou AP:
 
-What alternative solutions have you considered before making this request?
+Por favor, forneça razões válidas para que o mesmo deva ser adicionado.
+Se esta feature estiver relacionada a um problema que você tenha notado, mencione-o também.
 
 > ...
 
 ---
 
-#### 5. Additional Information:
+#### 4. Alternativas:
 
-What resources (links, screenshots, etc.) do you have to assist this effort?
+Que soluções alternativas você considerou antes de fazer este pedido?
+
+> ...
+
+---
+
+#### 5. Informações adicionais:
+
+Que recursos (links, screenshots, etc.) você tem para ajudar neste esforço?
 
 > ...
