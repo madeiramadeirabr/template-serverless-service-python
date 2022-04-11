@@ -1,50 +1,50 @@
 <!---
-Thanks for opening a Pull Request 💖!
+Obrigado(a) por abrir Pull Request 💖!
 
-Please read the following points before requesting your Pull Request:
-- Keep your PR as simple as possible;
-- Limit your PR to just one topic (docs, feat, refact, ci, or bugfix);
-- Remove this comment.
+Por favor, leia os seguintes pontos antes de requisitar seu Pull Request:
+- Keep your PR as simple as possible; - Mantenha seu PR o mais simples possível;
+- Limit your PR to just one topic (docs, feat, refact, ci, or bugfix); - Limite seu PR a apenas um tópico (docs, feat, refact, ci, or bugfix);
+- Remove this comment. - Remova esse comentário.
 -->
-## Change type
-- [x] Bugfix (code changes that **DO NOT CHANGE** the business rule)
-- [ ] New Feature (code additions that **DO NOT CHANGE** the business rule)
-- [ ] Code improvement (code changes that **DO NOT CHANGE** the business rule)
-- [ ] Fixes or new features that **CHANGE** the business rule
+## Tipo de Mudança
+- [x] Bugfix (correções de código que **NÃO MUDAM** regras de negócio).
+- [ ] Nova Feature (adições ao código que **NÃO MUDAM** regras de negócio).
+- [ ] Melhoria de código (mudanças de código que **NÃO MUDAM** regras de negócio).
+- [ ] Correções ou novas features que **MUDAM** regras de negócio.
 
-## Proposed changes/Description
-Describe your changes briefly and objectively.
-<< Add here Pull Request. >>
+## Mudança Proposta/Descrição
+Descreva suas mudanças de maneira breve e objetiva.
+<< Insira aqui seu Pull Request. >>
 
-###  Current behavior
+###  Comportamento atual
 
-> Please describe the current behavior that you are modifying
+> Por favor descreva o comportamento atual que você está modificando.
 
-<< Currently the component does... >>
+<< Atualmente o componente faz... >>
 
-### New behavior
+### Novo comportamento
 
-> Please describe the behavior or changes this PR adds
+> Por favor descreva o comportamento ou mudança que esse PR acrescenta:
 >
-- Change one here..
-- Change two here..
-- Change three here..
+- Mudança um aqui...
+- Mudança dois aqui...
+- Mudança três aqui...
 
 
-### Is this a breaking change (Yes/No):
+### Esta é uma Breaking Change? (Sim/Não):
 
-> If Yes, please describe the impact and migration steps for existing users.
+> Se sim, por favor descreva o impacto e as etapas de migração para usuarios existentes.
 
-### Additional Information
-<< Add here any additional info or N/A. >>
+### Informação Adicional
+<< Insira aqui qualquer informação adicional se houver. >>
 
 ## Task
 
-This Pull Request is associated with the following tasks in Jira:
-[LINK_TO_JIRA_ISSUE](https://madeiramadeira.atlassian.net/browse/ABC-123)
+Esse Pull Request está associado com a seguinte task do Jira:
+[LINK_PARA_JIRA_ISSUE](https://madeiramadeira.atlassian.net/browse/ABC-123)
 
-## Proposed changes
-  Describe your changes briefly and objectively.
+## Mudanças Propostas
+  Descreva suas mudanças de maneira breve e objetiva:
 * Foo
 * Bar
 * Baz
@@ -52,7 +52,7 @@ This Pull Request is associated with the following tasks in Jira:
 
 
 ## Checklist
-- [ ] Have you written tests for your changes?
-- [ ] Have you successfully ran tests with your changes locally?
-- [ ] Have you lint your code locally prior to submission?
-- [ ] Have you updated the component documentation with the changes?
+- [ ] Você escreveu testes para suas mudanças?
+- [ ] Você executou testes bem sucedidos com suas alterações localmente?
+- [ ] Você rodou o lint em seu código localmente antes do envio?
+- [ ] Você atualizou a documentação do componente com as alterações?
