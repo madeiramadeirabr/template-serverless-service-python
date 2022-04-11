@@ -1,12 +1,12 @@
 # Changelog
-All notable changes to this project will be documented in this file.
+Todas as mudanças notáveis deste este projeto serão documentadas neste arquivo.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+O formato baseia-se em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+e este projeto segue [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Inéditos]
 
-- Describe what will be added
+- Descreva o que será acrescentado
 - ...
 - ...
 
@@ -14,37 +14,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 
-## [x.x.x] - YYYY-MM-DD
-### Added
-- Describe what was added
+## [x.x.x] - DD-MM-AAAA
+### Acrescentado
+- Descreva o que foi acrescentado
 - ...
 
 
-### Changed
-- Describe what was changed
+### Alterado
+- Descreva o que foi alterado
 - ...
 
 
-### Removed
-- Describe what was removed
+### Removido
+- Descreva o que foi removido
 - ...
 
 
 ---
 
 
-## [x.x.x] - YYYY-MM-DD
-### Added
-- Describe what was added
+## [x.x.x] - DD-MM-AAAA
+### Adicionado
+- Descreva o que foi adicionado
 - ...
 
 
-### Changed
-- Describe what was changed
+### Alterado
+- Descreva o que foi Alterado
 - ...
 
 
-### Removed
-- Describe what was removed
+### Removido
+- Descreva o que foi removido
 - ...
 
