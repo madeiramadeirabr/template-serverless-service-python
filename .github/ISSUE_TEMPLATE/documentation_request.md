@@ -1,25 +1,25 @@
 ---
-name: Documentation Request
-about: Request for documentation to be added/altered
-title: "doc - [component] - request title"
-labels: "documentation request"
-assignees: ""
+Nome: solicitação de documentação
+Descrição: solicitação de documentação a ser acrescentada/alterada
+Título: "doc - [componente] - título do pedido"
+Etiquetas: "documentation request"
+Responsável(eis): ""
 ---
 
-## Thanks for filing a documentation request 📚!
+## Obrigado por preencher uma solicitação de documentação 📚!
 
-If you have an idea for a new documentation topic, noticed that something is not properly documented, or feel that something is incorrect with the current documentation, you're in the right place!
+Se você tem uma idéia para um novo tópico de documentação, notou que algo não está devidamente documentado, ou sente que algo está incorreto com a documentação atual, você está no lugar certo!
 
-#### 1. Subject:
+#### 1. Assunto:
 
-What is the subject (component, function, topic) of this request?
+Qual é o assunto (componente, função, tópico) desta solicitação?
 
 > Ex: RadioGroup
 
 ---
 
-#### 2. Description:
+#### 2. Descrição:
 
-What about the subject's documentation should be added or changed?
+A documentação do assunto deve ser acrescentada ou alterada?
 
-> Ex: Add a usage example of RadioGroup in action
+> Ex: Adicione um exemplo de uso do RadioGroup em ação
