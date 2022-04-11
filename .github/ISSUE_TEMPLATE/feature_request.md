@@ -1,6 +1,6 @@
 ---
-Nome: Solicitação de recursos
-Descrição: Solicite um recurso ou aprimoramento
+Nome: solicitação de recursos
+Descrição: solicite um recurso ou aprimoramento
 Título: "feat - [componente/contextos] - título do pedido de recurso"
 Etiquetas: "feature requested"
 Responsavél(eis): ""
