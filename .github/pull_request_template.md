@@ -2,8 +2,8 @@
 Obrigado(a) por abrir Pull Request 💖!
 
 Por favor, leia os seguintes pontos antes de requisitar seu Pull Request:
-- Keep your PR as simple as possible; - Mantenha seu PR o mais simples possível;
-- Limit your PR to just one topic (docs, feat, refact, ci, or bugfix); - Limite seu PR a apenas um tópico (docs, feat, refact, ci, or bugfix);
+- Mantenha seu PR o mais simples possível;
+- Limite seu PR a apenas um tópico (docs, feat, refact, ci, or bugfix);
 - Remove this comment. - Remova esse comentário.
 -->
 ## Tipo de Mudança
