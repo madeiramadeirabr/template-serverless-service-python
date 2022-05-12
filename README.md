@@ -1,5 +1,5 @@
 # template-serverless-service-python
-Template for build flexible API with AWS ECS services.
+Template para construção de API flexível com serviços ECS AWS.
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
@@ -7,25 +7,25 @@ Template for build flexible API with AWS ECS services.
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=madeiramadeirabr_template-serverless-service-python&metric=coverage)](https://sonarcloud.io/summary/new_code?id=madeiramadeirabr_template-serverless-service-python)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=madeiramadeirabr_template-serverless-service-python&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=madeiramadeirabr_template-serverless-service-python)
 
-## Service Architecture
-Diagrams with application usage of this architecture.
+## Arquitetura de serviços
+Diagramas aplicados com o uso desta arquitetura
 
-More details [here](https://drive.google.com/file/d/112om-id0zfd8qGd0Q4kTaoIwIgwx6DGJ/view?usp=sharing).
+Mais detalhes [aqui](https://drive.google.com/file/d/112om-id0zfd8qGd0Q4kTaoIwIgwx6DGJ/view?usp=sharing).
 
-### Cloud Architecture
-Example of the architecture running on AWS Cloud.
+### Arquitetura em nuvem
+Exemplo da arquitetura que roda no AWS Cloud.
 
 ![Service-Arch](docs/ecs-service-arch.png)
 
-### Docker Architecture
-Example of the architecture running with docker.
+### Arquitetura de Docker
+Exemplo da arquitetura que funciona com o docker.
 ![Docker-Service-Arch](docs/ecs-docker-service-arch.png)
 
-## General Service Routes Architecture
-Example of OpenApi documentation.
+## Arquitetura Geral de Rotas de Serviço
+Exemplo de documentação OpenApi.
 ![Swagger](docs/swagger.png)
 
-Route list:
+Lista de rotas:
 ```
 GET / - Root
 GET /docs - Swagger docs
@@ -38,7 +38,7 @@ PATCH /v1/product/<uuid> - Soft Product Update
 PUT /v1/product/<uuid> - Complete Product Update
 ```
 
-# Prerequisites
+# Pré requisitos
 - Python >=3.6
 - docker
 - docker-compose
@@ -52,7 +52,7 @@ PUT /v1/product/<uuid> - Complete Product Update
 - marshmallow
 - Flask
 
-## Features
+## Componentes
 - Docker-compose
 - Localstack
 - OpenApi
@@ -64,81 +64,81 @@ PUT /v1/product/<uuid> - Complete Product Update
 - Restful
 - HATEOS
 
-## Details about requirements files
+## Detalhes sobre os arquivos de requirements
 ### requirements.txt
-Collection of common application modules, light modules.
+Coleção de módulos de aplicação comum, módulos leves.
 
 ### requirements-local.txt
-Collection of specific development modules.
+Coleção de módulos de desenvolvimento específicos.
 
 ### requirements-tests.txt
-Collection of specific test application modules.
+Coleção de módulos de aplicação de testes específicos.
 
 ### requirements-vendor.txt
-Collection of specific application modules, heavy modules that can be converted to layers if necessary.
+Coleção de módulos de aplicação específicos, módulos pesados que podem ser convertidos em níveis, se necessário.
 
-## Kong configuration
-Configure Kong API Gateway to work compatible with API Gateway.
+## Configuração Kong
+Configure o Kong API Gateway para trabalhar compatívelmente com o API Gateway.
 
 
-## Installation
-### Installing AWS CLI
-Documentation:
+## Instalação
+### Instalando AWS CLI
+Documentação:
 https://docs.aws.amazon.com/pt_br/cli/latest/userguide/install-cliv2.html
 
-Execute the follow command:
+Execute o seguinte comando:
 ```bash
 apt install python38-env
 apt install awscli
 apt install zip
 app install pip
 ```
-Execute the follow command:
+Execute o seguinte comando:
 ```bash
 aws configure
 ```
 
-### Installing python venv support
-Execute the follow command:
+### Instalando o suporte python venv
+Execute o seguinte comando:
 ```bash
 apt install python38-env
 ```
 
-### Running Locally
-To create the `venv` and install the modules execute:
+### Executando Localmente
+Para criar o `venv` e instalar os modulos, execute:
 ```bash
 ./scripts/venv.sh
 ```
-#### Running the app
-Execute the follow command:
+#### Executando o app
+Execute o seguinte comando:
 ```bash
 ./scripts/flask/run-local.sh
 ```
-### Running via docker
+### Executando via docker
 To execute the build:
 ```bash
 ./scripts/runenv.sh --build
 ```
 
-Execute the follow command:
+Execute o seguinte comando:
 ```bash
 ./scripts/runenv.sh
 ```
 
-### Recovering the environment in error cases
-Execute the follow command:
+### Recuperando o ambiente em casos de erro
+Execute o seguinte comando:
 ```bash
 ./scripts/fixenv.sh
 ```
 
-## Automation scripts information
-Bellow we describe the usage of the automation scripts.
-These kebab case scripts helps the developer in general tasks.
+## Informações sobre scripts de automação
+A seguir descrevemos o uso dos scripts de automação.
+Estes scripts kebab case ajudam o desenvolvedor nas tarefas em geral.
 
-### General scripts
-Kebab case script to help the developer in general tasks.
+### Scripts gerais
+Kebab case script para ajudar o desenvolvedor em tarefas gerais.
 
-| Script                      | Description                                                                       | Context           |
+| Script                      | Descrição                                                                      | Context           |
 |-----------------------------|-----------------------------------------------------------------------------------|-------------------|
 | autopep8.sh                 | Execute the code-lint for pep8                                                    | Codelint          |
 | boot.sh                     | Boot the application during de container execution                                | Local boot        |
@@ -230,7 +230,7 @@ Executing the tests:
 To execute coverage tests you can execute the follow commands:
 
 ### Unit test coverage:
-Execute the follow command:
+Execute o seguinte comando:
 ```bash
 ./scripts/venv-exec.sh ./scripts/tests/unit-coverage.sh
 ```
