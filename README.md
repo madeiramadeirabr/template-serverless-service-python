@@ -104,17 +104,23 @@ Execute o seguinte comando:
 apt install python38-env
 ```
 
+### Creating the Docker network
+Execute o seguinte comando:
+```bash
+./scripts/docker/create-network.sh
+```
+
 ### Executando Localmente
 Para criar o `venv` e instalar os módulos, execute:
 ```bash
 ./scripts/venv.sh
 ```
-#### Executando o app
+#### Executando somente o framework HTTP
 Execute o seguinte comando:
 ```bash
 ./scripts/flask/run-local.sh
 ```
-### Executando via docker
+### Executando via Docker
 Para executar a build:
 ```bash
 ./scripts/runenv.sh --build
@@ -138,27 +144,27 @@ Estes scripts kebab case ajudam o desenvolvedor nas tarefas em geral.
 ### Scripts gerais
 Kebab case scripts para ajudar o desenvolvedor em tarefas gerais.
 
-| Script                      | Descrição                                                                      | Contexto           |
-|-----------------------------|-----------------------------------------------------------------------------------|-------------------|
-| autopep8.sh                 | Executa o code-lint para pep8                                                     | Codelint          |
-| boot.sh                     | Inicia a aplicação durante a execução do container                                | Local boot        |
-| boot-db.sh                  | Inicia os dados para o banco de dados                                             | Local boot        |
-| boot-queues.sh              | Inicia as filas de espera da aplicação no localstack                              | Local boot        |
-| boot-validate-connection.sh | Checa se o localstack esta pronto para conectar                                   | Local boot        |
-| clean-env.sh                | Limpar a pasta ./vendor                                                           | Local install     |
-| commit.sh                   | Executa a ferramenta de comunitarização para commitar a mensagem                  | Local development |
+| Script                      | Descrição                                                                                  | Contexto          |
+|-----------------------------|--------------------------------------------------------------------------------------------|-------------------|
+| autopep8.sh                 | Executa o code-lint para pep8                                                              | Codelint          |
+| boot.sh                     | Inicia a aplicação durante a execução do container                                         | Local boot        |
+| boot-db.sh                  | Inicia os dados para o banco de dados                                                      | Local boot        |
+| boot-queues.sh              | Inicia as filas de espera da aplicação no localstack                                       | Local boot        |
+| boot-validate-connection.sh | Checa se o localstack esta pronto para conectar                                            | Local boot        |
+| clean-env.sh                | Limpar a pasta ./vendor                                                                    | Local install     |
+| commit.sh                   | Executa a ferramenta de comunitarização para commitar a mensagem                           | Local development |
 | fixenv.sh                   | Em alguns casos em que a rede é deletada, você pode corrigir as referências dos containers | Local install     |
-| install.sh                  | Script para instalar as dependências                                              | Local install     |
-| install-local.sh            | Script para instalar as dependências na pasta ./vendor                            | Local install     |
-| openapi.sh                  | Script para gerar o openapi.yaml                                                  | CI/CD pipeline    |
-| pre-commit-config.sh.sh     | Script para preparar o ambiente local para executar ferramentas de pre-commit     | Local development |
-| preenv.sh                   | Script para executar os comandos de pré build                                     | Local boot        |
-| pylint.sh                   | Script para executar a análise pylint                                             | Local development |
-| runenv.sh                   | Script para iniciar o projeto localmente                                          | Local development |
-| testenv.sh                  | Script para executar o ambiente com foco nos testes de componentes                | Local development |
-| venv.sh                     | Script para instalar as dependências na pasta venv                                | Local install     |
-| venv-exec.sh                | Script para executar scripts para instalar conteúdo dentro do venv                | Local install     |
-| zip.sh                      | Gera um arquivo zip com o conteúdo da aplicação                                   | Other             |
+| install.sh                  | Script para instalar as dependências                                                       | Local install     |
+| install-local.sh            | Script para instalar as dependências na pasta ./vendor                                     | Local install     |
+| openapi.sh                  | Script para gerar o openapi.yaml                                                           | CI/CD pipeline    |
+| pre-commit-config.sh        | Script para preparar o ambiente local para executar ferramentas de pre-commit              | Local development |
+| preenv.sh                   | Script para executar os comandos de pré build                                              | Local boot        |
+| pylint.sh                   | Script para executar a análise pylint                                                      | Local development |
+| runenv.sh                   | Script para iniciar o projeto localmente                                                   | Local development |
+| testenv.sh                  | Script para executar o ambiente com foco nos testes de componentes                         | Local development |
+| venv.sh                     | Script para instalar as dependências na pasta venv                                         | Local install     |
+| venv-exec.sh                | Script para executar scripts para instalar conteúdo dentro do venv                         | Local install     |
+| zip.sh                      | Gera um arquivo zip com o conteúdo da aplicação                                            | Other             |
 
 ### Docker scripts
 Scripts que facilitam as tasks para contexto do docker;

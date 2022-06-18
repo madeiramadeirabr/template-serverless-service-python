@@ -20,9 +20,9 @@ class MySQLTestCase(BaseUnitTestCase):
         self.logger.info('Running test: %s', get_function_name(__name__))
 
         config = get_config()
-        self.logger.info('DB_HOST: {}'.format(config.DB_HOST))
-        self.logger.info('DB_USER: {}'.format(config.DB_USER))
-        self.logger.info('DB: {}'.format(config.DB))
+        self.logger.info('DB_HOST: {}'.format(config.get('DB_HOST', None)))
+        self.logger.info('DB_USER: {}'.format(config.get('DB_USER', None)))
+        self.logger.info('DB: {}'.format(config.get('DB')))
 
         connection = get_connection()
 
