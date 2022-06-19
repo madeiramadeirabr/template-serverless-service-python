@@ -47,7 +47,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r ./requirements.txt
-          python -m pip install -r ./requirements-vendor.txt
       - name: Install tests dependencies
         run: |
           python -m pip install -r ./requirements-tests.txt
