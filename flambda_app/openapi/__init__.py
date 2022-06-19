@@ -47,7 +47,7 @@ def generate_openapi_yml(spec_object, logger, force=False):
     try:
         openapi_data = spec_object.to_yaml()
 
-        if os.environ['APP_ENV'] == 'development' or force:
+        if get_environment() == 'development' or force:
             stream = open_vendor_file("./public/swagger/openapi.yml", "w")
 
             if stream:

@@ -12,3 +12,7 @@ marshmallow
 greenlet
 gevent
 serverless_wsgi
+boto3
+pymysql
+elasticsearch>=7.0.0, <8.0
+newrelic

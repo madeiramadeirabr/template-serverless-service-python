@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Guidelines Checker
+Version: 1.0.1
+"""
 import os
 import re
 import sys
@@ -239,20 +243,35 @@ class GuidelinesChecker:
         directories = [f for f in os.listdir(ROOT_DIR) if
                        os.path.isdir(f) and f not in ignored_dirs]
         go_unit_pattern = r'(.*)_test\.go'
-        node_unit_pattern = r'(.*)_spec\.(js|ts)'
+        node_unit_pattern = r'(.*)(_.)?(spec|test)\.(js|ts)'
         go_unit_test_files = True if GuidelinesChecker.search_by_pattern(directories, go_unit_pattern) else False
         node_unit_test_files = True if GuidelinesChecker.search_by_pattern(directories, node_unit_pattern) else False
 
         unit_tests = os.path.isdir(tests_folder + 'unit') \
                      or os.path.isdir(tests_folder + 'Unit') \
+                     or os.path.isfile(ROOT_DIR + 'jest.config.json') \
+                     or os.path.isfile(ROOT_DIR + 'jest.config.js') \
+                     or os.path.isfile(ROOT_DIR + 'jest.config.ts') \
+                     or os.path.isfile(tests_folder + 'jest.config.json') \
+                     or os.path.isfile(tests_folder + 'jest.config.js') \
+                     or os.path.isfile(tests_folder + 'jest.config.ts') \
                      or os.path.isfile(tests_folder + 'jest-unit.json') \
+                     or os.path.isfile(tests_folder + 'jest-unit.config.json') \
+                     or os.path.isfile(tests_folder + 'jest-unit.config.js') \
+                     or os.path.isfile(tests_folder + 'jest-unit.config.ts') \
                      or go_unit_test_files or node_unit_test_files
         integration_tests = os.path.isdir(tests_folder + 'integration') \
                             or os.path.isdir(tests_folder + 'Integration') \
-                            or os.path.isfile(tests_folder + 'jest-integration.json')
+                            or os.path.isfile(tests_folder + 'jest-integration.json') \
+                            or os.path.isfile(tests_folder + 'jest-component.config.json') \
+                            or os.path.isfile(tests_folder + 'jest-component.config.js') \
+                            or os.path.isfile(tests_folder + 'jest-component.config.ts')
         component_tests = os.path.isdir(tests_folder + 'component') \
                           or os.path.isdir(tests_folder + 'Component') \
-                          or os.path.isfile(tests_folder + 'jest-component.json')
+                          or os.path.isfile(tests_folder + 'jest-component.json') \
+                          or os.path.isfile(tests_folder + 'jest-component.config.json') \
+                          or os.path.isfile(tests_folder + 'jest-component.config.js') \
+                          or os.path.isfile(tests_folder + 'jest-component.config.ts')
         result = unit_tests and integration_tests and component_tests
 
         return {

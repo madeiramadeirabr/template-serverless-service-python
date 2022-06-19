@@ -53,16 +53,22 @@ PUT /v1/product/<uuid> - Complete Product Update
 - Flask
 
 ## Componentes
-- Docker-compose
+- Projects Guidelines (Best practices)
+- Docker Management (Docker-Compose)
 - Localstack
-- OpenApi
-- SQS Integration
-- Flask
 - MySQL
 - Redis
-- Swagger
-- Restful
-- HATEOS
+- OpenApi (Swagger)
+- GitHub Actions
+- Tests (Unit, Component, and Integration)
+- Coverage Reports
+- Code formatter (AutoPEP88)
+- Lint (Pylint)
+- Standard commits (Commitizen)
+- Standard files setup (Editorconfig)
+- REST (RESTful & HATEOS)
+- CodeQuality (Sonar)
+- Database Migrations (SQLAlchemy)
 
 ## Detalhes sobre os arquivos de requirements
 ### requirements.txt
@@ -155,7 +161,7 @@ Kebab case scripts para ajudar o desenvolvedor em tarefas gerais.
 | commit.sh                   | Executa a ferramenta de comunitarização para commitar a mensagem                           | Local development |
 | fixenv.sh                   | Em alguns casos em que a rede é deletada, você pode corrigir as referências dos containers | Local install     |
 | install.sh                  | Script para instalar as dependências                                                       | Local install     |
-| install-local.sh            | Script para instalar as dependências na pasta ./vendor                                     | Local install     |
+| dev.sh                      | Script para instalar as dependências de ferramentas de dev                                 | Local install     |
 | openapi.sh                  | Script para gerar o openapi.yaml                                                           | CI/CD pipeline    |
 | pre-commit-config.sh        | Script para preparar o ambiente local para executar ferramentas de pre-commit              | Local development |
 | preenv.sh                   | Script para executar os comandos de pré build                                              | Local boot        |
@@ -261,9 +267,7 @@ Execute o seguinte comando:
 ```bash
 ./scripts/venv-exec.sh ./scripts/tests/integration-coverage.sh
 ```
-> Observação:
-
-O resultado pode ser encontrado na pasta `target/*`.
+> Observação: O resultado pode ser encontrado na pasta `target/*`.
 
 
 ## Licença
@@ -276,7 +280,7 @@ Veja a licença: [LICENSE.md](LICENSE.md).
 * Para a sintaxe da docstring, por favor use o `reStructuredText`
 * Para uso de limite de linha 100 caracteres, conforme definido pelo PEP8
 
-## Pylint
+## Lint
 Para executar o pylint no código fonte do projeto, execute o seguinte comando:
 ```bash
 ./scripts/pylint.sh
@@ -287,7 +291,7 @@ Ou:
 ./scripts/pylint.sh ./app.py
 ```
 
-## AutoPEP8
+## Code Format
 Para executar o autopep8 no código fonte do projeto, execute o seguinte comando:
 ```bash
 ./scripts/autopep8.sh
@@ -309,4 +313,15 @@ Depois de você executar:
 
 ```bash
 ./scripts/pre-commit-config.sh
+```
+## Build
+Para executar o build do projeto, execute o seguinte comando:
+```bash
+./scripts/build.sh
+```
+
+## Guidelines
+Para executar a validação de guidelines do projeto, execute o seguinte comando:
+```bash
+./scripts/guidelines-checker.py
 ```

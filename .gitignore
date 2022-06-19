@@ -69,3 +69,5 @@ output/response.json
 /env/_staging.env
 /env/_integration.env
 /env/_production.env
+/dist/
+/template_serverless_service_python.egg-info/
