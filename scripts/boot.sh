@@ -79,16 +79,16 @@ fi
 
 read -p "Press enter to continue..."
 
-echo '----------------------------------------'
-echo "$0 - Lambda boot"
-echo '----------------------------------------'
-if test -f ${current_file_path}boot-lambda.sh; then
-  ${current_file_path}boot-lambda.sh
-else
-  echo 'There is no lambda to be booted'
-fi
-
-read -p "Press enter to continue..."
+#echo '----------------------------------------'
+#echo "$0 - Lambda boot"
+#echo '----------------------------------------'
+#if test -f ${current_file_path}boot-lambda.sh; then
+#  ${current_file_path}boot-lambda.sh
+#else
+#  echo 'There is no lambda to be booted'
+#fi
+#
+#read -p "Press enter to continue..."
 
 echo '----------------------------------------'
 echo "$0 - Database boot"
