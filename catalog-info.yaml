@@ -2,12 +2,16 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: template-serverless-service-python
+  description: Template para construção de API flexível com serviços ECS AWS.
   annotations:
     github.com/project-slug: madeiramadeirabr/template-serverless-service-python
+    backstage.io/techdocs-ref: dir:.
   tags:
     - python
+    - shell
+    - html
 spec:
-  type: service
+  type: template
   lifecycle: production
   owner: team-platform-engineering-admin
   
